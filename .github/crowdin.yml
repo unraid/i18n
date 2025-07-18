@@ -2,13 +2,16 @@
 # Source files are managed in a different repository
 base_path: "../"
 files:
-  - translation: /emhttp/languages/%locale%/unraid-webgui.po
+  - source: /emhttp/languages/unraid-webgui.po
+    translation: /emhttp/languages/%locale%/unraid-webgui.po
     scheme: file
 
-  - translation: /emhttp/languages/%locale%/unraid-webgui-js.po
+  - source: /emhttp/languages/unraid-webgui-js.po
+    translation: /emhttp/languages/%locale%/unraid-webgui-js.po
     scheme: file
 
-  - translation: /emhttp/languages/%locale%/helptext.txt
+  - source: /emhttp/languages/helptext.txt
+    translation: /emhttp/languages/%locale%/helptext.txt
     scheme: file
 
 # Export settings
