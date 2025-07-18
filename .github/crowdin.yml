@@ -1,16 +1,21 @@
-# Crowdin configuration file for downloading translations
-# This file defines how translations are downloaded and organized
+# Crowdin configuration file for downloading translations only
+# Source files are managed in a different repository
 
 files:
-  # Map specific files from Crowdin to local paths
   - source: /unraid-webgui.po
     translation: /%locale%/unraid-webgui.po
+    scheme: file
     
   - source: /unraid-webgui-js.po
     translation: /%locale%/unraid-webgui-js.po
+    scheme: file
     
   - source: /helptext.txt
     translation: /%locale%/helptext.txt
+    scheme: file
 
-# Additional settings
+# Export settings
+export_only_approved: false
+skip_untranslated_files: false
+skip_untranslated_strings: false
 preserve_hierarchy: true
