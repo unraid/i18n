@@ -3,15 +3,15 @@
 
 files:
   - source: /unraid-webgui.po
-    translation: /%locale%/unraid-webgui.po
+    translation: /unraid-webgui.po
     scheme: file
     
   - source: /unraid-webgui-js.po
-    translation: /%locale%/unraid-webgui-js.po
+    translation: /unraid-webgui-js.po
     scheme: file
     
   - source: /helptext.txt
-    translation: /%locale%/helptext.txt
+    translation: /helptext.txt
     scheme: file
 
 # Export settings
