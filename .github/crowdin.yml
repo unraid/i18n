@@ -1,23 +1,24 @@
 # Crowdin configuration file for downloading translations only
 # Source files are managed in a different repository
+# We must have the source files available in the repository - as placeholders only
+project_id_env: CROWDIN_UNRAID_PROJECT_ID
+api_token_env: CROWDIN_PERSONAL_TOKEN
+project_id: 1
+base_url: 'https://unraid.api.crowdin.com'
 base_path: "../"
 files:
-  - source: /emhttp/languages/unraid-webgui.po
-    translation: /emhttp/languages/%locale%/unraid-webgui.po
-    scheme: file
+  - source: ".github/translations/unraid-webgui.po"
+    translation: "/%locale%/unraid-webgui.po"
+  - source: ".github/translations/unraid-webgui-js.po"
+    translation: "/%locale%/unraid-webgui-js.po"
+  - source: "emhttp/languages/en_US/helptext.txt"
+    translation: "/%locale%/helptext.txt"
 
-  - source: /emhttp/languages/unraid-webgui-js.po
-    translation: /emhttp/languages/%locale%/unraid-webgui-js.po
-    scheme: file
-
-  - source: /emhttp/languages/helptext.txt
-    translation: /emhttp/languages/%locale%/helptext.txt
-    scheme: file
 
 # Export settings
 export_only_approved: false
 skip_untranslated_files: false
 skip_untranslated_strings: false
 preserve_hierarchy: false
-
+        
 download_translations_args: --verbose
