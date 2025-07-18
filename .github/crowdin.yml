@@ -2,13 +2,15 @@
 # This file defines how translations are downloaded and organized
 
 files:
-  # Define translation file patterns
-  # Adjust these patterns based on your Crowdin project structure
-  - source: /**/*.po
-    translation: /%locale%/%original_file_name%
+  # Map specific files from Crowdin to local paths
+  - source: /unraid-webgui.po
+    translation: /%locale%/unraid-webgui.po
     
-  - source: /**/*.txt
-    translation: /%locale%/%original_file_name%
+  - source: /unraid-webgui-js.po
+    translation: /%locale%/unraid-webgui-js.po
+    
+  - source: /helptext.txt
+    translation: /%locale%/helptext.txt
 
 # Additional settings
-preserve_hierarchy: false
+preserve_hierarchy: true
