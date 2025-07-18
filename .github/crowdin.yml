@@ -2,20 +2,20 @@
 # Source files are managed in a different repository
 
 files:
-  - source: /unraid-webgui.po
-    translation: /unraid-webgui.po
+  - source: /emhttp/languages/unraid-webgui.po
+    translation: /%locale%/unraid-webgui.po
     scheme: file
-    
-  - source: /unraid-webgui-js.po
-    translation: /unraid-webgui-js.po
+
+  - source: /emhttp/languages/unraid-webgui-js.po
+    translation: /%locale%/unraid-webgui-js.po
     scheme: file
-    
-  - source: /helptext.txt
-    translation: /helptext.txt
+
+  - source: /emhttp/languages/helptext.txt
+    translation: /%locale%/helptext.txt
     scheme: file
 
 # Export settings
 export_only_approved: false
 skip_untranslated_files: false
 skip_untranslated_strings: false
-preserve_hierarchy: true
+preserve_hierarchy: false
