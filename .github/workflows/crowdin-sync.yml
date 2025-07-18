@@ -21,6 +21,7 @@ jobs:
         upload_sources: false
         upload_translations: false
         download_translations: true
+        download_translations_args: --verbose
         
         # Create subfolder for each language
         create_pull_request: true
