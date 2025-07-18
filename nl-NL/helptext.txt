@@ -1,0 +1,2764 @@
+:main_array_devices_help:
+**Gekleurde statusindicator** het belang van de kleur-indicator aan het begin van elke regel in *Array Devices* is als volgt:
+
+<i class='fa fa-circle orb green-orb'></i>Normale activiteit, apparaat is actief.
+
+<i class='fa fa-circle orb grey-orb'></i>Apparaat is in standby-modus (spun-down).
+
+<i class='fa fa-warning orb yellow-orb'></i>Apparaatinhoud emuleerd.
+
+<i class='fa fa-times orb red-orb'></i>Apparaat is uitgeschakeld, inhoud emuleerd.
+
+<i class='fa fa-square orb blue-orb'></i>Nieuw apparaat.
+
+<i class='fa fa-square orb grey-orb'></i>Geen apparaat aanwezig, positie is leeg.
+
+**Identificatie** is de *ondertekening* die een opslagapparaat uniek identificeert. De handtekening
+inclusief het modelnummer van het apparaat, serienummer, linux apparaat id en de grootte van het apparaat.
+
+**Temp.** (temperatuur) wordt direct van het apparaat gelezen. U configureert welke eenheden u wilt gebruiken op
+de pagina [Weergavevoorkeuren](Settings/DisplaySettings)  We lezen niet de temperatuur van de spun-down hard
+rijdt omdat dit er meestal voor zorgt dat ze spin krijgen; in plaats daarvan wordt het '*' symbool weergegeven.  Wij ook
+toon het `*` symbool voor SSD en Flash apparaten, maar soms melden deze apparaten een geldig
+temperatuur en soms geven ze de waarde `0` terug.
+
+**Grootte, gebruikte, vrij** meldt de totale grootte van het apparaat, de gebruikte ruimte en de resterende ruimte voor bestanden.  Deze
+eenheden zijn ook geconfigureerd op de pagina [Weergavevoorkeuren](Settings/DisplaySettings)  De
+hoeveelheid ruimte die gebruikt wordt zal niet nul zijn, zelfs niet voor een lege schijf als gevolg van het bestandssysteem overhead.
+
+*Opmerking: voor een multi-apparaat cache pool, deze data is voor de hele pool zoals geretourneerd door btrfs.*
+
+**Lezen, schrijven** zijn een aantal I/O-verzoeken die naar de I/O-stuurprogramma's worden gestuurd.  Deze statistieken kunnen
+wordt op elk moment gewist, verwijs naar de Array Status sectie hieronder.
+
+**Fouten** tellen het aantal *onherstelbare* door het apparaat gerapporteerde fouten mee
+I/O chauffeurs. Ontbrekende gegevens zijn te wijten aan onherstelbare leesfouten in on-the-fly met behulp van parity
+Wederopbouw (en we proberen deze gegevens terug te schrijven naar de sector(en) die gefaald hebben. Elk onherstelbaar
+schrijf fout resulteert in het *uitschakelen* van de schijf.
+
+**FS** geeft aan dat het bestandssysteem is gedetecteerd in partitie 1 van het apparaat.
+
+Kolom **Bekijk** bevat een mappictogram dat aangeeft dat het apparaat *gekoppeld* is. Klik op het pictogram om
+blader door het bestandssysteem.
+
+Als "Toon array totaal" is ingeschakeld op de [Toon Voorkeuren](Settings/DisplaySettings) pagina, een
+**Totaal** lijn is inbegrepen die een deel van de apparaatstatistieken levert, inclusief de gemiddelde temperatuur
+van je apparaten.
+
+De matrix moet worden gestopt om de Array toewijzingen te wijzigen.
+
+Een unRAID array bestaat uit een of twee Parity disks en een aantal data disks. De gegevens
+schijven worden exclusief gebruikt voor het opslaan van gebruikersgegevens, en de disk(s) van Pariteit zorgen voor de noodzakelijke ontslag.
+om te herstellen van schijffouten.
+
+Aangezien gegevens niet over de array worden geslagen, moeten de Partijdisk(s) even groot of groter zijn dan de grootste data
+schijf.  Pariteit moet ook uw hoogste prestatiegericht zijn.
+
+Elke gegevensschijf heeft zijn eigen bestandssysteem en kan worden geëxporteerd als een
+gescheiden aandeel.
+
+Klik op de naam van het apparaat om individuele apparaatinstellingen te configureren en bepaalde nutsvoorzieningen te starten.
+:end
+
+:main_slots_help:
+**Slots** selecteer het aantal apparatenplaatsen in uw server die voor Array apparaten zijn aangewezen.
+Het minimum aantal matrix slots is 2 en je moet ten minste één apparaat aan de array hebben toegewezen.
+:end
+
+:cache_devices_help:
+**Gekleurde statusindicator** het belang van de kleurenindicator aan het begin van elke regel in *Zwembad Apparaten* is als volgt:
+
+<i class='fa fa-circle orb green-orb'></i>Normale activiteit, apparaat is actief.
+
+<i class='fa fa-circle orb grey-orb'></i>Apparaat is in standby-modus (spun-down).
+
+<i class='fa fa-square orb blue-orb'></i>Nieuw apparaat.
+
+<i class='fa fa-square orb grey-orb'></i>Geen apparaat aanwezig, positie is leeg.
+
+**Pool apparaten** is een enkel apparaat, of pool van meerdere apparaten, *buiten* de unRAID array.  Het kan alleen voor netwerktoegang worden geëxporteerd
+als een Array apparaat.  Buiten de unRAID array resulteert in aanzienlijk snellere schrijftoegang.
+
+Er zijn twee manieren om de pool apparaten te configureren:
+
+1. Als een enkel apparaat, of
+2. Als een multi-device pool.
+
+Wanneer ingesteld als een enkel apparaat kunt u het apparaat formatteren met behulp van elk ondersteund bestandssysteem (btrfs, reiserfs, reiserfs,
+of xfs).  Deze configuratie biedt de hoogste prestaties, maar ten koste van geen gegevensbescherming - als de
+Eén pool apparaat kan niet alle gegevens bevatten die erin staan en kan verloren gaan.
+
+Wanneer geconfigureerd als een multi-apparaat pool, zal Unraid OS automatisch *btrfs-raid1* formaat selecteren (voor beide data
+en meta-gegevens).  'btrfs' staan toe om een willekeurig aantal apparaten toe te voegen aan de pool en elke kopie van de gegevens is gegarandeerd
+om te schrijven naar twee verschillende apparaten.  Zo kan de pool weerstand bieden aan een enkel falen zonder gegevens te verliezen.
+
+Wanneer [Gebruiker Shares](/Settings/ShareSettings) zijn ingeschakeld, kunnen gebruiker-shares worden geconfigureerd naar
+automatisch gebruik maken van het pool apparaat om te
+versnellen schrijfmogelijkheden.  Een speciaal achtergrondproces genaamd *mover* kan worden gepland om uit te voeren
+periodiek om de gebruiker bestanden uit de cache te verplaatsen en naar de Array.
+:end
+
+:cache_slots_help:
+**Slots** Selecteer het aantal apparaatvakjes in uw server die zijn aangewezen voor Cache-apparaten.
+:end
+
+:boot_device_help:
+Vital array configuratie wordt onderhouden op het USB-Flash-apparaat; om deze reden moet deze behouden blijven
+aangesloten op de server.  Klik op [Flash](/Main/Flash?name=flash) om de GUID en registratie te zien
+informatie, en om exportinstellingen te configureren.  Omdat het USB-apparaat is geformatteerd met behulp van FAT bestandssysteem,
+het mag alleen worden geëxporteerd met een SMB-protocol.
+:end
+
+:array_status_help:
+**Gekleurde statusindicator** de betekenis van de kleurenindicator van de *array* is als volgt:
+
+<i class='fa fa-circle orb green-orb'></i>Array is gestart en de Pariteit is geldig.
+
+<i class='fa fa-circle orb grey-orb'></i>Array is gestopt, Pariteit is geldig.
+
+<i class='fa fa-warning orb yellow-orb'></i>Array is gestart, maar de Pariteit is ongeldig.
+
+<i class='fa fa-warning orb grey-orb'></i>Array is gestopt, Pariteit is ongeldig.
+
+:end
+
+:array_devices_help:
+#### Apparaten toewijzen
+
+Een unRAID schijf array bestaat uit een aantal gegevensschijven en maximaal twee Parity schijven. De gegevens
+schijven worden exclusief gebruikt voor het opslaan van gebruikersgegevens, en de disk(s) van Pariteit zorgen voor de noodzakelijke ontslag.
+om te herstellen van een enkele of dubbele schijffout.
+
+Let op dat we de term *disk* gebruiken als je verwijst naar een array opslagapparaat.  wo
+gebruik de term *harde schijf* (of soms alleen *schijf*) wanneer je verwijst naar een harde schijf (HDD)
+apparaat. Dit is omdat het in een RAID systeem mogelijk is om een array te lezen/schrijven waarvan de corresponderende schijf
+hard schijf is uitgeschakeld of zelfs gemist! Daarnaast is het nuttig om te kunnen vragen, "welk apparaat is
+toegewezen als pariteitsdisk?"; of, "welk apparaat komt overeen met schijf2?".
+
+We hebben daarom een manier nodig om harde schijven toe te wijzen aan mateloze schijven. Dit wordt hier bereikt met betrekking tot de
+Hoofdpagina wanneer de array is gestopt. Er is een drop-down box voor elke array schijf die alle lijsten geeft
+niet-toegewezen apparaten. Om een apparaat toe te wijzen selecteert u het uit de lijst. Elke keer een apparaat
+toewijzing is gemaakt, het systeem werkt een configuratiebestand bij om de toewijzing op te nemen.
+
+#### Vereisten
+
+In tegenstelling tot traditionele RAID systemen die data strepen over alle array apparaten, een Unraid server
+slaat bestanden op individuele harde schijven op. Bijgevolg zullen alle bestandsschrijfoperaties beide omvatten
+Data schijf waar het bestand naar wordt geschreven en de Parity disk(s).  Om deze redenen
+
+* Een Parity schijf grootte moet even groot of groter zijn als elk van de dataschijven,
+
+en
+
+* geeft een keuze, Partyschijf(en) moeten de snelste disk(s) zijn in je collectie.
+
+#### Richtlijnen
+
+Hier zijn de stappen die u moet volgen bij het ontwerpen van uw unRAID schijf array:
+
+1. Bepaal welke harde schijf je voor pariteit zal gebruiken en welke harde schijven je zal gebruiken voor
+Data disk1, disk2, etc., en label ze op een of andere manier. Zoek ook het serienummer van elk hard
+schijf en speel het ergens om; je hebt deze informatie later nodig.
+
+2. Installeer uw harde schijf apparaten, start uw server op en vergroot de webGUI. Als dit een nieuw systeem is
+bouw, dan zal de hoofdpagina geen schijven tonen. Dit betekent niet dat het systeem niet kan detecteren uw
+hard rijden betekent alleen dat er nog geen is toegewezen.
+
+3. Weet u de serienummers die u in stap 1 heeft opgenomen nog? Selecteer voor pariteit en elke data-schijf de
+goede schijf op basis van zijn serienummer uit de drop-down lijst.
+
+#### Populaire Stekker
+
+Je kan ook *hete plug* harde schijven in jouw server gebruiken als jouw hardware dit ondersteunt. Bijvoorbeeld
+als je gebruik maakt van kooien op de harde schijf, kun je deze gewoon aansluiten op je server wanneer deze is ingeschakeld en
+met array gestopt. Vernieuw de hoofdpagina om nieuwe niet-toegewezen apparaten te laten verschijnen in de toewijzing
+dropdown lijsten.
+
+#### Volgende stappen
+
+Als al je harde schijven zijn toegewezen, raadpleeg dan de Array Status sectie hieronder
+en Start de matrix.
+:end
+
+:encryption_help:
+#### Invoer encryptie
+
+Met array gestopt, kan de gebruiker een nieuwe encryptiesleutel specificeren. Merk op dat eenmaal een apparaat
+is geformatteerd met een specifieke sleutel die alleen kan worden geopend met dezelfde sleutel. Veranderen van de encryptiesleutel vereist
+gecodeerde apparaten moeten opnieuw geformatteerd worden **wat resulteert in een permanent verlies van alle bestaande gegevens op deze apparaten.**
+
+#### Passphrase
+
+Voer een wachtwoord in van maximaal 512 tekens. Het is zeer aangeraden om alleen de 95 drukbare tekens uit de
+eerste 128 tekens van de [ASCII tafel](https://en.wikipedia.org/wiki/ASCII), omdat ze altijd dezelfde binaire tekens zullen hebben
+representatie. Andere tekens kunnen verschillende codering hebben afhankelijk van de systeemconfiguratie en uw wachtwoord zal
+werkt niet met een andere codering. Als u een langere wachtwoordzin wilt of binaire gegevens wilt opnemen, upload dan in plaats daarvan een sleutelbestand.
+
+Raadpleeg de [cryptsetup FAQ](https://gitlab.com/cryptsetup/cryptsetup/wikis/FrequentlyAskedQuestions#5-security-aspects)
+voor wat een *veilig* wachtwoordzin is.
+
+**Memorize** dit wachtwoord. **ALS LOST, INCRYPTED CONTENT KAN NIET ONGEDAAN HERSTELLEN!**
+
+#### Keyfile
+
+Selecteer een lokaal sleutelbestand met een opgeslagen versleutelingssleutel of een binair bestand. De maximale grootte van het sleutelbestand is 8M (8388608 byte).
+
+**Maak een reservekopie** van uw lokale sleutelbestand. **ALS LOST, INCRYPTED CONTENT KAN NIET ONGEDAAN HERSTELLEN!**
+:end
+
+:info_warning_temp_help:
+*Waarschuwing voor schijftemperatuur* bepaalt de waarschuwingsdrempel voor deze harde schijftemperatuur. Het overschrijden van deze drempel zal resulteren in een waarschuwingsmelding.
+
+Een waarde van nul zal de waarschuwingsdrempelwaarde uitschakelen (inclusief meldingen).
+:end
+
+:info_critical_temp_help:
+*Kritieke schijftemperatuur* bepaalt de kritieke drempelwaarde voor deze harde schijftemperatuur. Het overschrijden van deze drempel zal resulteren in een waarschuwingsmelding.
+
+Een waarde van nul zal de kritische drempelwaarde uitschakelen (inclusief meldingen).
+:end
+
+:info_file_system_help:
+Vul het gewenste bestandstype in  Het veranderen van het bestandstype van een apparaat stelt je in staat om te hervormen
+dat apparaat gebruikt het nieuwe bestandssysteem.  Wees ervan bewust dat **alle bestaande gegevens op het apparaat verloren gaan**.
+:end
+
+:info_comments_help:
+Deze tekst verschijnt onder de kolom *Opmerkingen* voor het delen in Windows Explorer.
+Voer alles in wat u wilt, tot 256 tekens.
+:end
+
+:info_warning_utilization_help:
+*Waarschuwing schijf gebruik* stelt de waarschuwingsdrempel in voor dit harde schijf gebruik. Het overschrijden van deze drempel zal resulteren in een waarschuwingsmelding.
+
+Wanneer de waarschuwingsdrempel gelijk is aan of hoger is dan de kritische drempel, zullen er alleen kritische meldingen zijn (er bestaan geen waarschuwingen).
+
+Een waarde van nul zal de waarschuwingsdrempelwaarde uitschakelen (inclusief meldingen).
+:end
+
+:info_critical_utilization_help:
+*Kritieke schijf gebruik* stelt de kritische drempel voor deze harde schijf in. Het overschrijden van deze drempel zal resulteren in een waarschuwingsmelding.
+
+Een waarde van nul zal de kritische drempelwaarde uitschakelen (inclusief meldingen).
+:end
+
+:info_btrfs_balance_help:
+**Saldo** gebruikt het *btrfs saldo* programma om de extents over alle pool apparaten te strepen, bijvoorbeeld
+om de pool te converteren van raid1 naar raid0 of vice-versa.
+
+Wanneer een * volledig saldo* wordt uitgevoerd, wordt in principe alles in het huidige bestandssysteem herschreven.
+
+Een *mode conversie* heeft invloed op de btrfs data extents; metadata gebruikt altijd raid1 en wordt geconverteerd naar raid1 indien nodig door een saldo bewerking.
+
+De uitvoertijd is mogelijk zeer lang, afhankelijk van de bestandsgrootte en snelheid van het apparaat.
+
+Unraid OS gebruikt deze standaard opties bij het maken van een multiple-device pool:
+
+`-dconvert=raid1 -mconvert=raid1`
+
+Raadpleeg voor meer volledige documentatie de btrfs-balance [Manpage](https://man7.org/linux/man-pages/man8/btrfs-balance.8.html)
+
+*Opmerking: raid5 en raid6 worden over het algemeen **experimenteel** door de Linux gemeenschap beschouwd
+:end
+
+:info_balance_cancel_help:
+**Annuleren** zal de lopende balansbewerking annuleren.
+:end
+
+:info_btrfs_scrub_help:
+**Scrub** voert het *btrfs scrub* programma uit dat alle gegevens en metadata blokken van alle
+apparaten en controlesommen verifiëren.
+
+*btrfs scrub* zal beschadigde blokken repareren als er een juiste kopie beschikbaar is.
+:end
+
+:info_zfs_scrub_help:
+**Scrub** voert het *zfs scrub* programma uit dat alle gegevens en metadata blokken van alle
+apparaten en controlesommen verifiëren.
+
+Klik op de knop **Upgrade Pool** om de ZFS pool te upgraden om de nieuwste ZFS functies in te schakelen.
+:end
+
+:info_scrub_cancel_help:
+**Annuleren** annuleert de lopende crub operatie.
+:end
+
+:info_btrfs_check_help:
+**Controleer** voert het *btrfs controle* programma uit om de integriteit van het bestandssysteem op het apparaat te controleren.
+
+Het *Opties* veld is geïnitialiseerd met *--alleen-lezen* wat check-only specificeert.  Als reparatie nodig is, moet je uitvoeren
+een tweede checkpass, stel de *Opties* in op *--repair*; dit staat *btrfs controle* toe om het bestandssysteem te herstellen.
+
+WAARSCHUWING: **Gebruik niet** *--repair* tenzij je wordt aangeraden dit te doen door een ontwikkelaar of een ervaren gebruiker,
+en dan pas nadat men heeft aanvaard dat geen enkel middel met succes alle soorten van het bestandssysteem heeft gerepareerd.
+Bijv. sommige andere software of hardware bugs kunnen fataal een volume beschadigen.
+
+Nadat je een Check hebt gestart, moet je verversen om de voortgang en status te volgen.  Afhankelijk van
+hoe groot het bestandssysteem is en welke fouten aanwezig kunnen zijn, de bewerking kan **een lange tijd** duren om te eindigen (uren).
+Er wordt niet veel info afgedrukt in het venster, maar je kunt controleren of de bewerking wordt uitgevoerd door de read/write tellers te observeren
+verhoging van het apparaat op de hoofdpagina.
+:end
+
+:info_check_cancel_help:
+**Annuleren** zal de lopende controle annuleren.
+:end
+
+:info_reiserfs_check_help:
+**Controleer** voert het *reiserfsck* programma uit om de integriteit van het bestandssysteem op het apparaat te controleren.
+
+Het *Opties* veld kan ingevuld worden met specifieke opties om problemen in het bestandssysteem op te lossen. Meestal, jij
+voer eerst een controle voor het verlaten van *Opties* leeg.  Als voltooid, als *reiserfsck* problemen vindt, dan moet je
+voer een tweede controlepas uit, waarbij gebruik wordt gemaakt van een specifieke optie zoals aangegeven door de eerste *reiserfsck* pass.
+
+Na het starten van een check moet u vernieuwen om de voortgang en status te controleren.  Afhankelijk van
+hoe groot het bestandssysteem is en welke fouten aanwezig kunnen zijn, de bewerking kan **een lange tijd** duren om te eindigen (uren).
+Er wordt niet veel info afgedrukt in het venster, maar je kunt controleren of de bewerking wordt uitgevoerd door de read/write tellers te observeren
+verhoging van het apparaat op de hoofdpagina.
+:end
+
+:info_reiserfs_cancel_help:
+**Annuleren** zal de lopende controle annuleren.
+:end
+
+:info_xfs_check_help:
+**Controleer** voert het *xfs_repair* programma uit om de integriteit van het bestandssysteem op het apparaat te controleren.
+
+Het *Opties* veld is geïnitialiseerd met *-n* dat selectievakje specificeert.  Als reparatie nodig is, moet je uitvoeren
+een tweede checkpass, door de *Options* blank; hiermee kunnen *xfs_repair* het bestandssysteem worden gecorrigeerd.
+
+Nadat je een Check hebt gestart, moet je verversen om de voortgang en status te volgen.  Afhankelijk van
+hoe groot het bestandssysteem is en welke fouten aanwezig kunnen zijn, de bewerking kan **een lange tijd** duren om te eindigen (uren).
+Er wordt niet veel info afgedrukt in het venster, maar je kunt controleren of de bewerking wordt uitgevoerd door de read/write tellers te observeren
+verhoging van het apparaat op de hoofdpagina.
+:end
+
+:info_xfs_cancel_help:
+**Annuleren** zal de lopende controle annuleren.
+:end
+
+:info_smart_notifications_help:
+SMART meldingen worden gegenereerd op een toenemende RAW waarde van het attribuut, of een dalende NORMALIZED waarde die een vooraf ingestelde drempel bereikt die door de fabrikant is ingesteld.
+
+Elke schijf kan zijn eigen specifieke instelling hebben die de 'standaard' instelling overschrijdt (zie globale SMART instellingen onder Disk Instellingen).
+:end
+
+:info_tolerance_level_help:
+Er kan een tolerantieniveau worden gegeven om te voorkomen dat kleine wijzigingen leiden tot een melding. Het instellen van een te hoog tolerantieniveau kan leiden tot kritieke wijzigingen zonder een melding.
+
+Elke schijf kan zijn eigen specifieke instelling hebben die de 'standaard' instelling overschrijdt (zie globale SMART instellingen onder Disk Instellingen).
+:end
+
+:info_controller_type_help:
+Standaard wordt automatische controller selectie gedaan door smartctl om de SMART informatie te lezen. Bepaalde controllers hebben echter specifieke instellingen nodig om smartctl te laten werken.
+Gebruik deze instelling om je controller type te selecteren en vul de specifieke schijfindex en apparaatnaam in voor je situatie. Gebruik de documentatie van de fabrikant om de relevante informatie te vinden.
+
+Elke schijf kan zijn eigen specifieke instelling hebben die de 'standaard' instelling overschrijdt (zie globale SMART instellingen onder Disk Instellingen).
+:end
+
+:info_attribute_notifications_help:
+De gebruiker kan notificaties voor de opgegeven SMART attributen in- of uitschakelen. Het wordt aanbevolen om de standaardwaarde te behouden, dat is ALLE geselecteerde kenmerken,
+wanneer bepaalde attributen niet aanwezig zijn op uw harde schijf of niet de juiste informatie opgeven, kunnen deze worden uitgesloten.
+Daarnaast kunnen aangepaste SMART attributen worden ingevoerd om meldingen te genereren. Wees voorzichtig in deze selectie,
+het kan een lawine van meldingen veroorzaken als gekozen wordt voor ongepaste SMART-attributen.
+
+Elke schijf kan zijn eigen specifieke instelling hebben die de 'standaard' instelling overschrijdt (zie globale SMART instellingen onder Disk Instellingen).
+:end
+
+:selftest_history_help:
+Druk op **Toon** om de zelf-test geschiedenis te bekijken zoals wordt gehouden op de schijf zelf.
+Deze functie is alleen beschikbaar wanneer de schijf in actieve modus is.
+:end
+
+:selftest_error_log_help:
+Druk op **Toon** om het foutenrapport te bekijken zoals het op de schijf zelf gehouden wordt.
+Deze functie is alleen beschikbaar wanneer de schijf in actieve modus is.
+:end
+
+:selftest_short_test_help:
+Start een *kort* SMART zelftest, de geschatte duur kan worden bekeken onder de sectie *Mogelijkheden* Dit is meestal een paar minuten.
+
+Wanneer de schijf omlaag, zal het elke lopende zelftest afbreken.
+Deze functie is alleen beschikbaar wanneer de schijf in actieve modus is.
+:end
+
+:selftest_long_test_help:
+Start een *verlengde* SMART zelftest, de geschatte duur kan worden bekeken onder de sectie *Mogelijkheden* Dit is meestal een paar uur.
+
+Wanneer de schijf omlaag, zal het elke lopende zelftest afbreken. Het wordt aangeraden om de draadklok van de schijf uit te schakelen
+om een onderbreking van deze zelftest te voorkomen.
+
+Deze functie is alleen beschikbaar wanneer de schijf in actieve modus is.
+:end
+
+:selftest_result_help:
+Wanneer er geen test wordt uitgevoerd toont dit hier het laatst verkregen zelf-testresultaat (indien beschikbaar).
+Anders wordt er een voortgangsindicator (procentuele waarde) weergegeven voor een lopende test.
+:end
+
+:smart_attributes_help:
+Deze lijst toont de SMART attributen die door deze schijf worden ondersteund. Voor meer informatie over elke SMART kenmerk, wordt het aangeraden om online te zoeken.
+
+Attributen in *oranje* kunnen uw aandacht vereisen. Ze hebben een **rauwe waarde** groter dan nul en kunnen duiden op een wachtende schijffout.
+
+Speciale aandacht is vereist wanneer de rauwe waarde van het specifieke kenmerk in de loop der tijd zal toenemen. Bij twijfel het Limetech-forum raadplegen.
+:end
+
+:smart_capabilities_help:
+Deze lijst toont de SMART mogelijkheden die door deze schijf worden ondersteund.
+
+Waardeer hier de geschatte duur van de SMART korte en uitgebreide zelftests.
+:end
+
+:smart_identity_help:
+Deze lijst toont de SMART identiteitsinformatie van deze schijf
+:end
+
+:open_devices_help:
+Deze apparaten zijn geïnstalleerd op de server maar zijn niet toegewezen aan de parity-beveiligd
+array of de cache disk/pool.
+:end
+
+:flash_backup_help:
+Gebruik *Flash backup* om een zip-bestand van de huidige inhoud van het flash-apparaat te maken en het lokaal op uw computer op te slaan.
+:end
+
+:syslinux_cfg_help:
+Gebruik deze pagina om je `syslinux.cfg` bestand aan te passen.
+U moet uw server opnieuw opstarten om deze wijzigingen door te voeren.
+:end
+
+:syslinux_button_help:
+Klik op de knop **Standaard** om het bewerkingsvak te initialiseren met de
+fabrieksinstellingen inhoud  Je moet nog steeds op **Apply** klikken om te
+commit de verandering.
+
+Klik op de **Apply** knop om de huidige bewerkingen te committeren.  Klik **Terugzetten** naar
+wijzigingen die je maakt ongedaan maken (voor opslaan). Klik **Gereed** om deze pagina te verlaten.
+:end
+
+:info_share_assignment_help:
+De geselecteerde vragenset is beschikbaar voor gedeelde gebruikers.
+:end
+
+:info_free_space_help:
+Dit definieert een "verdieping" voor de hoeveelheid vrije ruimte die overblijft in het volume.
+Als de vrije ruimte minder wordt dan deze waarde, dan zullen nieuwe bestanden geschreven via gebruiker share mislukt met een fout met "niet genoeg ruimte".
+
+Voer een numerieke waarde in met één van deze achtervoegsels:
+
+**KB** = 1.000<br>
+**MB** = 1.000.000<br>
+**GB** = 1.000,000,000<br>
+**TB** = 1.000,000,000,000<br>
+**K** = 1,024 (dat wil zeggen, 2^10)<br>
+**M** = 1,048,576 (vb. 2^20)<br>
+**G** = 1,073,741,824 (dat wil zeggen, 2^30)<br>
+**T** = 1,099,511,627,776 (bijv. 2^40)<br>
+
+Als geen achtervoegsel wordt aangenomen dat er 1024-byte blokken zijn.
+:end
+
+:share_list_help:
+**Gekleurde statusindicator** -- het belang van de kleur-indicator aan het begin van elke regel in *User Shares* is als volgt:
+
+<i class='fa fa-circle orb green-orb'></i>Alle bestanden hebben een beveiligde opslag.
+
+<i class='fa fa-warning orb yellow-orb'></i>Sommige of alle bestanden hebben onbeveiligde opslag.
+
+**Beveiligingsmodus:**
+
++ '-' -- delen van gebruikers is niet geëxporteerd en niet beschikbaar op het netwerk
++ *Publiek* -- alle gebruikers, inclusief gasten hebben volledige lees/schrijfrechten (open toegang)
++ *Secure* -- Alle gebruikers, inclusief gasten hebben leestoegang, schrijftoegang is ingesteld per gebruiker (beperkte toegang)
++ *Privé* -- überhaupt geen gasttoegang, lezen/schrijven of alleen-lezen toegang is ingesteld per gebruiker (gesloten toegang)
+
+**Speciale modi:**
+
++ SMB beveiligingsmodus weergegeven in *italics* geeft aan dat verborgen gebruikersaandelen geëxporteerd worden.
++ NFS heeft geen speciale modi voor gebruiker aandelen.
+:end
+
+:disk_list_help:
+**Gekleurde statusindicator** -- het belang van de kleur-indicator aan het begin van elke regel in *Disk Shares* is als volgt:
+
+<i class='fa fa-circle orb green-orb'></i>Gekoppeld, onderliggende apparaat heeft ontslagen/beveiliging.
+
+<i class='fa fa-warning orb yellow-orb'></i>Gekoppeld, het onderliggende apparaat heeft geen ontslagen/bescherming.
+
+**Beveiligingsmodus:**
+
++ '-' -- schijfdeel wordt niet geëxporteerd en niet beschikbaar in het netwerk
++ *Publiek* -- alle gebruikers, inclusief gasten hebben volledige lees/schrijfrechten (open toegang)
++ *Secure* -- Alle gebruikers, inclusief gasten hebben leestoegang, schrijftoegang is ingesteld per gebruiker (beperkte toegang)
++ *Privé* -- überhaupt geen gasttoegang, lezen/schrijven of alleen-lezen toegang is ingesteld per gebruiker (gesloten toegang)
+
+**Speciale modi:**
+
++ SMB beveiligingsmodus weergegeven in *italics* geeft de geëxporteerde verborgen schijfshares.
++ NFS heeft geen speciale modi voor schijfaandelen.
+:end
+
+:share_edit_global1_help:
+Een *Delen*, ook wel *Gebruiker Share* genoemd, is gewoon de naam van een hoofdmap die op één of meer van je bestaat
+opslagvolumes (array schijven en pools).  Elke share kan worden geëxporteerd voor netwerktoegang.  Tijdens het browsen op een aandeel geven we de
+samengestelde weergave van alle bestanden en submappen waarvoor die hoofdmap bestaat op elk opslagapparaat.
+
+*Lees instellingen van* worden gebruikt om de instellingen van de nieuwe share te presetten met de instellingen van een bestaand aandeel.
+
+Selecteer de naam van de gewenste share en druk op **Lezen** om de instellingen van de geselecteerde bron te kopiëren.
+:end
+
+:share_edit_global2_help:
+*Schrijf instellingen naar* wordt gebruikt om de instellingen van de huidige share te kopiëren naar een of meer bestaande aandelen.
+
+Selecteer de gewenste bestemmingen en druk op **Schrijf** om de instellingen naar de geselecteerde aandelen te kopiëren.
+:end
+
+:share_edit_name_help:
+De aandelennaam kan oplopen tot 40 tekens en is hoofdlettergevoelig met deze beperkingen:
+
+* mag geen dubbel-quote teken (") of de volgende tekens bevatten: / \ * < > ~>
+* kan niet één van de gereserveerde aandelennamen zijn: flash, cache2, .., disk1, disk2, ..
+
+We raden je aan om je leven gemakkelijker te maken en speciale tekens te vermijden.
+:end
+
+:share_edit_comments_help:
+Alles wat je leuk vindt, tot 256 tekens.
+:end
+
+:share_edit_allocation_method_help:
+Deze instelling bepaalt hoe Unraid OS zal kiezen welke schijf zal worden gebruikt bij het maken van een nieuw bestand of map:
+
+**Hoog water**
+Kies de laagste genummerde schijf met een vrije ruimte boven het huidige *hoog watermerk*.  De
+* hoog watermerk* is geïnitialiseerd met de grootte van de grootste dataschijf gedeeld door 2.  Indien geen schijf
+heeft vrije ruimte boven het huidige *hoog watermerk*, deel het *hoge waterteken* met 2 en kies opnieuw.
+
+Het doel van **Hoogwater** is om zoveel mogelijk gegevens naar elke schijf te schrijven (om te minimaliseren
+hoe vaak schijven spun moeten zijn), terwijl je tegelijkertijd dezelfde hoeveelheid vrije ruimte op wilt houden
+elke schijf (om de gegevens gelijkmatig te verdelen over de array).
+
+**Fill-up**
+Kies de laagste genummerde schijf die nog vrije ruimte heeft boven de huidige **Minimale vrije ruimte**
+instelling.
+
+**Meest-gratis**
+Kies de schijf die momenteel de meeste vrije ruimte heeft.
+:end
+
+:share_edit_free_space_help:
+De *minimum vrije ruimte* die beschikbaar is om het schrijven van een gedeelde schijf toe te staan.<br>
+
+Kies een waarde die gelijk of groter is dan de grootste bestandsgrootte die u wilt kopiëren naar het gedeelte.
+Voeg eventueel eenheden van KB, MB, GB en TB toe, bijv. 10MB.
+:end
+
+:share_edit_split_level_help:
+Bepaalt of een map is toegestaan om uit te breiden op meerdere schijven.
+
+**Automatisch een map splitsen indien nodig**
+Wanneer een nieuw bestand of submap moet worden aangemaakt in een share, kiest Unraid OS eerst welke schijf
+het moet worden gemaakt, volgens de geconfigureerde *toewijzingsmethode*.  Indien de bovenliggende map
+het nieuwe bestand of de submap bestaat niet op deze schijf, dan zal Unraid OS eerst alle noodzakelijke aanmaken
+bovenliggende mappen en maak het nieuwe bestand of submap aan.
+
+**Automatisch alleen de map op het hoogste niveau opsplitsen indien nodig**
+Wanneer een nieuw bestand of submap wordt aangemaakt in de subdirectory op eerste niveau van een share, als dat eerst
+submap level bestaat niet op de schijf die wordt geschreven, dan zal de submap eerst worden aangemaakt.
+Als een nieuw bestand of submap wordt aangemaakt in het tweede of lagere niveau submap van een share, de nieuwe
+bestand of submap is gemaakt op dezelfde schijf als het nieuwe bestand of de bovenliggende map van de submap.
+
+**Automatisch alleen de bovenste "N" map automatisch opsplitsen indien nodig**
+Vergelijkbaar met de vorige: wanneer een nieuw bestand of submap wordt aangemaakt als de bovenliggende map op niveau "N" is
+en bestaat niet op de gekozen schijf, Unraid OS zal eerst alle benodigde bovenliggende mappen aanmaken.  Als de
+Bovenliggende map van het nieuwe bestand of submap is hoger dan niveau "N", dan het nieuwe bestand of de submap is
+gemaakt op dezelfde schijf waar de bovenliggende map bestaat.
+
+**Handmatig: niet automatisch mappen splitsen**
+Wanneer een nieuw bestand of submap moet worden gemaakt in een share, zal Unraid OS alleen overwegen waar de
+Bovenliggende map bestaat al.
+:end
+
+:share_edit_included_disks_help:
+Geef de schijven op die door de gedeelde kunnen worden gebruikt. Standaard zijn alle schijven inbegrepen; dat wil zeggen, als specifiek
+schijven worden hier niet geselecteerd, dan kan de share uitbreiden naar *alle* matrixschijven.
+:end
+
+:share_edit_excluded_disks_help:
+Geef de schijven op die *niet* gebruikt kunnen worden door de share. Standaard zijn geen schijven uitgesloten.
+:end
+
+:share_edit_cache_pool_help:
+Geef aan of nieuwe bestanden en mappen op de 'deel' kan worden geschreven naar de 'Cache disk/pool' indien aanwezig.
+Deze instelling heeft ook invloed op *mover* gedrag.
+
+**Nee** verbiedt het schrijven van nieuwe bestanden en subdirectories naar de cache disk/pool.
+* Mover* zal geen actie ondernemen, dus alle bestaande bestanden voor dit deel die in de cache staan daar achtergelaten worden.
+
+**Ja** geeft aan dat alle nieuwe bestanden en submappen geschreven moeten worden naar de Cache disk/pool, geleverd
+voldoende vrije ruimte bestaat op de cache disk/pool.
+Als er onvoldoende ruimte is op de cache disk/pool, dan worden er nieuwe bestanden en mappen aangemaakt via de array.
+Wanneer *mover* wordt aangeroepen, worden bestanden en subdirectories overgebracht vanuit de Cache disk/pool en naar de array.
+
+**Alleen** geeft aan dat alle nieuwe bestanden en submappen moeten worden geschreven naar de Cache disk/pool.
+Als er onvoldoende vrije ruimte is op de cache schijf/pool, zal *create* operaties mislukken met een status die *buiten de ruimte blijft*
+*Mover* zal geen actie ondernemen zodat alle bestaande bestanden voor dit deel dat in de matrix zit daar achterblijven.
+
+**Voorkeur** geeft aan dat alle nieuwe bestanden en submappen geschreven moeten worden naar de Cache disk/pool, geleverd
+voldoende vrije ruimte bestaat op de cache disk/pool.
+Als er onvoldoende ruimte is op de cache disk/pool, dan worden er nieuwe bestanden en mappen aangemaakt via de array.
+Wanneer *mover* wordt opgeroepen worden bestanden en subdirectories overgebracht van de array en naar de Cache disk/pool.
+
+**Let op:** Mover zal nooit de bestanden verplaatsen die momenteel in gebruik zijn.
+Dit betekent dat als u bestanden gekoppeld aan systeemdiensten zoals Docker of VMs wilt verplaatsen dan moet u
+deze diensten uitschakelen terwijl de mover actief is.
+:end
+
+:share_edit_copy_on_write_help:
+Zet dit op **Nee** om ervoor te zorgen dat het *btrfs* attribuut NU (Geen Copy-on-Write) ingesteld wordt op de share map
+wanneer aangemaakt op een apparaat met *btrfs* bestandssysteem.  Eenmaal ingesteld, nieuw aangemaakte bestanden en
+submappen op het apparaat zullen het NOCOW attribuut erven. Deze instelling heeft geen effect op niet-btrfs-bestandssystemen.
+
+Zet op **Auto** voor normale operatie, wat betekent dat COW **zal ** van kracht zijn op apparaten die geformatteerd zijn met *btrfs*.
+:end
+
+:share_edit_status_help:
+Delen bevat *niet* gegevens en kan worden verwijderd als het niet langer nodig is.
+:end
+
+:share_edit_delete_help:
+Delen kan *niet* worden verwijderd zolang het gegevens bevat. Wees ervan bewust dat sommige gegevens verborgen kunnen worden. Zie ook [SMB Settings](/Settings/SMB) -> Verberg "dot" bestanden.
+:end
+
+:share_edit_exclusive_access_help:
+Wanneer ingesteld op "Ja" geeft aan dat er een symlink direct naar een pool is ingesteld voor het delen in de /mnt/user tree.
+
+Verwijs naar [Global Share Settings](Settings/ShareSettings) -> Geef exclusieve aandelen toe.
+:end
+
+:share_edit_primary_storage_help:
+**Primaire opslag** is waar *nieuwe bestanden en mappen* worden gemaakt.  Als
+Primaire opslag is onder de minimum vrije ruimte instelling dan nieuwe bestanden
+en mappen zullen worden gemaakt in **Secundaire opslag**, indien geconfigureerd.
+
+**Belangrijk:** Voor *Exclusieve toegang* aandelen, de Min vrije ruimte
+instellingen worden genegeerd.
+:end
+
+:share_edit_secondary_storage_help:
+**Secundaire opslag** is waar nieuwe bestanden en mappen worden gemaakt als er geen
+ruimte op primaire opslag.  Wanneer zowel primaire als secundaire opslag zijn
+geconfigureerde de 'mover' zal bestanden tussen hen verplaatsen.
+:end
+
+:share_edit_mover_action_help:
+Dit definieert de richting van bestandsoverdracht tussen Primaire en
+Secundaire opslag als beide zijn geconfigureerd.
+:end
+
+:smb_security_help:
+*Lees instellingen van* worden gebruikt om de SMB beveiligingsinstellingen van de huidige geselecteerde share te presetten met de instellingen van een bestaand aandeel.
+
+Selecteer de gewenste share naam en druk op **Lezen** om de SMB beveiligingsinstellingen van de geselecteerde bron te kopiëren.
+
+*Schrijf instellingen naar* wordt gebruikt om de SMB beveiligingsinstellingen van de huidige geselecteerde share te kopiëren naar een of meer bestaande aandelen.
+
+Selecteer de gewenste bestemmingen en druk op **Schrijf** om de SMB beveiligingsinstellingen te kopiëren naar de geselecteerde aandelen.
+:end
+
+:smb_export_help:
+Deze instelling bepaalt of het delen zichtbaar en/of toegankelijk is.  De instelling 'Ja (verborgen)
+zal de share *verbergen* van *browsing* maar nog steeds toegankelijk zijn als u de naam van het delen weet.
+:end
+
+:smb_time_machine_volume_help:
+Dit beperkt de gerapporteerde volume grootte, voorkomt dat de tijdmachine de echte schijfruimte gebruikt
+voor back-up.  Bijvoorbeeld, het instellen van deze waarde op "1024" zou de gerapporteerde schijfruimte beperken tot 1GB.
+Merk op dat Ventura 13.6 en later een waarde nodig heeft om aanwezig te zijn.  Geen invoer voorkomt de tijdmachine
+werkt niet correct.
+:end
+
+:smb_case_sensitive_names_help:
+Controleert of bestandsnamen hoofdlettergevoelig zijn.
+
+De standaardinstelling van **auto** staat clients toe die hoofdletter gevoelige bestandsnamen (Linux CIFSVFS) ondersteunen
+om de Samba server op een per-packet basis te vertellen dat ze toegang willen krijgen tot het bestandssysteem op een hoofdlettergevoelige manier (ondersteuning van UNIX
+hoofdlettergevoelige semantiek). Geen Windows-systeem ondersteunt hoofdlettergevoelige bestandsnamen en het instellen van deze optie op **auto** is hetzelfde als
+het instellen op Nee; echter zal het geval van bestandsnamen die door een Windows client worden doorgegeven, worden behouden.  Deze instelling kan resultaat opleveren
+in lagere prestaties met zeer grote mappen omdat Samba een bestandsnaam moet zoeken en overeenkomen op de opgegeven namen.
+
+Een instelling van **Ja** betekent dat bestanden worden gemaakt met het geval dat de client passeert, en alleen toegankelijk met behulp van dezelfde zaak.
+Dit zal zeer grote toegang tot mappen versnellen, maar sommige Windows-applicaties werken mogelijk niet goed met deze instelling.  Voor
+voorbeeld, als "MyFile" is gemaakt, maar een Windows app probeert "MYFILE" te openen (wat is toegestaan in Windows), dan zal het niet worden gevonden.
+
+Een waarde van **gedwongen lager** is speciaal: het geval van alle inkomende client filenames, niet alleen nieuwe filenames, zal worden ingesteld op een miniem geval.
+Met andere woorden, wat voor naam voor gemengde zaak er ook wordt gemaakt aan de kant van Windows, het zal worden opgeslagen en toegankelijk voor alle kleine gevallen.  Dit
+zorgt ervoor dat alle Windows apps elk bestand op de juiste manier vinden, ongeacht geval, maar geval zal niet worden bewaard in mappen lijsten.
+Opmerking: deze instelling mag alleen voor nieuwe aandelen worden geconfigureerd.
+:end
+
+:smb_security_modes_help:
+Samenvatting van de beveiligingsmodi:
+
+**Publiek** Alle gebruikers, inclusief gasten hebben volledige lees/schrijftoegang.
+
+**Secure** Alle gebruikers inclusief gasten hebben leestoegang, u selecteert welke van uw gebruikers schrijfrechten hebben.
+
+**Privé** Geen gastentoegang, u selecteert welke van uw gebruikers lezen/schrijven, alleen-lezen toegang of geen toegang.
+
+Windows Server Ondertekening:
+
+Als u niet in staat bent SMB aandelen te bekijken met Windows 11 versie 24H2 of nieuwer, je moet enkele wijzigingen aanbrengen om ruimte te maken voor een nieuwe functie genaamd Server Signing.  Server Signing is ingeschakeld in Unraid en u moet wijzigingen aanbrengen om toegang te krijgen tot publieke aandelen.
+U kunt <u><a href='https://techcommunity.microsoft.com/t5/storage-at-microsoft/accessing-a-third-party-nas-with-smb-in-windows-11-24h2-may-fail/ba-p/4154300' target='_blank'>uitschakelen in Windows</a></u>, of met Unraid werken met Server Signing ingeschakeld, de eenvoudigste manier is het maken van een gebruiker (met een wachtwoordset) in Unraid met dezelfde naam als het Windows-account dat u gebruikt, Windows moet u dan om de inloggegevens vragen.
+Als je een Microsoft-account gebruikt, het kan beter zijn om gewoon een gebruiker aan te maken in Unraid met een eenvoudige gebruikersnaam en een wachtwoord in te stellen, dan in Windows ga naar Control Panel -> Credential Manager -> Windows referenties -> Voeg een Windows Credential toe en voeg de juiste Unraid server naam en referenties toe.
+:end
+
+:smb_secure_access_help:
+*Lezen instellingen van* worden gebruikt om de SMB gebruikerstoegangsinstellingen van de huidige geselecteerde share te presten met de instellingen van een bestaand aandeel.
+
+Selecteer de gewenste share naam en druk op **Lezen** om de SMB beveiligingsinstellingen van de geselecteerde bron te kopiëren.
+
+*Schrijf instellingen naar* wordt gebruikt om de SMB gebruikerstoegangsinstellingen van de huidige share te kopiëren naar een of meer bestaande aandelen.
+
+Selecteer de gewenste bestemmingen en druk op **Schrite** om de SMB User access instellingen te kopiëren naar de geselecteerde aandelen.
+:end
+
+:smb_private_access_help:
+*Lezen instellingen van* worden gebruikt om de SMB gebruikerstoegangsinstellingen van de huidige geselecteerde share te presten met de instellingen van een bestaand aandeel.
+
+Selecteer de gewenste share naam en druk op **Lezen** om de SMB beveiligingsinstellingen van de geselecteerde bron te kopiëren.
+
+*Schrijf instellingen naar* wordt gebruikt om de SMB gebruikerstoegangsinstellingen van de huidige share te kopiëren naar een of meer bestaande aandelen.
+
+Selecteer de gewenste bestemmingen en druk op **Schrite** om de SMB User access instellingen te kopiëren naar de geselecteerde aandelen.
+:end
+
+:nfs_security_help:
+*Lees instellingen van* worden gebruikt om de NFS beveiligingsinstellingen van de huidige geselecteerde share te presten met de instellingen van een bestaand aandeel.
+
+Selecteer de naam van de gewenste share en druk op **Lead** om de NFS beveiligingsinstellingen van de geselecteerde bron te kopiëren.
+
+*Schrijf instellingen naar* wordt gebruikt om de NFS beveiligingsinstellingen van de huidige geselecteerde share te kopiëren naar een of meer bestaande aandelen.
+
+Selecteer de gewenste bestemmingen en druk op **Schrijf** om de NFS beveiligingsinstellingen te kopiëren naar de geselecteerde aandelen.
+:end
+
+:nfs_security_rules_help:
+Plaats de regel voor elk IP-adres op een aparte regel en beëindig de regel met een nieuwe regel.
+U kunt geen regel invoeren in het formaat IP1,IP2(...).  Unraid formatteert niet het exportbestand in dat formaat.
+
+De standaardregels voor elke NFS-regel zijn - async en no_subtree_check.
+
+**Opmerking:** De gebruikte Public Rule is '*(rw,sec=sys,insecure,anongid=100,anonuid=99,no_root_squash)'.
+:end
+
+:user_add_username_help:
+Gebruikersnamen kunnen maximaal 40 tekens lang zijn en moeten beginnen met een **kleine letter** of een onderstrepingsteken,
+gevolgd door **kleine letters**, cijfers, onderstrepingstekens of streepjes. Ze kunnen eindigen met een dollar teken.
+:end
+
+:user_add_description_help:
+Tot 64 tekens. De tekens ampersand (&amp;) citaat (&quot;) en colon (:) zijn niet toegestaan.
+:end
+
+:user_add_custom_image_help:
+De afbeelding wordt geschaald naar 48 x 48 pixels in grootte. De maximale grootte van het afbeeldingsbestand is 95 kB (97,280 bytes).
+:end
+
+:user_password_help:
+Tot 128 tekens.
+:end
+
+:user_edit_description_help:
+Tot 64 tekens. De tekens ampersand (&amp;) citaat (&quot;) en colon (:) zijn niet toegestaan.
+:end
+
+:user_edit_custom_image_help:
+De afbeelding wordt geschaald naar 48 x 48 pixels in grootte. De maximale grootte van het afbeeldingsbestand is 512 kB (524,288 bytes).
+:end
+
+:cpu_vms_help:
+Deze pagina geeft een totale weergave van de huidige CPU-vastzetopdrachten voor VMs.<br>
+Het maakt het ook mogelijk om deze opdrachten te wijzigen.
+
+Lopende VM's zijn **gestopt eerst** en opnieuw gestart na de wijziging.<br>
+Gestopte VMs worden direct gewijzigd en nieuwe opdrachten worden actief wanneer de VM wordt gestart.
+
+Wanneer ***Apply*** wordt ingedrukt wordt een scan uitgevoerd om de wijzigingen te vinden, vervolgens worden alleen VM's die wijzigingen hebben parallel aangepast.
+
+Belangrijk: Wacht tot alle updates zijn voltooid voordat u deze pagina afsluitt*.
+:end
+
+:cpu_pinning_help:
+Deze pagina geeft een totale weergave van de huidige CPU-pinning opdrachten voor Docker containers.<br>
+Het maakt het ook mogelijk om deze opdrachten te wijzigen.
+
+Lopende containers worden **eerst gestopt** en opnieuw gestart na de wijziging.<br>
+Gestopte containers worden direct gewijzigd en nieuwe opdrachten worden actief wanneer de gebruiker handmatig de container start.
+
+Wanneer ***Apply*** wordt ingedrukt wordt een scan uitgevoerd om de wijzigingen te vinden, vervolgens containers die wijzigingen hebben tegelijkertijd worden aangepast.
+
+Belangrijk: Wacht tot alle updates zijn voltooid voordat u deze pagina afsluitt*.
+
+Standaard worden er geen cores geselecteerd voor een Docker container, wat betekent dat het alle beschikbare cores gebruikt.<br>
+Selecteer **ALL** cores voor containers, selecteer **NO** cores als je onbeperkt core wilt gebruiken.
+
+Selecteer geen kernen voor containers die *geïsole* zijn.
+Bij het ontwerp gebruikt een container slechts één kern (de laagste genummerde kern) wanneer meerdere geïsoleerde kernkoren zijn geselecteerd.<br>
+Meestal is dit niet wat een gebruiker wil bij het selecteren van meerdere cores.
+:end
+
+:cpu_isolation_help:
+CPU-isolatie stelt de gebruiker in staat CPU-cores op te geven die expliciet moeten worden gereserveerd voor toewijzing (aan VM's of Docker containers).
+
+Dit is ongelooflijk belangrijk voor het vloeiend draaien van spel-VM's, omdat zelfs als u uw Docker containers handmatig speld om niet te overlappen met uw gaming-VM,
+de host OS kan nog steeds dezelfde cores gebruiken als de gast VM nodig heeft voor zaken zoals retour reacties voor de webGUI, het uitvoeren van een pariteitscontrole, btrfs-operaties, enz.
+:end
+
+:timezone_help:
+Selecteer uw toepasselijke tijdzone uit de keuzelijst.
+:end
+
+:use_ntp_help:
+Selecteer 'Ja' om Netwerk Tijd Protocol te gebruiken om de tijd van uw server nauwkeurig te houden.
+Wij **veel** raden het gebruik van een netwerk tijd server aan, vooral als u Active Directory van plan bent.
+
+Opmerking: als je `pool.ntp.org` tijd servers gebruikt, raadpleeg dan ook [hun documentatie](http://www.pool.ntp.org/en/use.html).
+:end
+
+:ntp_server1_help:
+Dit is de primaire NTP-server om te gebruiken.  Voer een FQDN of een IP-adres in.
+:end
+
+:ntp_server2_help:
+Dit is de alternatieve NTP server om te gebruiken als NTP Server 1 offline is.
+:end
+
+:ntp_server3_help:
+Dit is de alternatieve NTP-server om te gebruiken als NTP-servers 1 en 2 beide offline zijn.
+:end
+
+:ntp_server4_help:
+Dit is de alternatieve NTP Server om te gebruiken als de NTP Servers 1, 2 en 3 allemaal offline zijn.
+:end
+
+:current_time_help:
+Voer de huidige tijd van de dag in.  Formaat gebruiken JJJJ-MM-DD HHH:MM:SS. Sluizen tijdens het gebruik van NTP.
+:end
+
+:disk_enable_autostart_help:
+Indien ingesteld op 'Ja' dan als de apparaatconfiguratie juist is bij het opstarten van de server,
+de array zal automatisch worden gestart en delen zullen worden geëxporteerd.<br>
+Indien ingesteld op 'Nee' dan moet je zelf de array starten.
+:end
+
+:disk_spindown_delay_help:
+Deze instelling definieert de 'standaard' time-out voor harde schijven die na een periode naar beneden draaien
+van geen I/O-activiteit.  U kunt de standaardwaarde voor een individuele schijf in de instellingen van de schijf overschrijven
+pagina voor die schijf.
+:end
+
+:disk_spinup_groups_help:
+Indien ingesteld op 'Ja', dan is de functie voor spinup groepen ingeschakeld.
+:end
+
+:disk_default_partition_format_help:
+Definieert het type partitie layout om te maken bij het formatteren van harde schijven 2TB in grootte en
+**alleen**. (Alle apparaten groter dan 2TB zijn altijd ingesteld met GPT-partitie tabellen.)
+
+**MBR: onuitgelijnd** instelling zal de MBR-stijl partitie tabel maken, waar de enige
+partitie 1 begint in de **63e sector** vanaf het begin van de schijf.  Dit is de *traditioneel*
+instelling voor vrijwel alle tabellen MBR-stijl partitie.
+
+**MBR: 4K-uitlijnde** instelling zal een MBR-stijl partitie tabel maken, waar de ene partitie
+partitie 1 zal beginnen in de **64e sector** vanaf het begin van de schijf. Aangezien de sectorgrootte 512 bytes is,
+dit zal het begin van partitie 1 op een 4K-byte grens *uitlijnen.  Dit is vereist voor de juiste
+ondersteuning van de zogenoemde *Advanced Format* schijven.
+
+Tenzij je een specifieke vereiste hebt verander deze instelling niet van de standaard **MBR: 4K-aliged**.
+:end
+
+:disk_default_file_system_help:
+Definieert het standaard bestandstype dat moet worden aangemaakt wanneer een *unmountable* array apparaat is geformatteerd.
+
+Het standaard bestandstype voor een enkele of meerdere apparaten cache is altijd Btrfs.
+:end
+
+:disk_shutdown_timeout_help:
+Bij het afsluiten van de server, definieert dit hoe lang in seconden moet worden gewacht voor *gracable* afsluiten voordat u het forceert
+Sluit om door te gaan.
+:end
+
+:disk_tunable_poll_attributes_help:
+Dit definieert het disk SMART onderzoek interval, in seconden.  Een waarde van 0 schakelt SMART-polling uit (niet aanbevolen).
+:end
+
+:disk_tunable_enable_ncq_help:
+Indien ingesteld op **Nee** is *Native Command Queuing* uitgeschakeld voor alle array-apparaten die NCQ ondersteunen.
+
+**Auto** laat de instelling voor elk apparaat ongewijzigd.
+
+Opmerking: Je moet opnieuw opstarten na het selecteren van Automatisch om instellingen effectief te maken.
+:end
+
+:disk_tunable_nr_requests_help:
+Dit definieert de `nr_requests` apparaat stuurprogramma instelling voor alle array apparaten.
+
+**Auto** laat de instelling voor elk apparaat ongewijzigd.
+
+Opmerking: als u op leeg staat en op Apply klikt, wordt de instelling teruggezet naar de standaard en moet u herstarten om de instelling te activeren.
+:end
+
+:disk_tunable_scheduler_help:
+Selecteert welke kernel I/O planner moet worden gebruikt voor alle array apparaten.
+
+**Auto** laat de instelling achter voor elk apparaat as-is (mq-deadline).
+
+Opmerking: Je moet opnieuw opstarten na het selecteren van Automatisch om instellingen effectief te maken.
+:end
+
+:disk_tunable_md_num_stripes_help:
+Dit is de grootte van het *streep zwembad* in het aantal *strepen*.  Een *stripe* verwijst naar een datastructuur die parallelle 4K lezen/schrijven mogelijk maakt
+operaties die nodig zijn voor een door gelijkheid beschermde matrix.
+
+Opmerking: als u op leeg heeft gezet en op Toepassing klikt, wordt de instelling teruggezet naar de standaard, en zal van kracht worden na herstart.
+:end
+
+:disk_tunable_md_queue_limit_help:
+Dit is een getal in [1..100] dat het maximale stabiele percentage van de toegestane stripe pool is.
+
+Opmerking: als u op leeg staat en klik op Toepassen, is de instelling teruggezet naar de standaard.
+:end
+
+:disk_tunable_md_sync_limit_help:
+Dit is een getal in [0..100] dat het maximale percentage van de stripe pool is toegewezen aan pariteit sync/check in de aanwezigheid van andere I/O.
+
+Opmerking: als u op leeg staat en klik op Toepassen, is de instelling teruggezet naar de standaard.
+:end
+
+:disk_tunable_md_write_method_help:
+Selecteert de methode om te gebruiken bij schrijven naar ingeschakelde schijf in pariteit beschermde matrix.
+
+*Auto* selecteert `read/modify/write`.
+:end
+
+:disk_default_warning_utilization_help:
+*Waarschuwing schijf gebruik* stelt de standaard waarschuwingsdrempel in voor alle harde schijven gebruik Het overschrijden van deze drempel zal resulteren in een waarschuwingsmelding.
+
+Wanneer de waarschuwingsdrempel gelijk is aan of hoger is dan de kritische drempel, zullen er alleen kritische meldingen zijn (er bestaan geen waarschuwingen).
+
+Een waarde van nul zal de waarschuwingsdrempelwaarde uitschakelen (inclusief meldingen).
+:end
+
+:disk_default_critical_utilization_help:
+*Kritieke schijf gebruik* stelt de standaard kritische drempelwaarde voor alle harde schijven in. Het overschrijden van deze drempel zal resulteren in een waarschuwingsmelding.
+
+Een waarde van nul zal de kritische drempelwaarde uitschakelen (inclusief meldingen).
+:end
+
+:disk_default_warning_temperature_help:
+*Waarschuwing schijftemperatuur* bepaalt de standaard waarschuwingsdrempel voor alle harde schijftemperatuur. Het overschrijden van deze drempel zal resulteren in een waarschuwingsmelding.
+
+Een waarde van nul zal de waarschuwingsdrempelwaarde uitschakelen (inclusief meldingen).
+:end
+
+:disk_default_critical_temperature_help:
+*Kritieke schijftemperatuur* bepaalt de standaard kritische drempelwaarde voor alle harde schijftemperatuur. Het overschrijden van deze drempel zal resulteren in een waarschuwingsmelding.
+
+Een waarde van nul zal de kritische drempelwaarde uitschakelen (inclusief meldingen).
+:end
+
+:ssd_default_warning_temperature_help:
+*Waarschuwing SSD temperature* stelt de standaard waarschuwingsdrempel voor alle SSD apparaten in. Het overschrijden van deze drempel zal resulteren in een waarschuwingsmelding.
+
+Een waarde van nul zal de waarschuwingsdrempelwaarde uitschakelen (inclusief meldingen).
+:end
+
+:ssd_default_critical_temperature_help:
+*Kritieke schijftemperatuur* stelt de standaard kritische drempelwaarde voor de temperatuur van alle SSD apparaten in. Het overschrijden van deze drempel zal resulteren in een waarschuwingsmelding.
+
+Een waarde van nul zal de kritische drempelwaarde uitschakelen (inclusief meldingen).
+:end
+
+:disk_default_smart_notification_help:
+SMART meldingen worden gegenereerd op een toenemende RAW waarde van het attribuut, of een dalende NORMALIZED waarde die een vooraf ingestelde drempel bereikt die door de fabrikant is ingesteld.
+
+Deze sectie wordt gebruikt om de globale instellingen voor alle schijven in te stellen. Het is mogelijk om instellingen voor individuele schijven aan te passen.
+:end
+
+:disk_default_smart_tolerance_help:
+Er kan een tolerantieniveau worden gegeven om te voorkomen dat kleine wijzigingen leiden tot een melding. Het instellen van een te hoog tolerantieniveau kan leiden tot kritieke wijzigingen zonder een melding.
+
+Deze sectie wordt gebruikt om de globale instellingen voor alle schijven in te stellen. Het is mogelijk om instellingen voor individuele schijven aan te passen.
+:end
+
+:disk_default_smart_controller_help:
+Standaard wordt automatische controller selectie gedaan door smartctl om de SMART informatie te lezen. Bepaalde controllers hebben echter specifieke instellingen nodig om smartctl te laten werken.
+Gebruik deze instelling om je controller type te selecteren en vul de specifieke schijfindex en apparaatnaam in voor je situatie. Gebruik de documentatie van de fabrikant om de relevante informatie te vinden.
+
+Deze sectie wordt gebruikt om de globale instellingen voor alle schijven in te stellen. Het is mogelijk om instellingen voor individuele schijven aan te passen.
+:end
+
+:disk_default_smart_attribute_help:
+De gebruiker kan notificaties voor de opgegeven SMART attributen in- of uitschakelen. Het wordt aanbevolen om de standaardwaarde te behouden, dat is ALLE geselecteerde kenmerken,
+wanneer bepaalde attributen niet aanwezig zijn op uw harde schijf of niet de juiste informatie opgeven, kunnen deze worden uitgesloten.
+Daarnaast kunnen aangepaste SMART attributen worden ingevoerd om meldingen te genereren. Wees voorzichtig in deze selectie,
+het kan een lawine van meldingen veroorzaken als gekozen wordt voor ongepaste SMART-attributen.
+
+Deze sectie wordt gebruikt om de globale instellingen voor alle schijven in te stellen. Het is mogelijk om instellingen voor individuele schijven aan te passen.
+:end
+
+:docker_repositories_help:
+Gebruik dit veld om sjabloonrepositories toe te voegen.
+Docker sjablonen worden gebruikt om Docker containers te maken en opnieuw te creëren.  Stel een per regel in.
+
+Gebruik van repositories wordt niet meer ondersteund.  Voor instructies over hoe communautaire toepassingen gebruik maken van privé repositories, bezoek <a href='https://forums.unraid.net/topic/57181-docker-faq/page/2/?tab=comments#comment-1018225' target='_blank'>hier</a>
+
+:end
+
+:docker_enable_help:
+Voordat u de Docker service voor de eerste keer kunt starten, geef een afbeeldingsbestand op voor de Docker te installeren.
+
+Eenmaal gestart, zal Docker altijd automatisch starten nadat de array is gestart.
+:end
+
+:docker_readmore_help:
+Sommige systemen met veel docker containers kunnen vertraging ondervinden via de Docker hoofdpagina.
+
+Als je dit op "Nee" zet, kan het algemene paginagebruik versnellen door het gebruik van readmore-js uit te schakelen.
+In plaats van chevrons die meer data voor Port and Volume mapping aangeven, worden alle gegevens weergegeven.
+:end
+
+:docker_timeout_help:
+De tijd in seconden om een container in zijn greintje te laten stoppen voordat hij gedwongen wordt om te stoppen
+:end
+
+:docker_pid_limit_help:
+Stel een PID-limiet in om het aantal PID's dat een docker kan gebruiken te beperken. De standaard is 2048.  Stel in op nul voor onbeperkte PID's (niet aanbevolen).
+:end
+
+:docker_vdisk_type_help:
+Selecteer waar de Docker blijvend moet blijven.
+
+Dit kan een afbeeldingsbestand zijn met een specifieke grootte of een specifieke map.
+:end
+
+:docker_vdisk_size_help:
+Als het systeem een nieuw afbeeldingsbestand voor docker moet maken, is dit de standaardgrootte om te gebruiken in GB.
+
+Om een bestaand afbeeldingsbestand te wijzigen, geef hier de nieuwe grootte op. De volgende keer dat de Docker-service wordt gestart zal het bestand (en het bestandssysteem) worden verhoogd tot de nieuwe grootte (maar nooit verminderd).
+:end
+
+:docker_vdisk_location_help:
+U moet een afbeeldingsbestand opgeven voor Docker. Het systeem maakt dit bestand automatisch aan wanneer de Docker service voor het eerst is gestart.
+
+De bestandsnaam van de afbeelding moet de extensie .img hebben als de invoer niet wordt geaccepteerd en rood is gemarkeerd.
+
+Het wordt aanbevolen om dit afbeeldingsbestand buiten de array aan te maken, b.v. in de cache pool. Voor de beste prestaties hebben we de voorkeur aan SSD-apparaten.
+:end
+
+:docker_vdisk_directory_help:
+U moet een map opgeven voor Docker. Het systeem zal deze map automatisch aanmaken wanneer de Docker-service voor het eerst is gestart.
+
+Het is aanbevolen om deze map te maken onder een aandeel dat zich in de Cache pool bevindt (instelling: cache=Allely). Voor de beste prestaties hebben we de voorkeur aan SSD-apparaten.
+:end
+
+:docker_storage_driver_help:
+overlay2 (standaard): Zal overlay2 als opslagdriver voor Docker gebruiken, ongeacht het onderliggende bestandssysteem.
+
+native: De native storage driver voor je onderliggende filesystem zal worden gebruikt (XFS: overlay2 × ZFS: zfs ## BTRFS: btrfs).
+
+LET OP: Wijzigen van het opslagtype van een bestaande Docker installatie is niet mogelijk. u moet eerst de Docker-map verwijderen, het opslagtype wijzigen en daarna uw containers opnieuw installeren.
+Het wordt aanbevolen om een screenshot te nemen van uw Docker containers voordat u het opslagtype wijzigt. Na het verwijderen en wijzigen van het opslagtype, installeer de containers opnieuw door op Container toevoegen op de Docker pagina te klikken en selecteer een voor één uit de drop-down om ze opnieuw te installeren met uw vorige instellingen).
+:end
+
+:docker_appdata_location_help:
+U kunt een map opgeven om automatisch submappen met configuratiebestanden voor elke Docker app te genereren en op te slaan (via het /config toegewezen volume).
+
+Het pad van de map moet eindigen met een schuine streep (/). Indien niet geaccepteerd en rood gemarkeerd
+
+Het is aanbevolen om deze map buiten de matrix te maken, b.v. in de cache pool. Voor de beste prestaties hebben we de voorkeur aan SSD-apparaten.
+
+Wordt alleen gebruikt bij het toevoegen van nieuwe Docker apps. Het bewerken van bestaande Docker-apps heeft geen invloed op deze instelling.
+:end
+
+:docker_log_rotation_help:
+Standaard is LOG rotatie uitgeschakeld en zal een enkele LOG bestand maken met een onbeperkte grootte.
+
+Schakel LOG rotatie in om de grootte van het LOG bestand te beperken en het aantal bestanden in het rotatie schema op te geven.
+:end
+
+:docker_log_file_size_help:
+Specificeert de maximale LOG grootte. Indien overschreden zal er LOG rotatie plaatsvinden.
+:end
+
+:docker_log_file_number_help:
+Hiermee geeft u het aantal LOG bestanden aan wanneer LOG rotatie is voltooid.
+:end
+
+:docker_authoring_mode_help:
+Indien ingesteld op **Ja** zal de interface aanwezig zijn met enkele extra velden gerelateerd aan het maken van sjabloonauteurs.
+:end
+
+:docker_custom_network_type_help:
+Het **ipvlan** type is het beste wanneer verbinding met het fysieke netwerk niet nodig is.
+Lees <u><a style="color:blue" href='https://docs.docker.com/network/ipvlan/', target='_blank'>dit</a></u> over het implementeren van een ipvlan netwerk.<br>
+
+Het **macvlan** netwerktype maakt directe verbinding naar het fysieke netwerk mogelijk.
+Lees <u><a style="color:blue" href='https://docs.docker.com/network/macvlan/', target='_blank'>dit</a></u> over het implementeren van een macvlan netwerk.<br>
+
+**Opmerking:** Docker gebruikt zijn eigen dhcp service, de **DHCP Pool** instelling.
+Wanneer je meerdere Unraid servers gebruikt, moet elke server een andere Docker **DHCP Pool** reeks hebben geconfigureerd.
+:end
+
+:docker_custom_network_access_help:
+Staat directe communicatie toe tussen de host en containers met behulp van een **macvlan** netwerk.  Dit is standaard uitgeschakeld.
+:end
+
+:docker_user_defined_network_help:
+De door de gebruiker gecreëerde netwerken zijn netwerken die zijn aangemaakt door de gebruiker buiten de GUI.  Standaard worden door gebruiker aangemaakte netwerken verwijderd uit Docker. Dit wordt gedaan om potentiële conflicten met de automatische generatie van aangepaste netwerken te voorkomen.
+
+Verander deze instelling om door de gebruiker gedefinieerde netwerken te bewaren maar het is de verantwoordelijkheid van de gebruiker om ervoor te zorgen dat deze inzendingen correct werken en zonder conflicten.
+:end
+
+:docker_include_interface_vlan_ipv4_help:
+Opnemen (standaard) of uitsluiten van bovenstaande interfaces of VLAN's als aangepast netwerk voor Docker.
+
+Voer het poolbereik in binnen elke toegewezen subnet dat wordt gebruikt voor DHCPv4 toewijzingen door Docker. Bijv. 192.168.1.128/25
+:end
+
+:docker_exclude_interface_vlan_ipv4_help:
+Bevat of schakel (standaard) de bovenstaande interfaces of VLAN's uit als aangepast netwerk voor Docker.
+
+Voer het poolbereik in binnen elke toegewezen subnet dat wordt gebruikt voor DHCPv4 toewijzingen door Docker. Bijv. 192.168.1.128/25
+:end
+
+:docker_include_interface_vlan_ipv6_help:
+Opnemen (standaard) of uitsluiten van bovenstaande interfaces of VLAN's als aangepast netwerk voor Docker.
+
+Voer het poolbereik in binnen elke toegewezen subnet dat wordt gebruikt voor DHCPv6 toewijzingen door Docker. Bijv. 2a02:abcd:9ef5:100:1::/72
+:end
+
+:docker_exclude_interface_vlan_ipv6_help:
+Bevat of schakel (standaard) de bovenstaande interfaces of VLAN's uit als aangepast netwerk voor Docker.
+
+Voer het poolbereik in binnen elke toegewezen subnet dat wordt gebruikt voor DHCPv6 toewijzingen door Docker. Bijv. 2a02:abcd:9ef5:100:1::/72
+:end
+
+:docker_version_help:
+Dit is de actieve Docker versie.
+:end
+
+:docker_vdisk_location_active_help:
+Dit is de locatie van de Docker-afbeelding.
+:end
+
+:docker_storage_driver_active_help:
+Dit is de opslagdriver voor Docker.
+:end
+
+:docker_appdata_location_active_help:
+Dit is de opslaglocatie voor Docker containers.
+:end
+
+:docker_log_rotation_active_help:
+Standaard wordt een enkel ongelimiteerd LOG bestand aangemaakt. Anders zijn LOG bestandsgrootte en het aantal bestanden beperkt wanneer LOG rotatie is ingeschakeld.
+:end
+
+:docker_custom_network_active_help:
+Staat directe communicatie toe tussen de host en containers met behulp van een aangepast (macvlan) netwerk.<br>
+Standaard is dit verboden.
+:end
+
+:docker_user_defined_network_active_help:
+Toont of netwerken die zijn aangemaakt buiten de GUI zijn verwijderd of behouden voor Docker. Indien bewaard zijn *gebruiker gedefinieerde netwerken* beschikbaar in de *Netwerk type* keuzelijst met containers.
+:end
+
+:docker_scrub_help:
+**Scrub** voert het *btrfs scrub* programma uit om de integriteit van het bestandssysteem te controleren.
+
+Als er reparatie nodig is, moet je de *Correct bestandssysteemfouten* controleren en een tweede kruisje gebruiken; dit zal *btrfs scrub* toestaan om het bestandssysteem te repareren.
+:end
+
+:docker_cancel_help:
+**Annuleren** annuleert de lopende crub operatie.
+:end
+
+:id_server_name_help:
+De netwerkidentiteit van uw server.  Ook bekend als *hostnaam* of *short hostname*. Windows netwerk
+verwijst hier naar de *NetBIOS naam* en moet 15 tekens of minder lang zijn.
+Gebruik alleen alfanumerieke tekens (dat wil zeggen, "A-Z", "a-z" en "0-9"), streepjes ("-"), en punten (".");
+en de eerste en laatste tekens moeten alfanumeriek zijn.
+:end
+
+:id_description_help:
+Dit is een tekstveld dat wordt weergegeven naast een server wanneer deze wordt vermeld in Netwerk of Verkenner
+(Windows), of Finder (macOS).
+:end
+
+:id_model_help:
+Dit is het modelnummer van de server.
+:end
+
+:mgmt_start_page_help:
+Selecteer de pagina die eerst wordt geopend bij het invoeren van de GUI. Standaard is de *Hoofd* pagina geselecteerd.
+:end
+
+:mgmt_use_telnet_help:
+TELNET toegang is standaard ingeschakeld. TELNET is echter een onveilig type CLI toegang
+en het wordt sterk aanbevolen om in plaats daarvan SSH toegang te gebruiken en TELNET toegang uit te schakelen.
+:end
+
+:mgmt_telnet_port_help:
+Voer de TELNET poort in, standaard poort is 23.
+:end
+
+:mgmt_use_ssh_help:
+SSH is standaard ingeschakeld en biedt een veilige manier van CLI toegang. Bij het opstarten van SSH sleutels worden automatisch gegenereerd
+als het nog niet bestaat, en opgeslagen op het flash-apparaat in de map */config/ssh*.
+:end
+
+:mgmt_ssh_port_help:
+Voer de SSH poort in, standaard poort is 22.
+:end
+
+:mgmt_use_upnp_help:
+Inschakelen (standaard) of uitschakelen van de UPnP-functie op de server. Deze functie staat automatisch doorsturen van havens op de router toe, alleen van toepassing wanneer UPnP op de router zelf is ingeschakeld.
+:end
+
+:mgmt_use_ssl_tls_help:
+Bepaalt hoe de webGUI reageert op HTTP en/of HTTPS protocol op je LAN.
+
+Selecteer **Nee** om HTTP te gebruiken. Gebruik deze URL om toegang te krijgen tot uw server:
+
+`http://<server-name>.<localTLD>`
+
+of deze URL:
+
+`http://<server-ip-address>`
+
+Selecteer **Ja** om gebruik te maken van een automatisch gegenereerde zelfondertekende
+SSL certificaat.  Gebruik deze URL voor toegang tot uw server:
+
+`https://<server-name>.<localTLD>`
+
+Merk op dat het gebruik van een zelfondertekend SSL-certificaat een browser genereert
+waarschuwing.
+
+Selecteer **Strikt** om *exclusief* gebruik van myunraid.net SSL in te schakelen
+certificaat voor https toegang (zie onderstaande **Provision**).  Merk op dat een DNS
+server moet bereikbaar zijn.
+
+**Omleidingen:** Wanneer u toegang krijgt tot `http://<server-ip-address>` of `http://<server-name>.<localTLD>`, de 
+gedrag zal veranderen afhankelijk van de waarde van de SSL/TLS-instelling:
+
+* Als SSL/TLS is ingesteld op **Strict**, wordt je doorgestuurd naar `https://<lan-ip>.<hash>.myunraid.net`
+* Als SSL/TLS is ingesteld op **Ja**, wordt u doorgestuurd naar `https://<server-ip-address> of https://<server-name>.<localTLD>`
+* Als SSL/TLS is ingesteld op **Nee**, dan wordt de http-url direct geladen.
+
+Belangrijk: **Strict** is mogelijk niet selecteerbaar als uw router of upstream DNS-server heeft
+[DNS herbinding bescherming](https://en.wikipedia.org/wiki/DNS_rebinding) ingeschakeld. Opnieuw verbinden met DNS
+bescherming voorkomt dat DNS een privé IP-netwerkbereik oplost. Bescherming tegen DNS-herkoppeling is bedoeld als
+een beveiligingsfunctie op een LAN die oude apparaten kan bevatten met buggy/onveilige "web" interfaces.
+
+Een bron van DNS-herverbindingsbescherming zou uw ISP DNS-server kunnen zijn. In dit geval kan het probleem worden opgelost door
+Overschakelen naar een andere DNS-server zoals OpenDNS waar DNS-herverbinding-proection kan worden uitgeschakeld.
+
+Meer gebruikelijk, DNS-herverbindingsbeveiliging kan worden ingeschakeld op uw router. De meeste consumentenrouters implementeren DNS niet
+weer verbinden van bescherming; maar als dat wel het geval is, moet er een configuratie-instelling beschikbaar zijn om het uit te schakelen.
+
+Hogere eindrouters zetten doorgaans DNS-herverbindingsbescherming in. Meestal zijn er manieren om het uit te schakelen
+volledig of selectief gebaseerd op domein. Voorbeelden
+
+**DD-WRT:** Als u "dnsmasq" met DNS-herkoppelingsbescherming gebruikt, kunt u deze regel aan uw router toevoegen
+configuratie bestand:
+
+`rebind-domeinin-ok=/myunraid.net/`
+
+**pfSense:** Als u een pfSense interne DNS-resolver service gebruikt, kunt u deze aangepaste optie regels toevoegen:
+
+`server:`<br>
+`private-domain: "myunraid.net"`
+
+**Ubiquiti USG router:** U kunt deze configuratielijn toevoegen:
+
+`set service dns forwarding opties rebind-domain-ok=/myunraid.net/`
+
+**OpenDNS:** Ga naar Instellingen -> Beveiliging en *verwijder* het selectievakje naast
+ "Verdachte antwoorden - Blokkeer interne IP-adressen". Het is een instelling die alles of niets.
+
+Als al het andere niet lukt, kunt u misschien een item aanmaken in het bestand *hosts* van uw pc om externe DNS te overschrijven en
+rechtstreeks oplossen van uw servers myunraid.net FQDN naar het lokale IP-adres.
+:end
+
+:mgmt_http_port_help:
+Voer de HTTP poort in, standaard poort is 80.
+:end
+
+:mgmt_https_port_help:
+Voer de HTTPS-poort in, standaard poort is 443.
+:end
+
+:mgmt_local_tld_help:
+Voer uw lokale topniveaudomein in. Kan leeg zijn.
+:end
+
+:mgmt_local_access_urls_help:
+De bovenstaande lokale toegangs-URL's zijn gebaseerd op uw huidige instellingen. 
+Om URL's aan te passen of te omleiden, bekijk de helptekst voor "Gebruik SSL/TLS".
+:end
+
+:mgmt_wg_access_urls_help:
+Deze URL's werken alleen wanneer ze via de juiste WireGuard tunnel verbonden zijn, zoals geconfigureerd op ***Instellingen > VPN Manager***
+:end
+
+:mgmt_tailscale_access_urls_help:
+Deze URL's werken alleen als ze verbonden zijn met de juiste Tailscale Tailnet.
+:end
+
+:mgmt_certificate_expiration_help:
+**Provision** kan worden gebruikt om een *gratis* myunraid.net SSL-certificaat te installeren van
+[Laten we versleutelen](https://letsencrypt.org/).
+
+Het myunraid.net SSL-certificaat kan op twee manieren worden gebruikt.  Eerst
+met het certificaat aanwezig kunt uw server reageren op een
+alternatieve URL van het formulier:
+
+`https://<lan-ip>.<hash>.myunraid.net`
+
+De '<hash>' waarde is een 40-karakter hex string (160 bits) uniek voor
+uw server.  Een Lime Technologie DDNS server geeft je "<lan-ip>"
+in reactie op een DNS-verzoek op deze URL. Het onderwerp van het certificaat is
+zet naar `*.<hash>.myunraid.net` zodat de https verbinding wordt gevalideerd.
+
+U kunt deze URL exclusief op uw LAN inschakelen door het instellen **Gebruik
+SSL/TLS** naar **Strikt**.
+
+Het tweede gebruik voor een myunraid.net certificaat is om veilig te maken
+Externe toegang beschikbaar via de functie Unraid Connect-plugin.  Notitie
+dat het mogelijk is om veilige toegang op afstand te gebruiken in combinatie met
+onveilige lokale toegang.
+
+Nadat een myunraid.net SSL-certificaat is geïnstalleerd, een
+achtergrond service is geactiveerd:
+
+- *hernieuwing* - Dit start 60 seconden nadat de server opnieuw is opgestart en de Lime Technologie contacteert
+certificaatvernieuwingsservice om te bepalen of uw myunraid.net SSL-certificaat moet worden vernieuwd.
+Daarna wordt het elke 24 uur wakker. Als binnen 30 dagen na vervaldatum een nieuw certificaat automatisch wordt
+Verwijderd en gedownload naar uw server.
+
+**Verwijderen** kan worden gebruikt om het myunraid.net certificaatbestand te verwijderen.
+
+**nginx certificaatverwerking details**
+
+nginx maakt gebruik van twee certificaatbestanden die zijn opgeslagen op het USB-opstart apparaat:<br>
+
+- een zelfondertekend certificaat: `config/ssl/certs/<server-name>_unraid_bundle.pem`
+
+- een myunraid.net certificaat: `config/ssl/certs/certificate_bundle.pem`
+
+Het zelfondertekende SSL-certificaatbestand wordt automatisch gemaakt als nginx
+start; en opnieuw aangemaakt als de server hostnaam of lokale TLD wordt gewijzigd.
+
+**nginx stapling support**
+
+OCSP-voorstelling is automatisch ingeschakeld als het certificaat een OCSP-responder URL bevat.
+
+Vandaar dat voor zelfondertekende certificaten stapling niet is ingeschakeld; voor CA-ondertekende certificaten
+stabling is ingeschakeld.
+:end
+
+:ftp_server_help:
+Droom van de FTP-server in- of uitschakelen Standaard is de FTP-server ingeschakeld.
+Deze instelling wordt niet opgeslagen, d.w.z. wanneer het systeem opnieuw opstart zal het teruggaan naar de standaard instelling.
+:end
+
+:ftp_users_help:
+Voer de gebruikersnamen in (gescheiden door spaties) die toegang hebben tot de server via FTP.
+Als u gebruikers geen toegang wilt geven, deze instelling wissen.
+
+**Opmerking:** heeft geen gebruikersnaam `root` ingevoerd, omdat dit in de toekomst problemen kan veroorzaken.
+:end
+
+:ftp_overview_help:
+### Overzicht
+
+Unraid OS bevat de populaire `vsftpd` FTP-server.  De configuratie van `vsftp` is momenteel erg
+eenvoudig: **Alle** gebruikersnamen die hierboven zijn ingevoerd hebben toegang tot de server via FTP en hebben
+*volledig lezen/schrijven/verwijder toegang* tot de hele server, dus wees voorzichtig.
+:end
+
+:smb_enable_help:
+Selecteer 'Ja (Workgroup)' om SMB (Windows Networking) protocol ondersteuning in te schakelen. Dit
+laat Windows host ook ontdekking toe.
+
+Selecteer 'Ja (Active Directory)' om Active Directory integratie in te schakelen.
+:end
+
+:smb_hide_files_help:
+Indien ingesteld op 'Ja' dan verschijnen bestanden die beginnen met een '.' (punt) als *verborgen bestanden* en normaal
+zal niet worden weergegeven in de Windows-mappen mappen, tenzij "Toon verborgen bestanden, mappen en drives" is ingeschakeld
+in Windows Map-opties.
+
+Indien ingesteld op 'Nee' dan verschijnen stip-bestanden in mappenlijsten hetzelfde als elk ander bestand.
+:end
+
+:smb_multi_channel_help:
+Wanneer ingesteld op 'Ja' activeert SMB Multi Channel ondersteuning in de server. van
+[microsoft](https://docs.microsoft.com/en-us/azure-stack/hci/manage/manage-smb-multichannel):
+"SMB Multichannel stelt bestandsservers in staat om meerdere netwerkverbindingen gelijktijdig te gebruiken.
+:end
+
+:smb_enhanced_macos_help:
+Wanneer 'Ja' is ingesteld biedt betere compatibiliteit met Apple SMB cliënten, wat bijvoorbeeld sneller resulteert
+Finder browsen en de mogelijkheid om Time Machine te exporteren.  Dit kan echter enkele problemen veroorzaken bij Windows-clients.
+Raadpleeg ook de [VFS_FRUIT MAN PAGE](https://www.mankier.com/8/vfs_fruit).
+:end
+
+:smb_enable_netbios_help:
+Selecteer 'Ja' om NetBIOS in te schakelen.  Indien ingeschakeld, wordt SMBv1 protocol ook herkend  Indien uitgeschakeld
+klanten moeten SMBv2 of hoger gebruiken.
+:end
+
+:smb_enable_wsd_help:
+Selecteer 'Ja' om WSD (WS-Discovery) in te schakelen.  De enige reden om dit uit te zetten is wanneer je een loopt
+oude LAN setup gebaseerd op SMBv1.
+:end
+
+:smb_wsd_options_help:
+Dit is een opdrachtregel-string die wordt doorgegeven aan de WSD daemon bij het opstarten. Laat dit veld leeg tenzij
+geïnstrueerd door steun om hier iets te plaatsen.
+:end
+
+:smb_extra_conf_help:
+Gebruik deze pagina om je `smb-extra.conf` bestand te veranderen.  Samba zal nodig hebben
+om de wijzigingen toe te passen.
+:end
+
+:smb_extra_button_help:
+Klik op de **Apply** knop om de huidige bewerkingen te committeren.  Klik **Terugzetten** naar
+wijzigingen die je maakt ongedaan maken (voor opslaan). Klik **Gereed** om deze pagina te verlaten.
+:end
+
+:smb_workgroup_help:
+Voer de naam van uw lokale netwerk Workgroup in. Meestal is dit "WERKGROUP".
+:end
+
+:smb_local_master_help:
+Indien 'Ja' is ingesteld dan zal de server volledig deelnemen aan browserverkiezingen, en in de afwezigheid
+van andere servers, zal meestal de lokale Master Browser worden.
+:end
+
+:nfs_enable_help:
+Selecteer 'Ja' om het NFS-protocol in te schakelen.
+:end
+
+:nfs_tunable_fuse_remember_help:
+Wanneer NFS is ingeschakeld deze Tunable kan worden gebruikt om exemplaren van de NFS Stale File Handles te verzachten of op te lossen"
+die je zou kunnen tegenkomen met je NFS cliënt.
+
+In wezen vertelt (fuse_remember) een intern subsysteem (genaamd "fuse") hoe lang tot "remember" of "cache"
+bestands- en mapinformatie geassocieerd met gebruikersnaam.  Wanneer een NFS client probeert toegang te krijgen tot een bestand
+(of directory) op de server, en die bestandsnaam (of map) is niet gecached, dan kan je tegenkomen
+'afhandeling van oude bestanden'.
+
+De numerieke waarde van deze afstemming is het aantal seconden om bestand/mapnaam in te cachen,
+waar de standaardwaarde van 330 5 1/2 minuten aangeeft.  Er zijn twee speciale waarden die u ook kunt instellen
+dit tot:
+
+* 0 wat betekent, laat de bestanden/mapnamen helemaal niet cachen en
+* -1 wat betekend cachebestand/mapnamen voor altijd (of totdat de array is gestopt)
+
+Een waarde van 0 zou gepast zijn als u NFS inschakelt, maar alleen van plan bent om het te gebruiken voor schijfaandelen,
+geen gebruiker aandelen.
+
+Een waarde van -1 zou gepast zijn als er geen andere time-out lijkt op te lossen de "verouderde bestandshandle" op
+uw client.  Wees ervan bewust dat het instellen van een waarde van -1 ervoor zal zorgen dat de geheugenvoetafdruk ongeveer groeit
+108 bytes per bestand/mapnaam in de cache.  Afhankelijk van hoeveel RAM is geïnstalleerd in uw server en hoeveel
+bestanden/mappen die u via NFS raadpleegt, kunnen leiden tot niet-geheugencondities.
+:end
+
+:nfs_server_max_protocol_help:
+Selecteer de max NFS Protocol versie die u wilt dat uw Unraid server ondersteunt.
+:end
+
+:nfs_client_max_protocol_help:
+Selecteer de maximale NFS Protocol versie die u wilt gebruiken om uw externe aandelen te verbinden.
+:end
+
+:nfs_threads_help:
+Stel het aantal threads in voor NFS.  Voor licht NFS laadt 8 voldoende. Voor zwaardere NFS ladingen kan een hoger aantal threads geschikt zijn.
+
+Als er niet genoeg threads zijn, zal NFS waarschijnlijk crashen.
+:end
+
+:shares_enable_disk_help:
+Indien ingesteld op Nee, worden schijfaandelen onvoorwaardelijk niet geëxporteerd.
+
+Indien dit op ja is ingesteld kunnen schijfaandelen worden geëxporteerd.  **WAARSCHUWING:** Kopieer geen gegevens van een gedeelde schijf naar een gebruiker
+tenzij u *weet* wat u doet.  Dit kan leiden tot verlies van gegevens en wordt niet ondersteund.
+
+Indien ingesteld op Auto, mogen alleen schijfaandelen die niet deelnemen aan Gebruiker Shares worden geëxporteerd.
+:end
+
+:shares_enable_shares_help:
+Indien ingesteld op 'Ja' is de gebruiker Shares functie geactiveerd.
+:end
+
+:shares_included_disks_help:
+Deze instelling definieert de set van array schijven die *inbegrepen* zijn in gebruiker aandelen.
+Als je alle schijven uitschakelt, kan je **alle** matrixschijven meenemen.
+:end
+
+:shares_excluded_disks_help:
+Deze instelling definieert de set array schijf die *uitgesloten* is van User Shares.
+Deselecteer alle schijven om geen schijven uit te sluiten
+
+**Opmerking:** Elke afzonderlijke gebruiker Share bevat ook zijn eigen set inbegrepen en uitgesloten
+schijven die een subset van de inbegrepen/uitgesloten schijven vertegenwoordigen hier gedefinieerd.
+:end
+
+:shares_exclusive_shares_help:
+Indien dit is ingesteld op Ja, delen van mappen onder /mnt/user zijn symlinks naar de share map op een opslagvolume
+moet aan de volgende voorwaarden worden voldaan:
+
+* De primaire opslag voor een share is ingesteld op een pool.
+* De secundaire opslagruimte voor een aandeel is ingesteld op **geen**.
+* De share bestaat op één volume.
+* De share is **niet** geëxporteerd via NFS.
+
+Het voordeel van *exclusief* aandelen is dat overschrijvingen de FUSE laag omzeilen, wat aanzienlijk kan zijn
+verhoog I/O prestaties.
+:end
+
+:shares_tunable_hard_links_help:
+Indien ingesteld op Ja ondersteunt dan de link() bewerking.
+
+Indien ingesteld op Nee worden harde links niet ondersteund.
+
+Notities:
+
+* Instelling op Ja kan problemen veroorzaken voor oudere media en dvd/bluray spelers die aandelen benaderen via NFS.
+* Het maakt niet uit hoe dit is ingesteld, de **mover** zal de gedetecteerde harde links nog steeds goed afhandelen.
+:end
+
+:shares_tunable_direct_io_help:
+**Experimenteel**: Indien ja is ingesteld koppel dan User Share bestandssysteem met FUSE *direct_io* mount optie.
+Dit zal de schrijfprestaties verhogen, maar kan mogelijk leesprestaties verlagen.
+
+*Auto* selecteert nr.
+:end
+
+:shares_fuse_file_descriptors_io_help:
+Stel het aantal zekeringsbestanden beschrijvingen in.  Met veel bestandsactiviteit in de array, moet u deze waarde misschien verhogen.
+:end
+
+:syslog_local_server_help:
+Laat de server optreden als een centrale syslog server en syslog berichten van andere systemen verzamelen.
+De server kan luisteren op UDP, TCP of beide met een selecteerbaar poortnummer.
+
+Syslog informatie wordt per IP-adres of per hostnaam opgeslagen. Dat is elk systeem dat zijn eigen syslog-bestand krijgt.
+:end
+
+:syslog_local_folder_help:
+Selecteer de map 'Delen' waar de syslogs worden opgeslagen.
+Het is aanbevolen om een aandeel te gebruiken dat zich op de cache drive bevindt om te voorkomen dat de matrixspinups worden gebruikt.
+:end
+
+:syslog_remote_system_identifier_help:
+Selecteer de identifier voor het externe systeem (gebruikt in de naam van het logbestand). 
+
+* "IP-adres" maakt gebruik van het IP-adres (IPv4 of IPv6) van het verzendsysteem.
+* "Hostname (uit syslog bericht)" gebruikt de hostnaam bij elk syslog bericht.
+* "Hostname (vanuit DNS reverse lookup)" voert een DNS-reverse lookup uit voor het verzenden van het IP adres en maakt gebruik van het resultaat.
+:end
+
+:syslog_local_rotation_help:
+Standaard is LOG rotatie uitgeschakeld en zal een enkele LOG bestand maken met een onbeperkte grootte.
+
+Schakel LOG rotatie in om de grootte van het LOG bestand te beperken en het aantal bestanden in het rotatie schema op te geven.
+:end
+
+:syslog_local_file_size_help:
+Specificeert de maximale LOG grootte. Indien overschreden zal er LOG rotatie plaatsvinden.
+:end
+
+:syslog_local_file_number_help:
+Specificeert het aantal extra LOG bestanden in het rotatie schema te bewaren.
+:end
+
+:syslog_remote_server_help:
+Voer een naam of IP-adres in van een externe syslog-server.
+Dit stuurt een kopie van de syslog berichten naar de aangewezen server.
+:end
+
+:syslog_mirror_flash_help:
+Deze instelling is standaard NEE en moet zorgvuldig worden gebruikt om onnodige slijtage en verscheuring van het USB-apparaat te voorkomen.
+
+Verander deze instelling naar JA wanneer er problemen moeten worden opgelost en het is niet mogelijk om gewone informatie over diagnoses te krijgen.
+Een spiegel van het syslog bestand wordt opgeslagen in de **logs** map van het flash-apparaat.
+:end
+
+:syslog_shutdown_flash_help:
+Deze instelling is standaard JA en stelt het systeem in staat om het syslog-bestand te kopiëren naar het USB-apparaat bij het afsluiten of herstarten.
+
+Na het herstarten zal de syslog zichtbaar zijn op Tools > Syslog > syslog-previous;
+het zal ook worden opgenomen in de diagnostiek als logboeken/syslog-previous.txt
+:end
+
+:confirm_reboot_help:
+Kies of herstarten of opstarten van de server een bevestiging nodig heeft.
+:end
+
+:confirm_array_stop_help:
+Kies of de array geen bevestiging nodig heeft.
+:end
+
+:display_settings_help:
+De weergave-instellingen hieronder bepalen hoe items worden weergegeven op het scherm. Gebruik deze instellingen om de visuele effecten aan uw wensen aan te passen.
+
+U kunt experimenteren met deze instellingen, zoals gewenst, hebben alleen invloed op de visuele eigenschappen.
+:end
+
+:display_width_help:
+**Boxed** is de oudere instelling die de breedte van de inhoud tot maximaal 1920 pixels beperkt
+
+**Ongelimiteerd** staat inhoud toe om alle beschikbare breedte te gebruiken, wat misschien handig is op brede schermen
+:end
+
+:display_font_size_help:
+Verandert de lettergrootte in de GUI. Dit is een per apparaat instelling.
+:end
+
+:display_tty_size_help:
+Wijzigt de lettergrootte van de terminal vensters.
+:end
+
+:display_page_view_help:
+Wijzigt hoe bepaalde pagina's worden weergegeven. In **Tabbed** modus worden verschillende secties weergegeven in verschillende tabbladen,
+wanneer in **Niet-tabbed** modus secties onder elkaar worden weergegeven.
+:end
+
+:display_users_menu_help:
+Het Gebruikers Menu kan deel uitmaken van de header of van het menu Instellingen.
+U kunt het Gebruikers Menu verplaatsen als er onvoldoende ruimte in de header beschikbaar is om alle menu's weer te geven.
+:end
+
+:display_listing_height_help:
+**Automatisch** : lange lijsten worden weergegeven zoals is en de gebruiker moet de hele pagina scrollen om onderaan te zien
+
+**Opgelost** : lange lijsten worden weergegeven in een venster met een vaste grootte, de gebruiker kan dit venster scrollen om onderaan te zien
+:end
+
+:display_wwn_device_id_help:
+World Wide Name (WWN) is een unieke identificatie die wordt gebruikt voor SAS bijgevoegde apparaten.
+
+Selecteer *Uitgeschakeld* om het toevoegen van WWN aan de apparaatidentificatie te onderdrukken
+
+Selecteer "Automatisch" om WWN toe te voegen aan de identificatie van het apparaat in geval van SAS apparaten
+:end
+
+:display_custom_text_color_help:
+Overschrijf de standaard tekstkleur in de koptekst. Dit kan worden gebruikt om de tekstkleur te vergelijken met een achtergrondafbeelding.
+:end
+
+:display_custom_background_color_help:
+Overschrijf de standaard achtergrondkleur in de header. Dit kan worden gebruikt om de achtergrondkleur te vergelijken met een aangepaste tekstkleur.
+:end
+
+:display_custom_banner_help:
+Afbeelding wordt geschaald naar 1920x90 pixels. De maximale grootte van het afbeeldingsbestand is 512 kB (524,288 bytes).
+:end
+
+:display_temperature_unit_help:
+Selecteert de temperatuureenheid voor de limieten van de schijftemperatuur. Het wijzigen van de unit zal de bestaande waarde in de schijftemperatuurdrempels naar behoren aanpassen.
+
+Zorg ervoor dat een nieuw ingevoerde waarde de geselecteerde temperatuureenheid vertegenwoordigt.
+:end
+
+:display_favorites_enabled_help:
+Favoriete ondersteuning ingeschakeld. Indien ingesteld op nee, stopt het hartpictogram dat getoond wordt voor toevoegingen. Als bestaande favorieten worden opgeslagen, zullen favorieten tabblad en vooraf opgeslagen opties nog steeds tonen en functioneren totdat alle zijn verwijderd.
+:end
+
+:vms_enable_help:
+Stoppen van de VM Manager zal eerst proberen om alle actieve VMs uit te schakelen. Na 60 seconden, zullen alle resterende VM instanties worden beëindigd.
+:end
+
+:vms_disable_help:
+Stop VM's van Autostarting\Beginnen wanneer VM Manager start of open wordt uitgevoerd vanuit de gui om te starten, foutmelding zal worden gezien.
+:end
+
+:vms_libvirt_volume_help:
+Dat is het libvirt volume.
+:end
+
+:vms_libvirt_vdisk_size_help:
+Als het systeem een nieuw libvirt afbeeldingsbestand moet maken, is dit de standaard grootte om te gebruiken in GB.
+Om een bestaand afbeeldingsbestand te wijzigen, geef hier de nieuwe grootte op. De volgende keer dat de Libvirt-service wordt gestart zal het bestand (en het bestandssysteem) worden verhoogd tot de nieuwe grootte (maar nooit verminderd).
+:end
+
+:vms_libvirt_location_help:
+Je moet een afbeeldingsbestand voor Libvirt opgeven. Het systeem zal dit bestand automatisch aanmaken wanneer de Libvirt-service voor het eerst is gestart.
+:end
+
+:vms_libvirt_storage_help:
+Geef een gebruiker die al uw VM submappen met vdisks bevat
+:end
+
+:vms_libvirt_iso_storage_help:
+Geef een gebruiker share op die al uw installatie media bevat voor besturingssystemen
+:end
+
+:vms_virtio_driver_help:
+Specificeer de virtuele CD-ROM (ISO) die de VirtIO-Windows drivers bevat zoals aangeboden door het Fedora Project.
+Download de nieuwste ISO hier: <a href="https://docs.fedoraproject.org/en-US/quick-docs/creating-windows-virtual-machines-using-virtio-drivers/index.html#virtio-win-direct-downloads" target="_blank">fedoraproject.org</a>
+
+Bij het installeren van Windows, bereikt u een stap waar geen schijfapparaten worden gevonden. Er is een optie om te bladeren naar chauffeurs op dat scherm.
+Klik op bladeren en zoek de additionele CD-ROM in het menu. Er zullen verschillende mappen zijn voor de verschillende versies van Windows.
+Open de map voor de versie van Windows die u installeert en selecteer vervolgens de AMD64 submap binnen (zelfs als u op een Intel systeem bent, Selecteer AMD64).
+Drie chauffeurs zullen gevonden worden. Selecteer ze alles, klik hierna en de vDisks die je hebt toegewezen zullen verschijnen.
+:end
+
+:vms_network_source_help:
+Selecteer de naam van het netwerk dat u als standaard wilt gebruiken voor uw VMs.
+Je kunt kiezen tussen **'bridges'** gemaakt onder netwerkinstellingen of
+**'libvirt'** gemaakt met virsh-commando in de terminal.
+De bridge **'virbr0'** en het bijbehorende virtuele netwerk **'default'** zijn
+gemaakt door libvirt.  
+Beide gebruiken NAT (netwerkadres vertaling) en fungeren als een DHCP-server om IP-adressen rechtstreeks uit te delen aan virtuele machines.
+Er zijn meer optionele selecties aanwezig voor bruggen onder netwerkinstellingen of voor libvirt-netwerken met het virsh-commando in de terminal.
+
+**Kies 'virbr0' als de aanbevolen Unraid standaard als 'virbr0'.**
+
+LET OP: U kunt ook een netwerkbron per VM opgeven.
+
+**BELANGRIJK: Noch Libvirt noch Unraid brengt automatisch een interface naar voren die is toegewezen aan een Libvirt netwerk.
+Voordat je een Libvirt netwerk gebruikt, ga je naar Instellingen -> Netwerk Instellingen en, indien nodig, handmatig instellen van de bijbehorende interface.**
+:end
+
+:vms_host_shutdown_help:
+Bij het afsluiten van de server, definieert dit de actie voor het uitvoeren van VMs. Als *Hibernate VMs* is gekozen,
+de VM zal worden geïnstrueerd (indien ondersteund) anders zal het een VM proberen te sluiten.
+:end
+
+:vms_shutdown_timeout_help:
+Bij het afsluiten van de server definieert dit hoe lang je in seconden moet wachten voor *siht* VM uitschakeling voordat je wordt gedwongen om door te gaan.
+OPMERKING: Het is aanbevolen om gastVMs vanuit de VM af te sluiten.
+:end
+
+:vms_console_help:
+Voor het instellen van de console-opties om te tonen in contextmenu's. Web zal alleen inbuild web clients(VNC en SPICE), 
+Virtuele Manager externe Viewer toont alleen de optie voor externe weergave. Beide tonen zowel het web als de externe weergave.
+:end
+
+:vms_rdpopt_help:
+Voegt optie toe aan menu om RDP te starten. RDP bestand is gedownload. U moet browser instellen om te openen als u klaar bent.
+:end
+
+:vms_usage_help:
+Toon statistieken voor zowel gasten als host percentage, geheugen, schijf io en netwerk io.
+:end
+
+:vms_usage_timer_help:
+Instelling in seconden voor statistieken ververstijd.
+:end
+
+:vms_acs_override_help:
+*PCIe ACS overschrijven* laat verschillende hardware componenten zichzelf als geïsoleerde apparaten zien.
+Meestal is het voldoende om *Downstream* poorten te isoleren.
+A hardware component may need the setting *Multi-function* or *Both* to further isolate different hardware functions.<br>
+Een herstart is vereist om wijzigingen in deze instelling te beïnvloeden.
+
+**Waarschuwing: het gebruik van deze instelling kan leiden tot gegevenscorruptie met bepaalde hardware-configuraties.**
+Bezoek de [Lime Technology forums](https://forums.unraid.net/forum/51-vm-engine-kvm) voor meer informatie.
+:end
+
+:vms_vfio_interupts_help:
+Als uw systeem geen remapping ondersteunt, kunnen deze worden ingeschakeld door onveilige onderbrekingen toe te staan.<br>
+Een herstart is vereist om wijzigingen in deze instelling te beïnvloeden.
+
+**Waarschuwing: het gebruik van deze instelling kan leiden tot gegevenscorruptie met bepaalde hardware-configuraties.**
+Bezoek de [Lime Technology forums](https://forums.unraid.net/forum/51-vm-engine-kvm) voor meer informatie.
+:end
+
+:vms_libvirt_log_help:
+Bekijk het logboek voor libvirt: <a onclick="openTerminal('log','libvirt','libvirt/libvirtd.log')">Bekijk libvirtd.log</a>
+:end
+
+:vms_scrub_help:
+**Scrub** voert het *btrfs scrub* programma uit om de integriteit van het bestandssysteem te controleren.
+Als er reparatie nodig is, moet je de *Correct bestandssysteemfouten* controleren en een tweede kruisje gebruiken; dit zal *btrfs scrub* toestaan om het bestandssysteem te repareren.
+:end
+
+:vms_cancel_help:
+**Annuleren* zal de lopende crub operatie annuleren.
+:end
+
+:eth_interface_description_help:
+Gebruik dit optionele veld voor aanvullende informatie over het doel van de verbinding.
+:end
+
+:eth_mac_address_help:
+Dit is het hardware adres van de interface.
+Als tagging is ingeschakeld, worden alle VLANs op dit scherm hetzelfde hardware-adres gedeeld.
+:end
+
+:eth_enable_bonding_help:
+Bonding is een functie die meerdere fysieke Ethernet-interfaces combineert tot een enkele *gebunded* interface genaamd **bond0**.
+Dit kan worden gebruikt om de verbinding te verbeteren en/of de doorvoer van het systeem.
+Verschillende verbonden modi worden ondersteund (zie hieronder), maar sommige modi vereisen de juiste schakelondersteuning.
+:end
+
+:eth_bonding_mode_help:
+**Modus 0 (saldo-r)**<br>
+Deze modus geeft pakketten over in een opeenvolgende volgorde vanaf de eerste beschikbare slaaf tot de laatste.
+Als twee echte interfaces slaven zijn in de bond en twee pakketten uit de verbonden interface komen, wordt de eerste op de eerste slaven overgelegd en het tweede kader op de tweede slaaf overgelegd.
+Het derde pakket zal worden verzonden vanaf het eerste pakket, enzovoort. Dit zorgt voor lastbalancering en foutentolerantie.
+
+**Mode 1 (actief-backup) - standaard**<br>
+Deze modus plaatst een van de interfaces in een back-upstatus en maakt deze alleen actief als de link verloren gaat door de actieve interface.
+Slechts één slaaf in de band is actief op een bepaald moment. Een andere slaaf wordt alleen actief als de actieve slaaf mislukt.
+Deze modus geeft fouttolerantie.
+
+**Modus 2 (balance-xor)**<br>
+Deze modus zendt pakketten uit op basis van een XOR formule. Bron MAC adres is XOR'd met doel MAC-adres modula slave telling.
+Dit selecteert dezelfde slaaf voor elk doel MAC adres en biedt laadbalans- en foutentolerantie.
+
+**Mode 3 (uitzending)**<br>
+Deze modus brengt alles over op alle slaveninterfaces. Deze modus wordt het minst gebruikt (alleen voor specifieke doeleinden) en geeft alleen een foutentolerantie.
+
+**Modus 4 (802.3ad)**<br>
+Deze modus staat bekend als *Dynamische Link Aggregation*. Het creëert aggregatie groepen die dezelfde snelheid en duplex instellingen delen.
+Het vereist een schakelaar die IEE 802.3ad dynamische link ondersteunt.
+Slavenselectie voor uitgaande verkeer gebeurt volgens het zendhashbeleid welke gewijzigd kan worden van de standaard eenvoudige XOR-beleid via de xmit_hash_policy optie.
+Houd er rekening mee dat niet alle transmitbeleid 802.3ad conform kan zijn, in het bijzonder met betrekking tot de packet per-ordevereisten van sectie 43.2.4 van de 802.3ad-standaard.
+Verschillende peerimplementaties zullen verschillende toleranties hebben voor niet-naleving.
+
+**Modus 5 (balance-tlb)**<br>
+Deze modus heet *Adaptive transmit load balancing*. Het uitgaande verkeer wordt verdeeld volgens de huidige last en wachtrij op elke slaaf interface.
+Inkomend verkeer wordt door de huidige slaaf ontvangen.
+
+**Mode 6 (balance-alb)**<br>
+Deze modus heet *Adaptive load balancing*. Dit omvat balans-tlb + ontvangen lastbalancering (rlb) voor IPV4-verkeer.
+De beladingsbalans wordt bereikt door ARP-onderhandelingen.
+De binding driver onderschept de ARP Antwoorden verzonden door de server op weg naar buiten en overschrijft het src hw adres met de unieke hw adres van een van de slaven in de bond
+zodanig dat verschillende cliënten verschillende hw adressen gebruiken voor de server.
+
+*Mode 1 (actief-backup) is de aanbevolen instelling. Andere modi maken het mogelijk om een specifieke omgeving in te stellen, maar kunnen een goede ondersteuning voor de schakelaar vereisen.
+Het kiezen van een niet-ondersteunde modus kan leiden tot storende communicatie.*
+:end
+
+:eth_bonding_members_help:
+Selecteer welke interfaces lid zijn van de *verbonden * interface. Standaard is eth0 lid en zijn andere interfaces optioneel.
+:end
+
+:eth_enable_bridging_help:
+Brug is een functie die een virtuele bridge maakt en VM's en Docker containers in staat stelt rechtstreeks te communiceren met de fysieke ethernetpoort.
+Zowel binding als brug kunnen gecombineerd worden om VM's of containers te laten communiceren over een *bonded* interface.
+:end
+
+:eth_bridging_members_help:
+Selecteer welke interfaces lid zijn van de *bridged* interface. Standaard is eth0 lid en zijn andere interfaces optioneel.
+:end
+
+:eth_network_protocol_help:
+Selecteer welke protocol(en) gebruikt worden. Standaard wordt alleen IPv4 gebruikt.<br>
+Wanneer zowel IPv4 als IPv6 is geselecteerd, kan elk protocol onafhankelijk worden geconfigureerd.
+:end
+
+:eth_ipv4_address_assignment_help:
+De volgende instellingen zijn mogelijk:
+
+*Automatisch* - de server zal proberen een IPv4 adres te krijgen van de lokale DHCP server<br>
+*Statisch* - het IPv4-adres is handmatig ingesteld voor dit interface<br>
+*Geen* - geen IPv4 adres is toegewezen aan het interface (alleen beschikbaar voor VLAN's)
+:end
+
+:eth_ipv4_address_help:
+Grijzen wanneer gebruik wordt gemaakt van automatische IP-toewijzing. Anders geef hier het IPv4-adres en masker van het systeem op.
+:end
+
+:eth_ipv4_default_gateway_help:
+Grijzen wanneer gebruik wordt gemaakt van automatische IP-toewijzing. Geef anders hier het IPv4-adres van je router op.
+:end
+
+:eth_ipv4_dns_server_assignment_help:
+Indien ingesteld op *Automatisch* zal de server gebruik maken van de IPv4 DNS server(s) geretourneerd door de lokale automatische toewijzing.<br>
+Indien ingesteld op *Static* kunt u uw eigen lijst invoeren.
+
+Dit is handig in de configuratie van de Active Directory waar u de eerste DNS-server moet instellen op het IP-adres van uw AD-domeinserver.
+:end
+
+:eth_ipv4_dns_server_help:
+Dit is de primaire IPv4 DNS server om te gebruiken. Voer een IPv4-adres in.
+
+Opmerking: voor *Active Directory* **moet u** er zeker van zijn dat dit is ingesteld op het IP adres van uw AD Domain server.
+:end
+
+:eth_ipv4_dns_server2_help:
+Dit is de IPv4 DNS server die gebruikt moet worden wanneer de IPv4 DNS server 1 offline is.
+:end
+
+:eth_ipv4_dns_server3_help:
+Dit is de IPv4 DNS-server die gebruikt moet worden wanneer IPv4 DNS-servers 1 en 2 beide offline zijn.
+:end
+
+:eth_ipv6_address_assignment_help:
+De volgende instellingen zijn mogelijk:
+
+*Automatisch* - de server zal proberen een IPv6 adres te krijgen van de lokale DHCP server of Router Advertisement (RA)<br>
+*Statisch* - het IPv6 adres is handmatig ingesteld voor dit interface<br>
+*Geen* - geen IPv6 adres is toegewezen aan het interface (alleen beschikbaar voor VLAN's)
+:end
+
+:eth_ipv6_address_help:
+Grijzen wanneer gebruik wordt gemaakt van automatische IP-toewijzing. Anders geef hier het IPv6-adres van het systeem op.
+:end
+
+:eth_ipv6_default_gateway_help:
+Grijzen wanneer gebruik wordt gemaakt van automatische IP-toewijzing. Geef anders hier het IPv6-adres van je router op.
+:end
+
+:eth_ipv6_privacy_extensions_help:
+In- of uitschakelen van het genereren van een willekeurige IPv6 interface identificatie volgens RFC4941. Dit is vergelijkbaar met de tijdelijke IPv6-adresgeneratie op Windows-machines.
+:end
+
+:eth_ipv6_dns_server_assignment_help:
+Indien ingesteld op *Automatisch* zal de server gebruik maken van de IPv6 DNS server(s) geretourneerd door de lokale automatische toewijzing.<br>
+Indien ingesteld op *Static* kunt u uw eigen lijst invoeren.
+:end
+
+:eth_ipv6_dns_server_help:
+Dit is de primaire IPv6 DNS server om te gebruiken. Voer een IPv6 adres in.
+:end
+
+:eth_ipv6_dns_server2_help:
+Dit is de IPv6 DNS server die gebruikt moet worden wanneer de IPv6 DNS server 1 offline is.
+:end
+
+:eth_ipv6_dns_server3_help:
+Dit is de IPv6 DNS server die gebruikt moet worden wanneer de IPv6 DNS servers 1 en 2 beide offline zijn.
+:end
+
+:eth_desired_mtu_help:
+Dit is de MTU-grootte voor gebruik in de fysieke Ethernet-interface.
+Indien leeg wordt de MTU automatisch bepaald (standaard 1500 bytes).
+:end
+
+:eth_enable_vlans_help:
+Standaard zijn er geen VLAN's geconfigureerd.<br>
+Het inschakelen van VLANs breidt het aantal logische verbindingen uit over dezelfde fysieke verbinding.
+
+Opmerking: uw router en schakelaar moet ook VLAN's ondersteunen wanneer deze functie wordt gebruikt.
+:end
+
+:eth_vlan_number_help:
+Geef elke VLAN een unieke identificator. De getallen variëren van 1 tot 4095.
+:end
+
+:eth_network_rules_help:
+De interface toewijzingsregels kunnen hier worden gewijzigd en kunnen nodig zijn om de gewenste interface in te stellen voor het beheren van Unraid - *gebruik met zorg meestal is er geen noodzaak om te veranderen*.
+
+**eth0** is de belangrijkste interface die wordt gebruikt om het Unraid systeem te beheren. De andere interfaces zijn facultatief en kunnen worden gebruikt zoals gewenst.
+Elke interface moet uniek worden geïdentificeerd door zijn MAC-(hardware) adres.
+
+De interface toewijzing is opgeslagen op het flash-apparaat onder */config/netwerk-rules.cfg*. Dit bestand kan met elke editor worden bekeken, maar het wordt aanbevolen om alleen wijzigingen aan te brengen via de webGUI.<br>
+Het bestand *netwerk-rules.cfg* van het flash-apparaat verwijderen zal de automatische interface-toewijzing herstellen na een herstart systeem.
+:end
+
+:eth_routing_table_help:
+Voer een geldige IPv4-route in als *nnn.nnn.nnn.nn/xx*, bijv. *192.168.1.0/24*<br>
+of voer een geldig IPv6 route in het formaat *nnnn:nnnn:nnn::nnnnn/xxx*, bijv. *fe80::3ad8:2fff:fe25:9709/64*
+
+Selecteer de gateway in de uitklaplijst of voer een geldig IPv4/IPv6 adres als gateway-waarde in.
+
+De metrische waarde is optioneel, deze is standaard 1 Gebruik het om de gewenste gateway te selecteren wanneer er meer dan één invoer van dezelfde route bestaat.
+:end
+
+:eth_network_extra_include_help:
+Voer een of meer interfacenamen of IP-adressen in die worden opgenomen in de lijst van luisterinterfaces voor lokale systeemdiensten.
+
+Dit is vooral handig wanneer u aangepaste interfaces heeft gemaakt (bijv. maatwerk VPN-tunnel) die worden gebruikt voor toegang tot lokale systeemdiensten.
+:end
+
+:eth_network_extra_exclude_help:
+Voer een of meer interfacenamen of IP-adressen in die worden uitgesloten van de lijst met luisterinterfaces voor lokale systeemdiensten.
+
+Dit kan worden gebruikt om speciale lokale interfaces uit te sluiten (bijv. p-t-p verbindingen) of sluit dynamische interfaces (WireGuard tunnels) uit van het gebruik van lokale systeemdiensten.
+:end
+
+:apc_ups_daemon_help:
+Stel in op 'Ja' om apcupsd in te schakelen en de daemon te starten, op 'Nee' om apcupsd uit te schakelen en de daemon te stoppen.
+:end
+
+:apc_ups_cable_help:
+Definieert het type kabel dat de UPS verbindt met uw computer. Mogelijke algemene keuzes voor 'kabel' zijn:
+
++ USB, Eenvoudig, Smart, Ether of Aangepast om een speciale kabel aan te geven.
+:end
+
+:apc_ups_custom_cable_help:
+Specificeer een speciale kabel volgens modelnummer, alleen van toepassing wanneer *UPS-kabel* is ingesteld op Custom.
+
++ 940-0119A, 940-0127A, 940-0128A, 940-0020B
++ 940-0020C, 940-0023A, 940-0024B, 940-0024C
++ 940-1524C, 940-0024G, 940-0095A, 940-0095B
++ 940-0095C, 940-0625A, M-02-2000
+:end
+
+:apc_ups_type_help:
+Definieer een *UPS-type*, welke overeenkomt met het type UPS dat je hebt (zie de beschrijving voor meer details).
+
++ **USB** - meeste nieuwe UPSes zijn USB
++ **APCsmart** - nieuwere seriële tekenapparaat, geschikt voor SmartUPS-modellen met behulp van een seriële kabel (niet USB)
++ **Net** - netwerk link naar een master apcupsd via apcupsd's Network Information Server. Dit wordt gebruikt als de UPS die je computer opstart verbonden is met een andere computer voor het monitoren
++ **SNMP** - SNMP netwerk link naar een SNMP-ingeschakeld UPS apparaat
++ **Dumb** - oud serienummer apparaat voor gebruik met eenvoudige signalerende UPSes
++ **PCnet** - PowerChute Network Shutdown protocol dat als alternatief kan worden gebruikt voor SNMP met de AP9617 familie smart slot cards
++ **ModBus** - serienummer voor gebruik met de nieuwste SmartUPS modellen ter ondersteuning van het MODBUS protocol
+:end
+
+:apc_ups_device_help:
+Voer het *apparaat* in dat overeenkomt met uw situatie, alleen van toepassing wanneer *UPS type* niet is ingesteld op USB.
+
++ **apcsmart** - /dev/tty**
++ **net** - hostnaam:poort Hostnaam is het IP-adres van de NIS server. De standaardpoort is 3551
++ **snmp** - hostnaam:poort:vendor:community. Hostnaam is het IP adres of de hostnaam van de UPS op het netwerk. Vendor kan "APC" of "APC_NOTRAP" zijn. "APC_NOTRAP" zal het vangen van SNMP-vallen uitschakelen; je wilt meestal "APC". Poort is meestal 161. De gemeenschap is meestal "privé"
++ **dumb** - /dev/tty**
++ **pcnet** - ipaddr:username:passphrase:port. ipaddr is het IP-adres van de UPS-beheerkaart. gebruikersnaam en wachtwoord zijn de inloggegevens waarvoor de kaart is geconfigureerd. poort is het poortnummer waarop moet worden geluisterd naar berichten van de UPS, normaal gesproken 3052. Als deze parameter leeg is of ontbreekt, wordt de standaard van 3052 gebruikt
++ **modbus** - /dev/tty**
+:end
+
+:apc_ups_override_ups_capacity_help:
+Als uw apparaat geen Nominal Power rapporteert (`NOMPOWER`) van `apcupsd`, maar rapporteert het Lading Percentage (`LOADPCT`), je kunt handmatig de UPS-capaciteitsbeoordeling in Watts (W) definiëren (dit is de 'echte kracht' waarde in Watts (W), niet de "schijnbare macht" in Volt Amps (VA), en zou gedetailleerd moeten zijn op uw UPS-handleiding of productlijst) en de plugin zal een virtuele nominale energieschatting (`four`) dynamisch berekenen door de Overschrijven UPS-Capaciteit (W) te vergelijken met de huidige laadPercentage. Het is slechts een schatting, want het maakt geen deel uit van zaken zoals de efficiëntie van de UPS.
+:end
+
+:apc_battery_level_help:
+Bij een stroomstoring, is het resterende batterijpercentage (zoals gerapporteerd door de UPS) lager of gelijk aan *Batterijniveau*, apcupsd zal een systeem afsluiten.
+:end
+
+:apc_runtime_left_help:
+Als tijdens een stroomstoring, is de resterende runtime in minuten (volgens berekening intern door de UPS) hieronder of gelijk aan dit gebied apcups, zal een systeem afsluiten.
+:end
+
+:apc_battery_time_help:
+Als tijdens een stroomstoring, heeft de UPS de batterijen *time-out* gedurende vele seconden aangezet; apcupsd zal een systeem uitschakeling starten. Een waarde van nul schakelt deze timer uit.
+
+Als u een Smart UPS hebt, wilt u deze timer hoogstwaarschijnlijk uitschakelen door hem in te stellen op nul.
+Zo Uw UPS gaat door met de batterijen totdat de resterende % laadtijd *Batterijniveau* of de resterende batterijduur op of onder *minuten* daalt.
+
+Natuurlijk - bij het testen - zal het instellen op 60 een snelle stopzetting van het systeem zijn als je de stroomstekker trekt.
+Als je een oudere domb UPS hebt, wil je dit instellen op minder tijd dan wanneer je weet dat je batterijen kunt gebruiken.
+:end
+
+:apc_note_help:
+**Opmerking:** *Batterijniveau*, *Runtime over*, en *Time on battery* werken in conjunctie, dus de eerste die optreedt veroorzaakt de initiatie van een afsluiting.
+:end
+
+:apc_killups_help:
+Stel in op *Ja* om de stroom uit te schakelen naar de UPS na de afsluiting.
+:end
+
+:parity_check_scheduled_help:
+Standaard is er geen pariteitscontrole gepland. Selecteer hier het gewenste schema. Dit kan een van de vooraf ingestelde schema's zijn voor dagelijks, wekelijks, maandelijks, jaar of een aangepast schema.
+:end
+
+:parity_day_of_the_week_help:
+Kies hier de gewenste *dag van de week*, wanneer een **aangepast** planning is geselecteerd in de andere schema's wordt deze instelling niet gebruikt en niet beschikbaar.
+:end
+
+:parity_week_of_the_month_help:
+Wanneer een **maandelijk** of **jaar** schema is geselecteerd, kies dan de gewenste *dag van de maand*.
+Wanneer een **aangepast** schema is geselecteerd, kies dan hier de gewenste *week van de maand*, in de andere schema's wordt deze instelling niet gebruikt en niet beschikbaar.
+:end
+
+:parity_time_of_the_day_help:
+Kies de gewenste *tijd van de dag* om de planning te starten. Tijd granulariteit wordt gegeven in een half uur periode.
+:end
+
+:parity_month_of_the_year_help:
+Wanneer een **jaar** of **aangepast** schema is geselecteerd, kies dan de gewenste *maand van het jaar*, in de andere schema's wordt deze instelling niet gebruikt en niet beschikbaar.
+:end
+
+:parity_write_corrections_help:
+Kies hier of er pariteitsfouten gevonden tijdens de controle gecorrigeerd moeten worden op de pariteitsschijf of niet.
+:end
+
+:parity_cumulative_check_help:
+Verander deze instelling in **Ja** om de lange duur van de pariteit controles over meerdere periodes te verdelen. Dit is nuttig wanneer het systeem beschikbaar moet zijn en een pariteitscontrole slechts gedurende bepaalde uren wordt uitgevoerd.
+:end
+
+:parity_accumulation_frequency_help:
+Hiermee geeft u aan hoe cumulatieperioden worden uitgevoerd.
+
+**Dagelijks** betekent elke volgende dag dat de pariteitscontrole doorgaat tot aan het einde
+
+**Wekelijks** betekent elke volgende week dat de pariteit controle doorgaat tot het einde
+:end
+
+:parity_accumulation_duration_help:
+Geeft aan hoe lang elke geaccumuleerde periode loopt, uitgedrukt in uren. De **Tijd van de dag** slaat de begintijd van de periode.
+:end
+
+:mover_schedule_help:
+Kies een activiteitenschema dat varieert van uur, dagelijks, wekelijks en maandelijks.
+
+Het interval bepaalt hoe snel de mover wordt geactiveerd, het draait op de achtergrond.
+:end
+
+:mover_day_of_the_week_help:
+Kies een dag waarop het wekelijkse schema is geselecteerd. Anders uitgeschakeld.
+:end
+
+:mover_day_of_the_month_help:
+Kies een datum wanneer het maandelijkse schema is geselecteerd. Anders uitgeschakeld.
+:end
+
+:mover_time_of_the_day_help:
+Wanneer een uurrooster is geselecteerd zal dit het interval in uren instellen. Een interval begint altijd op het hele uur (minuut 0).
+
+Voor de andere schema's kies hier het tijdstip van de dag waarop de mover moet beginnen.
+:end
+
+:mover_logging_help:
+Schrijf moverberichten naar het syslog-bestand.
+:end
+
+:notifications_display_help:
+In *gedetailleerd* worden alle meldingen op het scherm weergegeven zodra ze aankomen.<br>
+Meldingen kunnen individueel of allemaal tegelijk worden erkend.
+
+In *Samengevat* zullen meldingen alleen worden geteld en het aantal ongelezen meldingen wordt weergegeven in de menu koptekst per categorie.<br>
+Klik op de tellers om de ongelezen meldingen te erkennen of te bekijken.
+:end
+
+:notifications_display_position_help:
+Kies de positie van wanneer meldingen worden weergegeven op het scherm in *Gedetailleerde* weergave. Meerdere meldingen worden gestackt, onder-boven of
+van onderaf afhankelijk van de geselecteerde plaatsing.
+:end
+
+:notifications_auto_close_help:
+Aantal seconden voordat meldingen automatisch worden gesloten in *gedetailleerd* weergave.<br>
+Een waarde van 0 schakelt automatische sluiting uit.
+:end
+
+:notifications_date_format_help:
+Selecteer het gewenste datumformaat dat gebruikt wordt in het meldingenarchief. Aanbevolen is JJJJ-MM-DD, waardoor de datum/tijd kolom sorteerbaar is op een verstandige manier.
+:end
+
+:notifications_time_format_help:
+Selecteer de gewenste tijdnotatie die wordt gebruikt in het meldingenarchief. Aanbevolen is 24 uur, wat de datum/tijdkolom op een verstandige manier sorteerbaar maakt.
+:end
+
+:notifications_store_flash_help:
+Standaard worden meldingen opgeslagen op de RAM schijf, die verloren gaat bij het herstarten van het systeem.
+Meldingen kunnen permanent op de flash-schijf worden opgeslagen onder de map '/boot/config/plugins/dynamix'.
+:end
+
+:notifications_system_help:
+Standaard is het meldingssysteem uitgeschakeld. Schakel het hier in om meldingen te ontvangen.
+De volgende secties geven meer opties over welk type meldingen zal worden verzonden.
+:end
+
+:notifications_os_update_help:
+Start een periodieke verificatie en informeer de gebruiker wanneer een nieuwe versie van het Unraid OS systeem wordt gedetecteerd.
+Gebruik de selectievakjes hieronder om te selecteren hoe meldingen moeten worden gegeven; per browser, per e-mail en/of door een aangepast agent.
+:end
+
+:notifications_plugins_update_help:
+Start een periodieke verificatie en informeer de gebruiker wanneer een nieuwe versie van een of meer geïnstalleerde plugins wordt gedetecteerd.
+Gebruik de selectievakjes hieronder om te selecteren hoe meldingen moeten worden gegeven; per browser, per e-mail en/of door een aangepast agent.
+:end
+
+:notifications_docker_update_help:
+Start een periodieke verificatie en informeer de gebruiker wanneer een nieuwe versie van een of meer van de geïnstalleerde koppelaars wordt gedetecteerd.
+Gebruik de selectievakjes hieronder om te selecteren hoe meldingen moeten worden gegeven; per browser, per e-mail en/of door een aangepast agent.
+:end
+
+:notifications_array_status_help:
+Start een periodieke array health check (preventief onderhoud) en informeer de gebruiker het resultaat van deze check.
+:end
+
+:notifications_agent_selection_help:
+Gebruik de selectievakjes hierboven om te selecteren wat en hoe meldingen moeten worden gegeven; via de browser, via e-mail en/of via een service.<br>
+<b>Tip:</b> je kunt gebruik maken van aangepaste meldingen; voeg ze gewoon toe aan de "/boot/config/plugins/dynamix/notification/agents" map en vink 'Agents' aan.
+:end
+
+:notifications_classification_help:
+Meldingen zijn geclassificeerd als:
+
+*Opmerking* - dit zijn informatieve meldingen en geven geen probleemsituatie aan, b.v. een nieuwe versie is beschikbaar<br>
+*waarschuwing* - dit zijn attente meldingen en kan toekomstige problemen aangeven, bvb. een harde schijf is warmer dan normaal<br>
+*alert* - Dit zijn ernstige meldingen en vereisen onmiddellijke aandacht, bijvoorbeeld een falende harde schijf<br>
+
+Kies voor elke classificatie hoe je meldingen wilt ontvangen.
+:end
+
+:smtp_preset_service_help:
+Selecteer een vooraf ingestelde service om de basisinstellingen in te stellen.
+:end
+
+:smtp_email_address_help:
+E-mailadres van uw e-mail account. Dit adres wordt gebruikt als afzender van de meldingen.
+:end
+
+:smtp_recipients_help:
+Ontvangers van status- en foutmeldingen. Specificeer een of meer e-mailadressen, scheid meerdere e-mailadressen met een ruimte.
+:end
+
+:smtp_priority_help:
+Stel de koptekst van e-mail met hoog belang in als er een probleem is gedetecteerd door Unraid OS.
+:end
+
+:smtp_subject_prefix_help:
+Stel een prefix in voor eenvoudige herkenning van Unraid OS-berichten.
+:end
+
+:smtp_mail_server_help:
+Geef de naam op van de e-mailserver. Gebruik de vooraf ingestelde service selectie om deze automatisch in te vullen.
+:end
+
+:smtp_mail_server_port_help:
+Geef de poort op van de e-mailserver. Gebruik de vooraf ingestelde service selectie om deze automatisch in te vullen.
+:end
+
+:smtp_use_ssl_tls_help:
+Geeft aan of SSL/TLS moet worden gebruikt om met de SMTP-server te praten.
+:end
+
+:smtp_use_starttls_help:
+Geeft aan of STARTTLS moet worden gebruikt voor het starten van SSL-onderhandeling - Zie RFC 2487.
+:end
+
+:smtp_define_tls_cert_help:
+Selecteer alleen wanneer je een certificaat hebt dat nodig is voor communicatie.
+:end
+
+:smtp_tls_cert_location_help:
+De bestandsnaam van een RSA-certificaat om te gebruiken voor TLS - indien vereist.
+:end
+
+:smtp_authentication_method_help:
+Selecteer de juiste verificatiemethode voor uw e-mailserver. Gebruik test om te controleren of de toegang goed werkt.
+:end
+
+:smtp_username_password_help:
+Voer de gebruikersnaam en het wachtwoord in om in te loggen op uw e-mailaccount. Wees ervan bewust dat het wachtwoord niet is opgeslagen in het e-mailconfiguratiebestand.
+:end
+
+:plugin_install_help:
+Om een plugin te downloaden en te installeren, voer de URL van het plg bestand in en klik op **Installeren**. Een venster wordt geopend
+die de voortgang van de installatie toont. Sluit dit venster niet voordat de installatie voltooid is. U kunt ook opgeven
+de lokale bestandsnaam van een extensie.
+:end
+
+:plugin_error_help:
+Deze plugins zijn niet geïnstalleerd vanwege een soort installatiefout.  U moet deze verwijderen
+plugins en dan jouw server herstarten.*
+:end
+
+:plugin_stale_help:
+Deze plugins zijn niet geïnstalleerd omdat de nieuwere code al bestaat.  Het is veilig om deze eenvoudigweg te schrappen.
+:end
+
+:docker_client_general_help:
+Templates zijn een snellere manier om Docker Containers in te stellen op uw Unraid server.  Er zijn twee soorten sjablonen:
+
+**Standaard templates**<br>
+Wanneer geldige repositories worden toegevoegd aan uw Docker Repositories pagina ze verschijnen in een sectie op deze drop-down voor u om te kiezen (master gecategoriseerd door auteur en vervolgens door toepassing sjabloon).
+Na het selecteren van een standaard sjabloon, wordt de pagina gevuld met nieuwe informatie over de applicatie in het Beschrijving veld en zal meestal instructies geven voor het instellen van de container.
+Selecteer een standaardsjabloon wanneer het de eerste keer is dat u deze toepassing configureert.
+
+**Gebruiker gedefinieerde templates**<br>
+Zodra je een applicatie hebt toegevoegd aan je systeem via een standaardsjabloon,
+de instellingen die je hebt opgegeven worden opgeslagen op je USB-flash-apparaat om het makkelijk te maken om je applicaties opnieuw op te bouwen in het geval dat een upgrade zou mislukken of als er een ander probleem is opgetreden.
+Om te herbouwen, Selecteer simpelweg de eerder geladen toepassing uit de door de gebruiker gedefinieerde lijst en alle instellingen voor de container zullen worden gevuld uit uw vorige setup.
+Klikken op aanmaken zal de benodigde bestanden voor de applicatie opnieuw downloaden en zou je moeten herstellen naar een werkende staat.
+Om een door de gebruiker gedefinieerde template te verwijderen, selecteer deze uit de lijst hierboven en klik op de rode X aan de rechterkant.
+:end
+
+:docker_client_name_help:
+Geef de container een naam of laat deze als standaard.  Minimaal twee tekens.  Eerste teken moet a-z A-Z 0-9 resterende tekens zijn a-z A-Z 0-9 . - _
+:end
+
+:docker_client_overview_help:
+Een beschrijving van de applicatie-container.  Ondersteunt basis HTML mark-up.
+:end
+
+:docker_client_additional_requirements_help:
+Alle extra eisen die de container heeft.  Ondersteunt basis HTML mark-up.
+:end
+
+:docker_client_repository_help:
+De repository voor de applicatie in het Docker Registry.  Formaat van auteur/appname.
+U kunt optioneel een toevoegen: na appname en een specifieke versie aanvragen voor de containerafbeelding.
+:end
+
+:docker_client_support_thread_help:
+Link naar een ondersteunende thread op het Lime-Technology's forum.
+:end
+
+:docker_client_project_page_help:
+Link naar de projectpagina (bv: www.plex.tv)
+:end
+
+:docker_client_readme_help:
+Link naar een leesbestand of pagina
+:end
+
+:docker_client_hub_url_help:
+Het pad naar de opslagplaats van de container op de Docker Hub.
+:end
+
+:docker_client_template_url_help:
+Deze URL wordt gebruikt om de sjabloon bij te houden.
+:end
+
+:docker_client_icon_url_help:
+Link naar de pictogram afbeelding voor uw applicatie (alleen weergegeven op dashboard als Toon Dashboard apps onder weergave-instellingen is ingesteld op Icons).
+:end
+
+:docker_client_webui_help:
+Als u op een applicatie-icoon van de Docker Containers pagina klikt, wordt de WebUI optie naar het pad in dit veld gekoppeld.
+Gebruik [IP] om het IP van je host te identificeren en [PORT:####] vervang de #'s voor je poort.
+:end
+
+:docker_extra_parameters_help:
+Als u extra commando's wilt toevoegen aan uw Docker container tijdens run-time, kunt u ze hier opgeven.<br>
+Zie hier voor alle mogelijke Docker run-time commando's: <a href="https://docs.docker.com/reference/run/" target="_blank">https://docs.docker.com/reference/run/</a>
+:end
+
+:docker_post_arguments_help:
+Als u extra argumenten toe wilt voegen AFTER de containerdefinitie, kunt u ze hier opgeven.
+De inhoud van dit veld is container specificatie.
+:end
+
+:docker_cpu_pinning_help:
+Het controleren van een CPU-core(s) zal de container beperken tot alleen de geselecteerde cores uitvoeren. Door geen cores te selecteren kan de container op alle beschikbare cores worden uitgevoerd (standaard)
+:end
+
+:docker_fixed_ip_help:
+Als het brugtype is geselecteerd, zal de netwerktoegang van de applicatie worden beperkt tot alleen communiceren in de havens die zijn opgegeven in de sectie poorttoewijzingen.
+Als het host-type is geselecteerd, de applicatie zal toegang krijgen om te communiceren met behulp van een poort van de host die nog niet is toegewezen aan een andere applicatie/service in gebruik.
+Over het algemeen wordt aanbevolen om deze instelling op de standaardwaarde te laten staan zoals gespecificeerd per toepassing sjabloon.
+
+BELANGRIJK: Als u poorttoewijzingen wijzigt, wijzigt u de instellingen voor de Container poort niet, omdat alleen de Host poort kan worden aangepast.
+:end
+
+:docker_container_network_help:
+Hierdoor kan uw container de netwerkconfiguratie van een andere container gebruiken. Selecteer de juiste container uit de lijst.<br>Deze instelling kan bijzonder gunstig zijn als u het verkeer van uw container via een VPN wilt routeren.
+:end
+
+:docker_tailscale_help:
+Schakel Tailscale in om deze container als een machine toe te voegen op uw Tailnet.
+:end
+
+:docker_tailscale_hostname_help:
+Geef de hostnaam voor deze container. Het hoeft niet overeen te komen met de naam van de container, maar het moet uniek zijn op uw Tailnet. Merk op dat er een HTTPS-certificaat wordt gegenereerd voor deze hostname dit betekent dat het in een openbaar register zal worden geplaatst, dus gebruik een naam die je niet erg vindt.
+Zie <a href="https://tailscale.com/kb/1153/enabling-https" target="_blank">https</a> voor meer informatie.
+:end
+
+:docker_tailscale_be_exitnode_help:
+Schakel dit in als andere machines op uw Tailnet hun internetverkeer door deze container moeten leiden, dit is het meest nuttig voor containers die verbinding maken met commerciële VPN-diensten. 
+Zorg ervoor dat u deze Exit Node autoriseert in uw <a href="https://login.tailscale.com/admin/machines" target="_blank">Tailscale Machines Admin Panel</a>.
+Voor meer details, zie de Tailscale documentatie van <a href="https://tailscale.com/kb/1103/exit-nodes" target="_blank">Exit Nodes</a>.
+:end
+
+:docker_tailscale_exitnode_ip_help:
+Optioneel route deze container zijn uitgaande internetverkeer via een Exit Node op je Tailnet. Kies de Exit Node of voer de Tailscale IP adres in.
+Voor meer details, zie <a href="https://tailscale.com/kb/1103/exit-nodes" target="_blank">Exit Nodes</a>.
+:end
+
+:docker_tailscale_lanaccess_help:
+Geldt alleen wanneer deze container een Exit Node gebruikt. Schakel dit in om de container toegang te geven tot het lokale netwerk.
+
+<b>WAARSCHUWING:</b>&nbsp;Zelfs als deze functie is ingeschakeld, systemen op uw LAN hebben mogelijk geen toegang tot de container tenzij er Tailscale zijn geïnstalleerd.
+:end
+
+:docker_tailscale_userspace_networking_help:
+Wanneer ingeschakeld, zal deze container in een beperkte omgeving werken. Tailscale DNS werkt niet, en de container kan geen verbindingen starten naar andere Tailscale machines. Andere machines op je Tailnet kunnen echter nog steeds met deze container communiceren.
+
+Indien uitgeschakeld heeft deze container volledige toegang tot uw Tailnet. Tailscale DNS werkt en de container kan volledig communiceren met andere machines op de Tailnet.
+Echter, systemen op uw LAN hebben mogelijk geen toegang tot de container tenzij er Tailscale zijn geïnstalleerd.
+:end
+
+:docker_tailscale_ssh_help:
+Tailscale SSH is vergelijkbaar met de Docker "Console" optie in de Unraid webgui, behalve dat u verbinding maakt met een SSH client en authenticeert via Tailschaal.
+Voor meer details, zie de documentatie <a href="https://tailscale.com/kb/1193/tailscale-ssh" target="_blank">Tailscale SSH</a>
+:end
+
+:docker_tailscale_serve_mode_help:
+Het inschakelen van <b>Serve</b> zal automatisch de proxy omdraaien van de primaire webservice van deze container en deze beschikbaar maken op je Tailnet met behulp van https met een geldig certificaat! 
+
+Merk op dat wanneer de <b>Tailscale WebUI</b> -URL wordt benaderd, geen extra verificatielaag wordt toegevoegd die verder gaat dan het beperken tot uw Tailnet - de container is nog steeds verantwoordelijk voor het beheren van gebruikersnamen/wachtwoorden die toegang hebben tot het systeem. Afhankelijk van uw configuratie kan directe toegang tot de container ook nog mogelijk zijn.
+
+Voor meer details, zie de documentatie van de <a href="https://tailscale.com/kb/1312/serve" target="_blank">Tailscale Serve</a>
+
+Als de documentatie aanvullende instellingen voor een complexer gebruik geval aanbeveelt, schakel dan "Tailscale Show Advanced Settings" in. Ondersteuning voor deze geavanceerde instellingen is niet beschikbaar na het bevestigen van het bevestigen van de commando's worden op correcte schaal doorgegeven.
+
+<b>Funnel</b> is vergelijkbaar met <b>Serve</b>, behalve dat de webservice beschikbaar is op het open internet. Gebruik met zorg, want de service zal waarschijnlijk aangevallen worden. Net als bij <b>Serve</b>is de container zelf verantwoordelijk voor het verwerken van authenticatie.
+
+We raden aan om de <a href="https://tailscale.com/kb/1223/funnel" target="_blank">Tailscale Funnel</a> documentatie te lezen voordat u deze functie inschakelt.
+
+<b>Opmerking:</b>&nbsp;Inschakelen <b>Serve</b> of <b>Funnel</b> publiceert de Tailscale hostname naar een openbaar grootboek.
+Voor meer details, ga naar de Tailscale Documentatie: <a href="https://tailscale.com/kb/1153/enabling-https" target="_blank">HTTPS</a>.
+:end
+
+:docker_tailscale_serve_port_help:
+Dit veld moet de poort opgeven voor de primaire webservice van deze container. Opmerking: het moet de poort in de container specificeren, niet een poort die op de host is verdeeld.
+
+Het systeem probeerde de juiste poort automatisch te bepalen. Als de verkeerde waarde werd gebruikt dan is er waarschijnlijk een probleem met het veld "Web UI" voor deze container, zichtbaar door te schakelen van "Basic View" naar "Advanced View" in de rechter bovenhoek van deze pagina. 
+
+In de meeste gevallen is deze poort het enige dat je nodig hebt om de website in deze container te serveren, hoewel er hieronder aanvullende opties beschikbaar zijn voor complexere containers.
+
+Deze waarde wordt doorgegeven aan het `<serve_port>` deel van dit commando dat begint te bedienen of door te gaan:<br>
+`tailscale [serveľfunnel] --bg --<protocol><protocol_port><path> <serve_target>:<serve_port><local_path>`<br>
+Voor meer details zie de documentatie van de <a href="https://tailscale.com/kb/1242/tailscale-serve" target="_blank">Tailscale Serve Command Line</a>
+:end
+
+:docker_tailscale_show_advanced_help:
+Hier zijn draken!
+:end
+
+:docker_tailscale_serve_target_help:
+Indien niet opgegeven, deze waarde standaard op http://localhost. Het wordt doorgegeven aan het `<serve_target>` deel van dit commando dat begint te dienen of door de trechter heen:<br>
+`tailscale [serveľfunnel] --bg --<protocol><protocol_port><path> <serve_target>:<serve_port><local_path>`<br>
+Voor meer details zie de documentatie van de <a href="https://tailscale.com/kb/1242/tailscale-serve" target="_blank">-Tailscale Serve Command Line</a> .<br>
+Houd er rekening mee dat alleen `localhost` of `127.0.0.1` wordt ondersteund.
+:end
+
+:docker_tailscale_serve_local_path_help:
+Indien niet opgegeven, deze waarde standaard in een lege string. Het wordt doorgegeven aan het `<local_path>` deel van dit commando dat begint te dienen of door de trechter heen:<br>
+`tailscale [serveľfunnel] --bg --<protocol><protocol_port><path> <serve_target>:<serve_port><local_path>`<br>
+Voor meer details zie de documentatie van de <a href="https://tailscale.com/kb/1242/tailscale-serve" target="_blank">Tailscale Serve Command Line</a>
+:end
+
+:docker_tailscale_serve_protocol_help:
+Indien niet opgegeven, standaard is deze waarde 'https'. Het wordt doorgegeven aan het `<protocol>` deel van dit commando dat begint te dienen of door de trechter heen:<br>
+`tailscale [serveľfunnel] --bg --<protocol>=<protocol_port><path> <serve_target>:<serve_port><local_path>`<br>
+Voor meer details zie de documentatie van de <a href="https://tailscale.com/kb/1242/tailscale-serve" target="_blank">Tailscale Serve Command Line</a>
+:end
+
+:docker_tailscale_serve_protocol_port_help:
+Indien niet opgegeven, deze waarde standaard "=443". Het wordt doorgegeven aan het `<protocol_port>` deel van dit commando dat begint te dienen of door de trechter heen:<br>
+`tailscale [serveľfunnel] --bg --<protocol><protocol_port><path> <serve_target>:<serve_port><local_path>`<br>
+Voor meer details zie de documentatie van de <a href="https://tailscale.com/kb/1242/tailscale-serve" target="_blank">Tailscale Serve Command Line</a>
+:end
+
+:docker_tailscale_serve_path_help:
+Indien niet opgegeven, deze waarde standaard in een lege string. Het wordt doorgegeven aan het `<path>` deel van dit commando dat begint te dienen of door de trechter heen:<br>
+`tailscale [serveľfunnel] --bg --<protocol><protocol_port><path> <serve_target>:<serve_port><local_path>`<br>
+Voor meer details zie de documentatie van de <a href="https://tailscale.com/kb/1242/tailscale-serve" target="_blank">Tailscale Serve Command Line</a>
+:end
+
+:docker_tailscale_serve_webui_help:
+Als <b>Serve</b> is ingeschakeld zal dit een https url zijn met een correcte domeinnaam die toegankelijk is via uw Tailnet, geen poort nodig!
+
+Als <b>Funnel</b> is ingeschakeld zal dezelfde url beschikbaar zijn op internet.
+
+Als ze uitgeschakeld zijn, dan zal de url gegenereerd worden vanuit het container's hoofd"Web UI" veld, maar aangepast naar het Tailscale IP. Als hier de verkeerde poort is opgegeven, verander dan van "Basic View" naar "Advanced View" en bekijk het "Web UI" veld voor deze container.
+:end
+
+:docker_tailscale_advertise_routes_help:
+Indien gewenst, geef een route op die doorgegeven moet worden aan de **`--advertise-routes=`** parameter wanneer je **`tailscale up`** gebruikt.
+Zie de documentatie van de <a href="https://tailscale.com/kb/1019/subnets#connect-to-tailscale-as-a-subnet-router" target="_blank">Subnet routers</a> voor meer details.
+:end
+
+:docker_tailscale_accept_routes_help:
+Wanneer ingeschakeld, accepteert dit uw subnet routes van andere apparaten, waarbij de **`--accept-routes`** parameter wordt toegevoegd wanneer **`tailscale up`**.
+Voor meer details zie de <a href="https://tailscale.com/kb/1019/subnets?q=allow+routes#use-your-subnet-routes-from-other-devices" target="_blank">Gebruik je subnet routes van andere apparaten</a> documentatie.
+:end
+
+:docker_tailscale_daemon_extra_params_help:
+Specificeer de extra parameters die moeten worden gegeven bij het starten van **`tailscaled`**.
+Voor meer informatie, zie de documentatie <a href="https://tailscale.com/kb/1278/tailscaled" target="_blank">op maat gesneden</a>.
+:end
+
+:docker_tailscale_extra_param_help:
+Geef de extra parameters op die moeten worden doorgegeven wanneer je **`tailscale up`**.
+Zie de documentatie over de <a href="https://tailscale.com/kb/1080/cli#up" target="_blank">Tailscale CLI</a> voor meer informatie.
+:end
+
+:docker_tailscale_statedir_help:
+Als staatsendetectie bij het opstarten mislukt, kunt u een persistente map opgeven in de container om automatische detectie te overschrijven, d.w.z. `/container-path/.tailscale_state`
+:end
+
+:docker_tailscale_troubleshooting_packages_help:
+Schakel dit in om `ping`, `nslookup`, `curl` en `speedtest-cli` in de container te installeren om te helpen met het oplossen van netwerkwerkproblemen. Zodra de problemen zijn opgelost raden we u aan dit uit te schakelen om de grootte van de container te verkleinen.
+:end
+
+:docker_privileged_help:
+Voor containers die direct toegang tot het host-apparaat nodig hebben of volledige blootstelling nodig hebben aan de mogelijkheden van de host, moet deze optie geselecteerd worden.
+Voor meer informatie, zie deze link: <a href="https://docs.docker.com/engine/reference/run/#runtime-privilege-and-linux-capabilities" target="_blank">https://docs.docker.com/engine/reference/run/#runtime-privilege-and-linux-capabilities</a>
+:end
+
+; sysdevs hulp - toegevoegd op 18 mei 2020
+:sysdevs_iommu_groups_help:
+Dit toont een lijst van IOMMU groepen die beschikbaar zijn op uw systeem samen met de output van het `lspci` commando voor elke IOMMU groep.  De numerieke ID's worden gebruikt om PCI pas-door-through te configureren.
+
+Apparaten die u selecteert, zijn gebonden aan de vfio-pci chauffeur bij het opstarten, waardoor deze beschikbaar zijn voor toewijzing aan een virtuele machine, en voorkomt ook dat de Linux kernel ze automatisch koppelt aan elke huidige host driver.
+
+**Merk op dat het selecteren van een apparaat niet alleen de opgegeven apparaten bindt, maar *alle* andere apparaten in dezelfde IOMMU groep.**
+
+&nbsp;<i class="fa fa-circle orb green-orb middle"></i>&nbsp;Dit symbool geeft aan dat het apparaat momenteel is gebonden aan de vfio-pci driver.
+
+&nbsp;<i class="fa fa-retweet grey-orb middle"></i>&nbsp;&nbsp;&nbsp;Dit symbool geeft het apparaat ondersteuning voor FLR (Function Level Reset).
+
+<input type="checkbox" value="" disabled>&nbsp;&nbsp;Als een selectievakje is uitgekleed, betekent dit dat het apparaat in gebruik is door Unraid OS en niet doorgegeven kan worden.
+:end
+
+:sysdevs_thread_pairings_help:
+Hier zie je een lijst van CPU thread koppelingen.
+:end
+
+:sysdevs_usb_devices_help:
+Dit toont de output van het `lsusb` commando.  De numerieke ID's worden gebruikt om PCI pas-door-through te configureren.
+:end
+
+:sysdevs_scsi_devices_help:
+Dit toont de uitvoer van het `lsscsi` commando.  De numerieke ID's worden gebruikt om PCI pas-door-through te configureren.
+
+Merk op dat linux-groepen ATA, SATA en SAS apparaten met echte SCSI-apparaten.
+:end
+
+; unraid.net hulp - voegde 11 maart 2021 toe
+:unraidnet_wanpanel_help:
+WAN poort is het externe TCP poortnummer op je router naar NAT/Port Forward verkeer vanaf het internet naar dit
+Unraid server SSL poort voor veilig webverkeer.
+:end
+
+:unraidnet_inactivespanel_help:
+Klik op Activeren om een lokale git repo voor uw lokale USB-boot apparaat in te stellen en verbinding te maken met een toegewijde afstandsbediening op unraid. aan deze server vastgezet.
+:end
+
+:unraidnet_changespanel_help:
+De status 'Niet bijgewerkt' geeft aan dat er lokale bestanden zijn die worden gewijzigd vs. de afstandsbediening op unraid.net.
+
+Klik op Bijwerken om de afstandsbediening te pushen.
+
+Klik op Wijzigingen om te zien wat er is veranderd.
+:end
+
+:unraidnet_uptodatepanel_help:
+De actuele status geeft aan dat uw lokale configuratie overeenkomt met die van de unraid.net afstandsbediening.
+:end
+
+:unraidnet_activepanel_help:
+Klik op deactiveren om communicatie met je afstandsbediening te pauzeren op unraid.net.
+
+Klik op Herinitialiseren om de geschiedenis van wijzigingen in zowel lokale als unraid.net afstandsbediening te wissen.
+:end
+
+:unraidnet_extraorigins_help:
+Geef een door komma's gescheiden lijst met URL's die toegang hebben tot de unraid-api (https://abc.myreverseproxy.com,https://xyz.rvrsprx.com,…)
+:end
+
+:myservers_remote_t2fa_help:
+Als Transparante 2FA voor externe toegang is ingeschakeld, u krijgt toegang tot de server door te klikken op de link "Externe toegang" op de <a href="https://connect.myunraid.net/" target="_blank" rel="noopener noreferrer">Ga naar Verbinden</a>. Het systeem zal op transparante wijze een 2FA-token aanvragen van uw server en deze insluiten in het inlogformulier van de server. De server zal elke poging om op afstand toegang in te loggen weigeren die geen geldige token bevat. Elke token kan slechts eenmaal worden gebruikt, en is slechts vijf minuten geldig.
+:end
+
+:myservers_local_t2fa_help:
+Wanneer Transparant 2FA voor Lokale Toegang is ingeschakeld U krijgt toegang tot de server door te klikken op de link "Lokale toegang" op de <a href="https://connect.myunraid.net/" target="_blank" rel="noopener noreferrer">Ga naar Verbinden</a>. Het systeem zal op transparante wijze een 2FA-token aanvragen van uw server en deze insluiten in het inlogformulier van de server. Uw server zal elke lokale toegangsloginpoging weigeren die geen geldige token bevat. Elke token kan slechts eenmaal worden gebruikt, en is slechts vijf minuten geldig.
+
+Dit is tamelijk extreem voor lokale toegang en in de meeste gevallen is dat niet nodig. Het vereist een goede internetverbinding. Als je toegang wilt tot de webGUI terwijl het internet afneemt, SSH naar de server en voer 'use_ssl no' uit, dit geeft je toegang via http://<?$nginx['NGINX_LANIP']?><?=$nginx['NGINX_PORT'] ! = '80' ? ':'.$nginx['NGINX_PORT'] : '' ?>
+:end
+
+; Helptekst van WireGuard
+
+:wg_local_name_help:
+Gebruik dit veld om een naam voor deze verbinding in te stellen en het gemakkelijk herkenbaar te maken. Dezelfde naam wordt weergegeven in de configuratie van een peers.
+:end
+
+:wg_generate_keypair_help:
+Gebruik de knop **Genereer Keypair** om automatisch een unieke privé en openbare sleutel combinatie te maken.<br>
+Of plak een bestaande privésleutel, gegenereerd door WireGuard. Deel **NIET** deze persoonlijke sleutel met anderen!
+:end
+
+:wg_local_tunnel_network_pool_help:
+WireGuard tunnels hebben een intern IP-adres nodig. Een netwerkpool toewijzen met behulp van het standaard IPv4-netwerk <?=$netpool['wg0']?>/24
+of het standaard IPv6-netwerk <?=$netpool6['wg0']? /64 of wijs je eigen netwerkpool toe, waaruit automatische toewijzing kan worden gedaan voor zowel deze server als alle andere teams.
+
+De *tunnelnetwerkpool* moet een uniek netwerk zijn dat nog niet bestaat op de server of een van de verbonden netwerken.
+:end
+
+:wg_local_tunnel_network_pool_X_help:
+WireGuard tunnels hebben een intern IP-adres nodig. Een netwerkpool toewijzen met behulp van het standaard IPv4-netwerk 
+het standaard IPv6-netwerk, of het toewijzen van uw eigen netwerkpost, waaruit automatische toewijzing kan worden gedaan voor zowel deze server als alle andere teams.
+
+De *tunnelnetwerkpool* moet een uniek netwerk zijn dat nog niet bestaat op de server of een van de verbonden netwerken.
+:end
+
+:wg_local_tunnel_address_help:
+Dit veld wordt automatisch gevuld als er een lokale tunnelnetwerk is aangemaakt. Het is toegestaan om de opdracht te overschrijven, maar dat is normaal gesproken niet nodig. Gebruik met zorg als u handmatig wisselt.
+:end
+
+:wg_local_tunnel_address_help:
+Dit veld wordt automatisch gevuld als er een lokale tunnelnetwerk is aangemaakt. Het is toegestaan om de opdracht te overschrijven, maar dat is normaal gesproken niet nodig. Gebruik met zorg als u handmatig wisselt.
+:end
+
+:wg_local_endpoint_help:
+Dit veld wordt automatisch ingevuld met het publieke beheerdomein *&lt;wan-ip&gt;.&lt;hash&gt;.myunraid.net* of het openbare adres van de server.<br>
+Hierdoor kunnen VPN-tunnels worden gemaakt van externe peers naar de server.<br>
+Configureer de juiste poort forwarding op uw router (standaard poort is <?=$netport['wg0']? maar dit kan worden gewijzigd) om inkomende verbindingen de server te laten bereiken.
+
+Gebruikers met een geregistreerde domeinnaam kunnen dit veld gebruiken om aan te geven hoe hun server bekend is op internet. Bijv. www.myserver.mijndomein.<br>
+Zorg er nogmaals voor dat uw router goed is opgezet.
+
+Notitie voor Cloudflare gebruikers: de Cloudflare proxy is ontworpen voor http-verkeer, het is niet in staat om VPN-verkeer te proxiseren. U moet de Cloudflare proxy uitschakelen om VPN met uw domein te kunnen gebruiken.
+:end
+
+:wg_local_endpoint_X_help:
+Dit veld wordt automatisch ingevuld met het publieke beheerdomein *&lt;wan-ip&gt;.&lt;hash&gt;.myunraid.net* of het openbare adres van de server.<br>
+Hierdoor kunnen VPN-tunnels worden gemaakt van externe peers naar de server.<br>
+Configureer de juiste port forwarding op uw router zodat inkomende verbindingen de server kunnen bereiken.
+
+Gebruikers met een geregistreerde domeinnaam kunnen dit veld gebruiken om aan te geven hoe hun server bekend is op internet. Bijv. www.myserver.mijndomein.<br>
+Zorg er nogmaals voor dat uw router goed is opgezet.
+
+Notitie voor Cloudflare gebruikers: de Cloudflare proxy is ontworpen voor http-verkeer, het is niet in staat om VPN-verkeer te proxiseren. U moet de Cloudflare proxy uitschakelen om VPN met uw domein te kunnen gebruiken.
+:end
+
+:wg_local_server_uses_nat_help:
+Wanneer NAT is ingeschakeld, gebruikt de server zijn eigen LAN-adres bij het doorsturen van verkeer van de tunnel naar andere apparaten in het LAN-netwerk.
+Gebruik deze instelling als er geen router wijzigingen gewenst zijn, maar deze aanpak werkt niet met Docker containers met aangepaste IP-adressen.
+
+Wanneer NAT is uitgeschakeld, gebruikt de server de WireGuard tunnel adres wanneer het verkeer wordt doorgestuurd.
+In dit geval is het vereist dat de standaard gateway (router) een statische route heeft geconfigureerd om het tunneladres terug te verwijzen naar de server.
+:end
+
+:wg_local_gateway_uses_upnp_help:
+Standaard JA als de lokale gateway UPnP ingeschakeld heeft en op verzoeken reageert.<br>
+Als UPnP is ingeschakeld, is het niet nodig om poort forwarding op de router te configureren om inkomende tunnelverbindingen mogelijk te maken. Dit gebeurt automatisch.
+:end
+
+:wg_local_tunnel_firewall_help:
+De firewall functie bepaalt de toegang op afstand over de WireGuard tunnel voor specifieke hosts en/of subnetten.<br>
+De standaard regel is "deny" en blokkeer adressen opgegeven in dit veld, terwijl alle andere worden toegelaten.<br>
+De regel wijzigen naar "toestaan" wijzigt de selectie, wat betekent dat alleen de opgegeven adressen zijn toegestaan en alle anderen worden geblokkeerd.<br>
+Gebruik een komma als scheidingsteken wanneer er meer dan één IP-adres wordt ingevoerd.
+:end
+
+:wg_mtu_size_help:
+Laat dit over naar de standaard automatische modus om de MTU-grootte te selecteren. Deze MTU-grootte is algemeen voor alle peer verbindingen.
+:end
+
+:wg_peer_configuration_help:
+Het <i class='fa fa-fw fa-eye'></i> pictogram wordt gebruikt om de configuratie van een peer te bekijken. Een configuratie kan direct worden gedownload of gelezen voor het instellen van de peer.<br>
+Het pictogram is uitgeschakeld wanneer er geen peer configuratie bestaat of de gebruiker wijzigingen heeft aangebracht aan de bestaande instellingen die nog niet zijn toegepast.
+
+Het <i class='fa fa-fw fa-key'></i> pictogram wordt gebruikt om private, openbare en ingedrukte toetsen te tonen of te verbergen. Deze velden worden altijd getoond wanneer er geen toetsen zijn ingesteld.
+:end
+
+:wg_peer_name_help:
+Gebruik dit veld om een naam voor deze peer verbinding in te stellen en het gemakkelijk herkenbaar te maken. Dezelfde naam wordt weergegeven in de configuratie van de peer aan de andere kant.
+:end
+
+:wg_peer_preshared_key_help:
+Voor extra beveiliging kan een vooraf gedeelde sleutel worden gebruikt. Gebruik de **Generate Key** knop om automatisch een unieke preshared key te maken.<br>
+Deze sleutel is hetzelfde op de server en op de peer kant en wordt ook aan de peer configuratie toegevoegd.
+:end
+
+:wg_peer_tunnel_address_help:
+Dit veld wordt automatisch gevuld als er een lokale tunnelnetwerk is aangemaakt. Het is toegestaan om de opdracht te overschrijven, maar dat is normaal gesproken niet nodig. Met zorg gebruiken bij handmatig veranderen.<br>
+Elke peer moet een uniek IP-adres van de tunnel hebben.
+:end
+
+:wg_peer_endpoint_help:
+Wanneer dit veld leeg wordt gelaten, werkt de server in *passieve modus* om de tunnel aan te leggen. Dat moet de peer zijn die de tunnel begint.
+
+Wanneer een IP-adres is ingevoerd om verbinding te maken met de peer, de server opereert in *actieve modus* en zet de tunnel aan de peer op zodra er gegevens te verzenden zijn.
+
+*Opmerking: dit veld is verplicht voor "server-naar-server" en "LAN-naar-LAN" verbindingen*
+:end
+
+:wg_peer_allowed_ips_help:
+Dit veld wordt automatisch gevuld met het adres van de tunnel. Dit staat de server toe om de peer over de tunnel te bereiken.<br>
+Wanneer de peer een andere server of router is met extra netwerken dan kunnen hun subnetten hier worden toegevoegd om deze netwerken via de tunnel bereikbaar te maken.
+:end
+
+:wg_peer_dns_server_help:
+Gebruik deze invoer om de huidige DNS-server toewijzing van de Peer te overschrijven
+:end
+
+:wg_persistent_keepalive_help:
+Standaard blijft een WireGuard tunnel stil wanneer er geen verkeer aanwezig is, wat de verbinding kan doen dalen.
+Normaal gesproken is dit geen probleem omdat een WireGuard tunnel automatisch wordt hersteld wanneer deze nodig is.<br>
+Een keepalive timer zal de verbinding open houden, want in de meeste situaties is een timerwaarde van 20 seconden geschikt.
+
+Merk op dat dit voor mobiele apparaten meer gegevens gebruikt en de batterij sneller verbruikt.
+:end
+
+:sysdrivers_intro_help:
+Deze pagina toont alle drivers die beschikbaar zijn op dit systeem. Filter de lijst met of de chauffeur onbruikbaar is of niet, of zoek naar een specifieke chauffeur indien gewenst.
+
+Een 3e partij stuurprogramma dat is geïnstalleerd door een plugin zal een steunsymbool naast zich hebben, klik hier om ondersteuning voor de plugin te krijgen.
+
+Klik op de knop Bewerken/Wijzigen om elk modprobe.d configuratiebestand toe te voegen / te verwijderen in de config/modprobe.d map op het flash-station.
+:end
+
+:console_keyboard_help:
+Selecteer je standaard toetsenkaart voor de lokale console (niet de terminal).
+:end
+
+:console_screen_help:
+**Standaard:** 'Standaard' zet de lege time-out op 15 minuten en powersave op 60 minuten.
+
+**Uitgeschakeld:** 'Uitgeschakeld' zal de lege en powersave time-out uitschakelen.
+
+**Alle andere waarden:** Zal de lege time-out instellen op de geselecteerde waarde en de time-out voor powersave uitschakelen.
+:end
+
+:console_bash_help:
+Indien 'Ja' is ingesteld zal de basisgeschiedenis herstarten blijven, zet op 'Nee' om uit te schakelen.
+
+**LET OP:** De bash-geschiedenis wordt naar het USB-Boot apparaat geschreven zodat dit hogere slijtage en tranen introduceert!
+
+**Let op:** Het uitschakelen en inschakelen zal de hele bash-geschiedenis verwijderen.
+:end
+
+:WOL_intro_help:
+Deze pagina staat de installatie toe om VMs, Containters(Docker en LXC) te starten/hervatten en te stoppen met behulp van WOL magische pakketten
+
+Er wordt geen ontwaken van de Unraid server ingesteld.
+
+Het proces zoekt naar het gedefinieerde mac adres binnen de dienst (VM of container) met uitzondering van dockers. Dockers hebben geen mac adres totdat ze draaien, dus u moet een mac adres definiëren zodat u ze kunt starten
+
+Als de service is gepauzeerd wordt een WOL Pakket hervat. 
+
+Voor elke dienst kunt u instellen: inschakelen, uitschakelen of uitschakelen en afsluiten
+
+Wanneer de aan- en uitschakeling is ingesteld als de service wordt uitgevoerd wanneer het volgende WOL-pakket wordt ontvangen zal er een uitschakeling worden uitgevoerd.
+:end
+
+:WOL_enable_help:
+Indien ingesteld op Ja is Unraidwold daemon ingesteld op 'run'.
+:end
+
+:WOL_run_docker_help:
+Indien op ja is ingesteld wanneer er wakker worden gemaakt op lan pakketten, worden er controles uitgevoerd voor dokkers, anders worden dokkers genegeerd.
+:end
+
+:WOL_run_VM_help:
+Als op ja is ingesteld wanneer er op "Ja" wordt wake op lange-pakketten wordt ontvangen, worden er controles uitgevoerd voor virtuele machines, anders worden virtuele machines genegeerd.
+:end
+
+:WOL_run_LXC_help:
+Indien op ja is ingesteld wanneer wake op lan pakketten worden ontvangen worden er controles uitgevoerd voor LXC anders worden LXC genegeerd. De LXC plugin moet worden geïnstalleerd om LXC te kunnen gebruiken.
+:end
+
+:WOL_run_shutdown_help:
+Als ja is ingesteld wanneer wake op lan pakketten wordt ontvangen, worden er controles uitgevoerd en indien ingeschakeld voor de service en die service wordt uitgevoerd wordt de entiteit uitgeschakeld. Systeem moet ingeschakeld zijn en Shutdwon om actie te ondernemen.
+:end
+
+:WOL_interface_help:
+Specificeer de interface van de te binden daemon Sommige interfaces kunnen mogelijk geen etherframe pakketten ontvangen. Aanbevelen om aan een fysieke interface te binden.
+:end
+
+:WOL_promiscuous_mode_help:
+Inschakelen om de NIC niet in te stellen op filterpakketten.
+:end
+
+:WOL_log_file_help:
+Standaard is om naar syslog te loggen, maar als je een andere log locatie wilt, stel de bestandsnaam in.
+:end

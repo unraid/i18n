@@ -1,0 +1,15 @@
+# JavaScript translation strings for Unraid webgui
+msgid ""
+msgstr ""
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : (n==0 || (n%100>0 && n%100<20)) ? 1 : 2);\n"
+"X-Crowdin-Project: cd82808b6ca77f24a5d4a6524992b13e\n"
+"X-Crowdin-Project-ID: 1\n"
+"X-Crowdin-Language: ro\n"
+"X-Crowdin-File: unraid-webgui-js.po\n"
+"X-Crowdin-File-ID: 25\n"
+"Project-Id-Version: cd82808b6ca77f24a5d4a6524992b13e\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Language-Team: Romanian\n"
+"Language: ro_RO\n"
+"PO-Revision-Date: 2025-07-18 14:58\n"
+

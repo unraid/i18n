@@ -1,0 +1,2763 @@
+:main_array_devices_help:
+**Indicador de Estado de Color** la importancia del indicador de color al inicio de cada línea en *Dispositivos de Array* es la siguiente:
+
+<i class='fa fa-circle orb green-orb'></i>Operación normal, el dispositivo está activo.
+
+<i class='fa fa-circle orb grey-orb'></i>El dispositivo está en modo de espera (apagado).
+
+<i class='fa fa-warning orb yellow-orb'></i>El contenido del dispositivo es emulado.
+
+<i class='fa fa-times orb red-orb'></i>El dispositivo está deshabilitado, el contenido es emulado.
+
+<i class='fa fa-square orb blue-orb'></i>Nuevo dispositivo.
+
+<i class='fa fa-square orb grey-orb'></i>No hay dispositivo presente, la posición está vacía.
+
+**Identificación** es la *firma* que identifica de manera única a un dispositivo de almacenamiento. La firma
+incluye el modelo del dispositivo, número de serie, ID del dispositivo Linux y tamaño del dispositivo.
+
+**Temp.** (temperatura) se lee directamente del dispositivo. Se configura qué unidades usar en
+la página de [Preferencias de Pantalla](Settings/DisplaySettings).  No leemos la temperatura de discos duros apagados normalmente porque esto suele hacer que se enciendan; en su lugar mostramos el símbolo `*`.
+Mostramos el símbolo `*` también para dispositivos SSD y Flash, aunque a veces estos dispositivos sí informan de una temperatura válida, y a veces devuelven el valor `0`.  Además
+mostramos el símbolo `*` para dispositivos SSD y Flash, aunque a veces estos dispositivos sí informan de una temperatura válida, y a veces devuelven el valor `0`.
+temperatura, y a veces devuelven el valor `0`.
+
+**Tamaño, Usado, Libre** informa del tamaño total del dispositivo, el espacio usado y el espacio restante para archivos.  Estas
+unidades también se configuran en la página de [Preferencias de Pantalla](Settings/DisplaySettings).  La
+cantidad de espacio usado será un número distinto de cero incluso en un disco vacío debido al sobrecosto del sistema de archivos.
+
+*Nota: para un pool de cache de múltiples dispositivos, estos datos son para el pool completo como lo indica btrfs.*
+
+**Lecturas, Escrituras** son un conteo de las solicitudes de I/O enviadas a los controladores I/O del dispositivo.  Estas estadísticas pueden
+ser eliminadas en cualquier momento, consulte la sección Estado del Array más abajo.
+
+**Errores** cuentan el número de errores *irrecuperables* reportados por los controladores I/O del dispositivo
+I/O. Los datos faltantes debidos a errores de lectura irrecuperables del array se llenan en tiempo real usando reconstrucción de paridad (e intentamos escribir nuevamente estos datos en los sectores que fallaron).
+Cualquier error de escritura irrecuperable resulta en *deshabilitar* el disco. Cualquier
+error de escritura irrecuperable resulta en *deshabilitar* el disco.
+
+**FS** indica el sistema de archivos detectado en la partición 1 del dispositivo.
+
+**Ver** columna contiene un icono de carpeta que indica que el dispositivo está *montado*. Haga clic en el icono para
+explorar el sistema de archivos.
+
+Si "Mostrar totales del array" está habilitado en la página de [Preferencias de Pantalla](Settings/DisplaySettings), una
+línea de **Total** está incluida, la cual proporciona un resumen de las estadísticas del dispositivo, incluyendo la temperatura promedio
+de sus dispositivos.
+
+El Array debe estar detenido para cambiar las asignaciones de dispositivos del Array.
+
+Un array unRAID consiste en uno o dos discos de Paridad y varios discos de Datos. Los discos de Datos
+se utilizan exclusivamente para almacenar datos de usuario, y el(los) disco(s) de Paridad proporcionan la redundancia necesaria
+para recuperarse de fallas de disco.
+
+Dado que los datos no se distribuyen a través del array, el(los) disco(s) de Paridad deben ser tan grandes, o más grandes que el disco de Datos más grande.
+disco de Datos.  La paridad también debería ser su disco de mayor rendimiento.
+
+Cada disco de Datos tiene su propio sistema de archivos y puede exportarse como un
+compartido separado.
+
+Haga clic en el nombre del Dispositivo para configurar ajustes individuales del dispositivo y lanzar ciertas utilidades.
+:fin
+
+"":main_slots_help:""
+"**Ranuras**: selecciona el número de ranuras para dispositivos en tu servidor designadas para dispositivos del arreglo."
+"El número mínimo de ranuras para dispositivos del arreglo es 2, y debes asignar al menos un dispositivo al arreglo."
+"":end:""
+
+"":cache_devices_help:""
+"**Indicador de Estado por Color:** el significado del indicador de color al principio de cada línea en *Dispositivos de Pool* es como sigue:"
+
+"<i class='fa fa-circle orb green-orb'></i> Operación normal, el dispositivo está activo."
+
+"<i class='fa fa-circle orb grey-orb'></i> El dispositivo está en modo de espera (apagado)."
+
+"<i class='fa fa-square orb blue-orb'></i> Dispositivo nuevo."
+
+"<i class='fa fa-square orb grey-orb'></i> No hay dispositivo presente, la posición está vacía."
+
+"**Dispositivos de Pool** es un solo dispositivo, o un pool de múltiples dispositivos, *fuera* del arreglo unRAID."  "Puede ser exportado para acceso en red tal como un dispositivo de Arreglo."
+"Como un dispositivo del arreglo."  "Estar fuera del arreglo unRAID resulta en un acceso de escritura significativamente más rápido."
+
+"Existen dos formas de configurar los dispositivos del pool:"
+
+"1." "Como un único dispositivo, o"
+"2." "Como un pool de múltiples dispositivos."
+
+"Cuando se configura como un solo dispositivo puedes formatear el dispositivo usando cualquier sistema de archivos soportado (btrfs, reiserfs, o xfs)."
+"Esta configuración ofrece el mayor rendimiento, pero a costo de protección de datos - si el dispositivo individual del pool falla, todos los datos contenidos en él se pueden perder."  "Cuando se configura como un pool de múltiples dispositivos, Unraid OS seleccionará automáticamente el formato *btrfs-raid1* (para tanto datos como metadatos)."
+"btrfs permite añadir cualquier número de dispositivos al pool y cada copia de datos se garantiza que se escribe en dos dispositivos diferentes."
+
+"Por lo tanto, el pool puede soportar un fallo de un solo disco sin perder datos."
+"Cuando [User Shares](/Settings/ShareSettings) están habilitados, los usuarios pueden configurar para utilizar automáticamente los dispositivos del pool para accel rare las escrituras."  "Un proceso de fondo especial llamado *mover* puede programarse para funcionar periódicamente para mover archivos de las User Shares fuera del Caché y hacia el Arreglo."
+"":end:""  "":cache_slots_help:""
+
+"**Ranuras** selecciona el número de ranuras de dispositivos en tu servidor designadas para dispositivos de Caché."
+"":end:""
+"":boot_device_help:""  "La configuración vital del arreglo se mantiene en el dispositivo USB Flash; por esta razón, debe permanecer conectado a su servidor."
+"Haz clic en [Flash](/Main/Flash?name=flash) para ver el GUID y la información de registro, y para configurar los ajustes de exportación."
+"Dado que el dispositivo USB Flash está formateado usando el sistema de archivos FAT, solo puede ser exportado usando el protocolo SMB."
+
+"":end:""
+"":array_status_help:""
+"**Indicador de Estado por Color:** el significado del indicador de color del *Arreglo* es como sigue:"
+
+"<i class='fa fa-circle orb green-orb'></i>Arreglo iniciado y paridad válida."
+"<i class='fa fa-circle orb grey-orb'></i>Arreglo detenido, paridad válida."
+"<i class='fa fa-warning orb yellow-orb'></i>Arreglo iniciado, pero paridad inválida."  "<i class='fa fa-warning orb grey-orb'></i>Arreglo detenido, paridad inválida."
+"":end:""  "":array_devices_help:""
+"#### Asignación de Dispositivos"
+"Un arreglo de discos unRAID consiste en un número de discos de Datos y hasta dos discos de Paridad."
+
+"Los discos de Datos se usan exclusivamente para almacenar datos de usuario."
+"El(los) disco(s) de Paridad proporcionan la redundancia necesaria para recuperarse de cualquier fallo de uno o dos discos."
+
+"Es importante utilizar el término *disco* cuando se refiere a un dispositivo de almacenamiento del arreglo."
+
+"Utilizamos el término *disco duro* (a veces solo *unidad*) al referirse a un disco duro físico (HDD)."
+
+"Esto se debe a que en un sistema RAID es posible leer/escribir un disco del arreglo cuyo disco duro correspondiente está deshabilitado o incluso ausente."
+
+"También es útil hacer preguntas como, "¿Qué dispositivo está asignado como disco de Paridad?"; o, "¿Qué dispositivo corresponde a disco2?"."
+
+"Por lo tanto, necesitamos una forma de asignar discos duros a discos del arreglo."
+
+"Esto se logra aquí en la página Principal cuando el arreglo está detenido."
+"Hay un cuadro desplegable para cada disco del arreglo que lista todos los dispositivos no asignados."
+
+"Para asignar un dispositivo simplemente selecciónalo de la lista." "Cada vez que se hace una asignación de dispositivo, el sistema actualiza un archivo de configuración para registrar la asignación."
+"#### Requisitos"
+"A diferencia de los sistemas RAID tradicionales que dividen datos entre todos los dispositivos del arreglo, un servidor unRAID almacena archivos en discos duros individuales."
+
+"Por consiguiente, todas las operaciones de escritura de archivos involucrarán tanto al disco de Datos al que se escribe el archivo, como al(los) disco(s) de Paridad."  "Por estas razones,"
+"* el tamaño de un disco de Paridad debe ser tan grande o más grande que cualquiera de los discos de Datos,"
+"y" "* dado una opción, el(los) disco(s) de Paridad deben ser los discos más rápidos en tu colección."
+"#### Directrices" Además, es útil poder preguntar, "¿qué dispositivo está
+asignado como el disco de Paridad?"; o, "¿a qué dispositivo corresponde el disco2?".
+
+Por lo tanto, necesitamos un método para asignar discos duros a los discos del array. Esto se logra aquí en la
+página Principal cuando el array está detenido. Hay un cuadro desplegable para cada disco del array que lista todos los
+dispositivos no asignados. Para asignar un dispositivo simplemente selecciónelo de la lista. Cada vez que se hace una
+asignación de dispositivo, el sistema actualiza un archivo de configuración para registrar la asignación.
+
+#### Requisitos
+
+A diferencia de los sistemas RAID tradicionales que distribuyen datos en todos los dispositivos del array, un servidor Unraid
+almacena archivos en discos duros individuales. En consecuencia, todas las operaciones de escritura en archivos involucrarán tanto el
+Disco de Datos al que se está escribiendo el archivo, como el(los) Disco(s) de Paridad.  Por estas razones,
+
+* el tamaño del Disco de Paridad debe ser igual o mayor que cualquiera de los Discos de Datos,
+
+y
+
+* dada una elección, el(los) Disco(s) de Paridad deben ser el(los) disco(s) más rápido(s) de su colección.
+
+#### Guías
+
+Estos son los pasos que debe seguir al diseñar su array de discos unRAID:
+
+1. Decida qué disco duro utilizará para la paridad, y qué discos duros utilizará para
+Disco de Datos 1, disco2, etc., y etiquételos de alguna manera. Además, encuentre el número de serie de cada disco duro
+y anótelo en algún lugar; necesitará esta información más adelante.
+
+2. Instale sus dispositivos de disco duro, inicie su servidor y abra el webGUI. Si se trata de una compilación de sistema nueva
+entonces la página Principal no mostrará discos instalados. Esto no significa que el sistema no pueda detectar sus
+discos duros; solo significa que aún no se han asignado.
+
+3. ¿Recuerda los números de serie que anotó en el paso 1? Para la paridad y cada Disco de Datos, seleccione el
+disco duro correcto basándose en su número de serie desde la lista desplegable.
+
+#### Enchufe caliente
+
+También puede *enchufar en caliente* discos duros a su servidor si su hardware lo admite. Por ejemplo,
+si está utilizando jaulas para discos duros, puede simplemente conectarlos a su servidor mientras está encendido y
+con el array Detenido. Actualice la página Principal para que los nuevos dispositivos no asignados aparezcan en el desplegable de asignación.
+#### Próximos pasos
+
+Una vez que haya asignado todos sus discos duros, consulte la sección Estado del Array abajo
+
+y Arranque el array.
+:end
+:encryption_help:
+
+#### Entrada de encriptación
+Con el array Detenido, el usuario puede especificar una nueva clave de encriptación.
+
+Tenga en cuenta que una vez que un dispositivo se formatea con una determinada clave, solo se puede abrir usando esa misma clave.
+Cambiar la clave de encriptación requiere reformatear los dispositivos encriptados **resultando en la pérdida permanente de todos los datos existentes en esos dispositivos.**
+#### Frase de contraseña
+
+Introduzca una frase de contraseña de hasta 512 caracteres.
+
+Es muy aconsejable usar solo los 95 caracteres imprimibles de los primeros 128 caracteres de la [tabla ASCII](https://es.wikipedia.org/wiki/ASCII), ya que siempre tendrán la misma representación binaria.
+Otros caracteres pueden tener una codificación diferente dependiendo de la configuración del sistema y su frase de contraseña no
+funcionará con una codificación diferente. Si desea una frase de contraseña más larga o incluir datos binarios, suba un archivo de clave en su lugar.
+Consulte el [FAQ de cryptsetup](https://gitlab.com/cryptsetup/cryptsetup/wikis/FrequentlyAskedQuestions#5-aspectos-de-seguridad) para saber qué constituye una frase de contraseña *segura*.
+
+**Memorice** esta frase de contraseña.
+**SI SE PIERDE, EL CONTENIDO ENCRIPTADO NO PUEDE SER RECUPERADO!**
+
+#### Archivo de clave Seleccione un archivo de clave local con una clave de encriptación almacenada o un archivo binario.
+
+El tamaño máximo del archivo de clave es de 8M (8388608 bytes).
+
+**Haga una copia de seguridad** de su archivo de clave local. **SI SE PIERDE, EL CONTENIDO ENCRIPTADO NO PUEDE SER RECUPERADO!**
+
+:end :info_warning_temp_help:
+*Advertencia de temperatura del disco* establece el umbral de advertencia para la temperatura de este disco duro.
+
+Superar este umbral resultará en una notificación de advertencia.
+Un valor de cero desactivará el umbral de advertencia (incluidas las notificaciones). Superar este umbral resultará en una notificación de advertencia.
+
+Un valor de cero desactivará el umbral de advertencia (incluidas las notificaciones).
+:end
+
+:info_critical_temp_help:
+*La temperatura crítica del disco* establece el umbral crítico para la temperatura de este disco duro. Superar este umbral resultará en una notificación de alerta.
+
+Un valor de cero desactivará el umbral crítico (incluidas las notificaciones).
+:end
+
+:info_file_system_help:
+Ingrese el tipo de sistema de archivos deseado.  Al cambiar el tipo de sistema de archivos de un dispositivo, se le permitirá reformatear
+ese dispositivo usando el nuevo sistema de archivos.  Tenga en cuenta que **todos los datos existentes en el dispositivo se perderán**.
+:end
+
+:info_comments_help:
+Este texto aparecerá en la columna *Comentarios* para la carpeta compartida en el Explorador de Windows.
+Ingrese cualquier cosa que desee, hasta 256 caracteres.
+:end
+
+:info_warning_utilization_help:
+*La utilización de advertencia del disco* establece el umbral de advertencia para esta utilización del disco duro. Superar este umbral resultará en una notificación de advertencia.
+
+Cuando el umbral de advertencia se establece igual o superior al umbral crítico, solo habrá notificaciones críticas (no existen advertencias).
+
+Un valor de cero desactivará el umbral de advertencia (incluidas las notificaciones).
+:end
+
+:info_critical_utilization_help:
+*La utilización crítica del disco* establece el umbral crítico para esta utilización del disco duro. Superar este umbral resultará en una notificación de alerta.
+
+Un valor de cero desactivará el umbral crítico (incluidas las notificaciones).
+:end
+
+:info_btrfs_balance_help:
+**Equilibrar** ejecutará el programa *btrfs balance* para reordenar las extensiones entre todos los dispositivos del grupo, por ejemplo,
+para convertir el grupo de raid1 a raid0 o viceversa.
+
+Cuando se realiza un *balance completo*, básicamente reescribe todo en el sistema de archivos actual.
+
+Una *conversión de modo* afecta las extensiones de datos de btrfs; la metadatos siempre utiliza raid1 y se convierte a raid1 si es necesario por cualquier operación de equilibrio.
+
+El tiempo de ejecución es potencialmente muy largo, dependiendo del tamaño del sistema de archivos y la velocidad del dispositivo.
+
+Unraid OS utiliza estas opciones predeterminadas al crear un grupo de múltiples dispositivos:
+
+`-dconvert=raid1 -mconvert=raid1`
+
+Para una documentación más completa, por favor consulte el  [Manpage](https://man7.org/linux/man-pages/man8/btrfs-balance.8.html) btrfs-balance.
+
+*Nota: raid5 y raid6 todavía son considerados mayormente **experimentales** por la comunidad de Linux*
+:end
+
+:info_balance_cancel_help:
+**Cancelar** cancelará la operación de equilibrio en curso.
+:end
+
+:info_btrfs_scrub_help:
+**Scrub** ejecuta el programa *btrfs scrub* que leerá todos los bloques de datos y metadatos de todos los
+dispositivos y verificará los checksums.
+
+*btrfs scrub* reparará bloques dañados si hay una copia correcta disponible.
+:end
+
+:info_zfs_scrub_help:
+**Scrub** ejecuta el programa *zfs scrub* que leerá todos los bloques de datos y metadatos de todos los
+dispositivos y verificará los checksums.
+
+Haga clic en el botón **Actualizar Grupo** para actualizar el grupo ZFS y habilitar las últimas funcionalidades de ZFS.
+:end
+
+:info_scrub_cancel_help:
+**Cancelar** cancelará la operación de Scrub en curso.
+:end
+
+:info_btrfs_check_help:
+**Verificar** ejecutará el programa *btrfs check* para verificar la integridad del sistema de archivos en el dispositivo.
+
+El campo *Opciones* está inicializado con *--readonly* que especifica solo verificación.  Si se necesita reparación, debe ejecutar
+una segunda pasada de Verificación, configurando las *Opciones* a *--repair*; esto permitirá a *btrfs check* arreglar el sistema de archivos.
+
+ADVERTENCIA: **No use** *--repair* a menos que se lo aconseje un desarrollador o un usuario experimentado,
+y solo después de haber aceptado que no todos los fsck reparan exitosamente todos los tipos de corrupción del sistema de archivos.
+P. ej., algunos otros errores de software o hardware pueden dañar fatalmente un volumen.
+
+Después de iniciar una Verificación, debería Actualizar para monitorear el progreso y el estado.  Dependiendo de
+dependiendo del tamaño del sistema de archivos y los errores que puedan estar presentes, la operación puede tardar **mucho tiempo** en completarse (horas).
+No se imprime mucha información en la ventana, pero puedes verificar que la operación está ejecutándose observando los contadores de lectura/escritura.
+incrementando para el dispositivo en la página principal.
+:end
+
+:info_check_cancel_help:
+**Cancelar** cancelará la operación de verificación en curso.
+:end
+
+:info_reiserfs_check_help:
+**Verificar** ejecutará el programa *reiserfsck* para revisar la integridad del sistema de archivos en el dispositivo.
+
+El campo *Opciones* puede ser rellenado con opciones específicas utilizadas para corregir problemas en el sistema de archivos. Típicamente,
+primero ejecutas una pasada de Verificación dejando *Opciones* en blanco.  Al completar, si *reiserfsck* encuentra algún problema, debes
+ejecutar una segunda pasada de Verificación utilizando una opción específica como lo indique la primera pasada de *reiserfsck*.
+
+Después de iniciar una Verificación, debes refrescar para monitorear el progreso y el estado.  Dependiendo de
+dependiendo del tamaño del sistema de archivos y los errores que puedan estar presentes, la operación puede tardar **mucho tiempo** en completarse (horas).
+No se imprime mucha información en la ventana, pero puedes verificar que la operación está ejecutándose observando los contadores de lectura/escritura.
+incrementando para el dispositivo en la página principal.
+:end
+
+:info_reiserfs_cancel_help:
+**Cancelar** cancelará la operación de verificación en curso.
+:end
+
+:info_xfs_check_help:
+**Verificar** ejecutará el programa *xfs_repair* para revisar la integridad del sistema de archivos en el dispositivo.
+
+El campo *Opciones* se inicializa con *-n* que especifica sólo verificar.  Si se necesita reparar, debes ejecutar
+una segunda pasada de Verificación, dejando en blanco las *Opciones*; esto permitirá a *xfs_repair* reparar el sistema de archivos.
+
+Después de iniciar una Verificación, debes refrescar para monitorear el progreso y el estado.  Dependiendo de
+dependiendo del tamaño del sistema de archivos y los errores que puedan estar presentes, la operación puede tardar **mucho tiempo** en completarse (horas).
+No se imprime mucha información en la ventana, pero puedes verificar que la operación está ejecutándose observando los contadores de lectura/escritura.
+incrementando para el dispositivo en la página principal.
+:end
+
+:info_xfs_cancel_help:
+**Cancelar** cancelará la operación de verificación en curso.
+:end
+
+:info_smart_notifications_help:
+Las notificaciones SMART se generan ya sea por un valor RAW creciente del atributo o un valor NORMALIZADO decreciente que alcanza un umbral predefinido establecido por el fabricante.
+
+Cada disco puede tener su propia configuración específica que anula la configuración 'predeterminada' (ver configuraciones globales SMART en Configuración de Discos).
+:end
+
+:info_tolerance_level_help:
+Se puede dar un nivel de tolerancia para evitar que pequeños cambios resulten en una notificación. Establecer un nivel de tolerancia demasiado alto puede resultar en cambios críticos sin una notificación.
+
+Cada disco puede tener su propia configuración específica que anula la configuración 'predeterminada' (ver configuraciones globales SMART en Configuración de Discos).
+:end
+
+:info_controller_type_help:
+Por defecto, la selección automática del controlador es realizada por smartctl para leer la información SMART. Sin embargo, ciertos controladores necesitan configuraciones específicas para que smartctl funcione.
+Utiliza esta configuración para seleccionar el tipo de controlador y completar el índice del disco específico y el nombre del dispositivo para tu situación. Usa la documentación del fabricante para encontrar la información relevante.
+
+Cada disco puede tener su propia configuración específica que anula la configuración 'predeterminada' (ver configuraciones globales SMART en Configuración de Discos).
+:end
+
+:info_attribute_notifications_help:
+El usuario puede habilitar o deshabilitar las notificaciones para los atributos SMART dados. Se recomienda mantener el valor predeterminado, que es TODOS los atributos seleccionados,
+cuando ciertos atributos no estén presentes en tu disco duro o no proporcionan la información correcta, estos pueden ser excluidos.
+Además, se pueden ingresar atributos SMART personalizados para generar notificaciones. Ten cuidado en esta selección,
+puede causar una avalancha de notificaciones si se eligen atributos SMART inapropiados.
+
+Cada disco puede tener su propia configuración específica que anula la configuración 'predeterminada' (ver configuraciones globales SMART en Configuración de Discos).
+:end
+
+:selftest_history_help:
+Presiona **Mostrar** para ver el historial de auto-pruebas tal como se mantiene en el disco.
+Esta función solo está disponible cuando el disco está en modo activo.
+:end
+
+:selftest_error_log_help:
+Presiona **Mostrar** para ver el informe de errores tal como se mantiene en el disco.
+Esta función solo está disponible cuando el disco está en modo activo.
+:end
+
+:selftest_short_test_help:
+Inicia una auto-prueba SMART *corta*, la duración estimada se puede ver en la sección *Capacidades*. Esto suele ser unos pocos minutos.
+
+Cuando el disco se apaga, abortará cualquier auto-prueba en ejecución.
+Esta función solo está disponible cuando el disco está en modo activo.
+:end
+
+:selftest_long_test_help:
+Inicia una auto-prueba SMART *extendida*, la duración estimada se puede ver en la sección *Capacidades*. Esto suele ser varias horas.
+
+Cuando el disco se apaga, abortará cualquier auto-prueba en ejecución. Se recomienda desactivar el temporizador de apagado del disco
+para evitar la interrupción de esta auto-prueba.
+
+Esta función solo está disponible cuando el disco está en modo activo.
+:end
+
+:selftest_result_help:
+Cuando no se está ejecutando ninguna prueba, se mostrará aquí el resultado más reciente de auto-prueba obtenida (si está disponible).
+De lo contrario, se muestra un indicador de progreso (valor de porcentaje) para una prueba en ejecución.
+:end
+
+:smart_attributes_help:
+Esta lista muestra los atributos SMART que este disco admite. Para más información sobre cada atributo SMART, se recomienda buscar en línea.
+
+Atributos en *naranja* pueden requerir tu atención. Tienen un **valor bruto** mayor que cero y pueden indicar un fallo en el disco pendiente.
+
+Se requiere atención especial cuando el valor bruto del atributo particular comienza a aumentar con el tiempo. En caso de duda, consulta el foro de Limetech para obtener asesoramiento.
+:end
+
+:smart_capabilities_help:
+Esta lista muestra las capacidades SMART que este disco admite.
+
+Aquí observa la duración estimada de las auto-pruebas SMART corta y extendida.
+:end
+
+:smart_identity_help:
+Esta lista muestra información de identidad SMART de este disco.
+:end
+
+:open_devices_help:
+Estos son dispositivos instalados en tu servidor pero no asignados ni al
+array protegido por paridad ni al disco/ grupo de caché.
+:end
+
+:flash_backup_help:
+Utiliza *Copia de seguridad de Flash* para crear un único archivo zip del contenido actual del dispositivo flash y almacenarlo localmente en tu computadora.
+:end
+
+:syslinux_cfg_help:
+Usa esta página para hacer cambios en tu archivo `syslinux.cfg`.
+Deberás reiniciar tu servidor para que estos cambios surtan efecto.
+:end
+
+:syslinux_button_help:
+Haz clic en el botón **Predeterminado** para inicializar el cuadro de edición con el
+contenido predeterminado de fábrica.  Aún necesitas hacer clic en **Aplicar** para
+confirmar el cambio.
+
+Haz clic en el botón **Aplicar** para confirmar las ediciones actuales.  Haz clic en **Restablecer** para
+deshacer cualquier cambio que hayas hecho (antes de guardar). Haz clic en **Hecho** para salir de esta página.
+:end
+
+:info_share_assignment_help:
+El grupo seleccionado está disponible para compartir con usuarios.
+:end
+
+:info_free_space_help:
+Esto define un "piso" para la cantidad de espacio libre restante en el volumen.
+Si el espacio libre es menor a este valor, entonces los nuevos archivos escritos a través de compartir con usuarios fallarán con un error de "espacio insuficiente".
+
+Ingresa un valor numérico con uno de estos sufijos:
+
+**KB** = 1,000<br>
+**MB** = 1,000,000<br>
+**GB** = 1,000,000,000<br>
+**TB** = 1,000,000,000,000<br>
+**K** = 1,024 (es decir, 2^10)<br>
+**M** = 1,048,576 (es decir, 2^20)<br>
+**G** = 1,073,741,824 (es decir, 2^30)<br>
+**T** = 1,099,511,627,776 (es decir, 2^40)<br>
+
+Si no hay sufijo, se asume un conteo de bloques de 1024 bytes.
+:end
+
+:share_list_help:
+**Indicador de Estado de Color** -- el significado del indicador de color al inicio de cada línea en *Compartir con Usuarios* es el siguiente:
+
+<i class='fa fa-circle orb green-orb'></i>Todos los archivos están en almacenamiento protegido.
+
+<i class='fa fa-warning orb yellow-orb'></i>Algunos o todos los archivos están en almacenamiento no protegido.
+
+**Modos de seguridad:**
+
++ '-' -- el compartir usuario no está exportado y está no disponible en la red
++ *Público* -- todos los usuarios, incluidos los invitados, tienen acceso completo de lectura/escritura (acceso abierto)
++ *Seguro* -- todos los usuarios, incluidos los invitados, tienen acceso de lectura, el acceso de escritura está configurado por usuario (acceso limitado)
++ *Privado* -- sin acceso de invitado, el acceso de lectura/escritura o solo de lectura está configurado por usuario (acceso cerrado)
+
+**Modos especiales:**
+
++ El modo de seguridad SMB se muestra en *cursiva* indicando compartir usuario exportados ocultos.
++ NFS no tiene modos especiales para compartir usuario.
+:end
+
+:disk_list_help:
+**Indicador de Estado de Color** -- el significado del indicador de color al inicio de cada línea en *Compartir de Discos* es el siguiente:
+
+<i class='fa fa-circle orb green-orb'></i>Montado, el dispositivo subyacente tiene redundancia/protección.
+
+<i class='fa fa-warning orb yellow-orb'></i>Montado, el dispositivo subyacente no tiene redundancia/protección.
+
+**Modos de seguridad:**
+
++ '-' -- el compartir disco no está exportado y no está disponible en la red
++ *Público* -- todos los usuarios, incluidos los invitados, tienen acceso completo de lectura/escritura (acceso abierto)
++ *Seguro* -- todos los usuarios, incluidos los invitados, tienen acceso de lectura, el acceso de escritura está configurado por usuario (acceso limitado)
++ *Privado* -- sin acceso de invitado, el acceso de lectura/escritura o solo de lectura está configurado por usuario (acceso cerrado)
+
+**Modos especiales:**
+
++ El modo de seguridad SMB se muestra en *cursiva* indicando compartir disco exportados ocultos.
++ NFS no tiene modos especiales para compartir disco.
+:end
+
+:share_edit_global1_help:
+Un *Compartir*, también llamado un *Compartir de Usuarios*, es simplemente el nombre de un directorio de nivel superior que existe en uno o más de tus
+volúmenes de almacenamiento (discos de matriz y grupos).  Cada compartir se puede exportar para acceso a la red.  Al navegar un compartir, devolvemos la
+vista compuesta de todos los archivos y subdirectorios para los cuales ese directorio de nivel superior existe en cada dispositivo de almacenamiento.
+
+*Leer configuraciones de* se utiliza para preconfigurar los ajustes del nuevo compartir con los ajustes de un compartir existente.
+
+Selecciona el nombre del compartir deseado y presiona **Leer** para copiar los ajustes de la fuente seleccionada.
+:end
+
+:share_edit_global2_help:
+*Escribir configuraciones en* se usa para copiar las configuraciones del compartir actual a uno o más compartir existentes.
+
+Selecciona los destinos deseados y presiona **Escribir** para copiar las configuraciones a los compartir seleccionados.
+:end
+
+:share_edit_name_help:
+El nombre del compartir puede tener hasta 40 caracteres y distingue entre mayúsculas y minúsculas con estas restricciones:
+
+* no puede contener un carácter de comillas dobles (") o los siguientes caracteres: / \ * < > |
+* no puede ser uno de los nombres de compartir reservados: flash, cache, cache2, .., disco1, disco2, ..
+
+Recomendamos encarecidamente facilitar tu vida y evitar caracteres especiales.
+:end
+
+:share_edit_comments_help:
+Lo que quieras, hasta 256 caracteres.
+:end
+
+:share_edit_allocation_method_help:
+Esta configuración determina cómo el sistema operativo Unraid elegirá qué disco usar al crear un nuevo archivo o directorio:
+
+**Alta-nivel**
+Elige el disco con el número más bajo con espacio libre aún por encima del *nivel alto de agua* actual.  El
+*nivel alto de agua* se inicializa con el tamaño del disco de datos más grande dividido por 2.  Si ningún disco
+tiene espacio libre por encima del *nivel alto de agua* actual, divide el *nivel alto de agua* por 2 y elige de nuevo.
+
+El objetivo de **Alta-nivel** es escribir la mayor cantidad de datos posible en cada disco (para minimizar
+con qué frecuencia los discos necesitan girar), mientras al mismo tiempo, intenta mantener la misma cantidad de espacio libre en
+cada disco (para distribuir los datos de manera uniforme a través del array).
+
+**Llenar**
+Elige el disco con el número más bajo que aún tiene espacio libre por encima de la configuración actual de **Espacio libre mínimo**
+configuración.
+
+**Más-libre**
+Elige el disco que actualmente tiene más espacio libre.
+:end
+
+:share_edit_free_space_help:
+El *espacio libre mínimo* disponible para permitir la escritura en cualquier disco que forme parte del compartir.<br>
+
+Elige un valor que sea igual o mayor que el tamaño del mayor archivo único que planeas copiar al compartir.
+Incluye las unidades KB, MB, GB y TB según sea necesario, por ejemplo, 10MB.
+:end
+
+:share_edit_split_level_help:
+Determina si un directorio tiene permitido expandirse a múltiples discos.
+
+**Dividir automáticamente cualquier directorio según sea necesario**
+Cuando se necesita crear un nuevo archivo o subdirectorio en un compartir, Unraid OS primero elige en qué disco
+debería ser creado, de acuerdo con el método de *Asignación* configurado. Si el directorio padre que contiene  el nuevo archivo o subdirectorio no existe en este disco, entonces Unraid OS primero creará todos los directorios padre necesarios y luego creará el nuevo archivo o subdirectorio.
+el nuevo archivo o subdirectorio no existe en este disco, entonces Unraid OS primero creará todos los directorios padre necesarios, y luego creará el nuevo archivo o subdirectorio.
+**Dividir automáticamente solo el directorio de nivel superior según sea necesario**
+
+Cuando se crea un nuevo archivo o subdirectorio en el primer subdirectorio de nivel de un compartir, si ese primer
+nivel de subdirectorio no existe en el disco que está siendo escrito, entonces el subdirectorio será creado primero.
+Si se está creando un nuevo archivo o subdirectorio en el segundo o nivel inferior de subdirectorio de un compartir, el nuevo
+archivo o subdirectorio se crea en el mismo disco que el directorio padre del nuevo archivo o subdirectorio.
+**Dividir automáticamente solo los "N" directorios de nivel superior según sea necesario**
+
+Similar al anterior: cuando se crea un nuevo archivo o subdirectorio, si el directorio padre está en el nivel "N",
+y no existe en el disco elegido, el sistema operativo Unraid primero creará todos los directorios padre necesarios.
+Si el  directorio padre del nuevo archivo o subdirectorio está más allá del nivel "N", entonces el nuevo archivo o subdirectorio se
+crea en el mismo disco donde existe el directorio padre.
+**Manual: no dividir automáticamente los directorios**
+
+Cuando se necesita crear un nuevo archivo o subdirectorio en un compartir, el sistema operativo Unraid solo considerará los discos donde el
+directorio padre ya existe.
+:end
+:share_edit_included_disks_help:
+
+Especifica los discos que pueden ser utilizados por el compartir.
+Por defecto, todos los discos están incluidos; es decir, si no se seleccionan discos específicos aquí, entonces el compartir puede expandirse a *todos* los discos de array.
+los discos no están seleccionados aquí, entonces la compartición puede expandirse a *todos* los discos del array.
+:end
+
+:share_edit_excluded_disks_help:
+Especifique los discos que pueden *no* ser utilizados por la compartición. Por defecto, no se excluye ningún disco.
+:end
+
+:share_edit_cache_pool_help:
+Especifique si se pueden escribir nuevos archivos y directorios en la compartición en el disco/pool de Caché si está presente.
+Esta configuración también afecta el comportamiento de *mover*.
+
+**No** prohíbe que los nuevos archivos y subdirectorios se escriban en el disco/pool de Caché.
+*Mover* no tomará ninguna acción, por lo que cualquier archivo existente para esta compartición que esté en el caché se dejará allí.
+
+**Sí** indica que todos los nuevos archivos y subdirectorios deben ser escritos en el disco/pool de Caché, siempre y cuando
+exista suficiente espacio libre en el disco/pool de Caché.
+Si hay espacio insuficiente en el disco/pool de Caché, entonces se crean nuevos archivos y directorios en el array.
+Cuando se invoca al *mover*, los archivos y subdirectorios se transfieren del disco/pool de Caché al array.
+
+**Solo** indica que todos los nuevos archivos y subdirectorios deben ser escritos en el disco/pool de Caché.
+Si hay espacio libre insuficiente en el disco/pool de Caché, las operaciones de *crear* fallarán con el estatus de *fuera de espacio*.
+*Mover* no tomará ninguna acción, por lo que cualquier archivo existente para este compartir que esté en el arreglo se quedará allí.
+
+**Preferir** indica que todos los nuevos archivos y subdirectorios deben ser escritos en el disco/pool de Caché, siempre que hay espacio libre
+suficiente en el disco/pool de Caché.
+Si hay espacio insuficiente en el disco/pool de Caché, entonces los nuevos archivos y directorios son creados en el conjunto.
+Cuando el *mover* se invoca, los archivos y subdirectorios se transfieren del conjunto al disco/pool de Caché.
+
+**NOTA:** Mover nunca moverá ningún archivo que esté en uso.
+Esto significa que si deseas mover archivos asociados con servicios del sistema como Docker o máquinas virtuales, entonces necesitas
+deshabilitar estos servicios mientras el mover se está ejecutando.
+:end
+
+:share_edit_copy_on_write_help:
+Configurar en **No** para hacer que el atributo NOCOW (No Copy-on-Write) de *btrfs* se establezca en el directorio compartido
+cuando se crea en un dispositivo formateado con el sistema de archivos *btrfs*.  Una vez configurado, los nuevos archivos y
+subdirectorios en el dispositivo heredarán el atributo NOCOW. Esta configuración no tiene efecto sobre sistemas de archivos no btrfs.
+
+Configurar en **Auto** para el funcionamiento normal, lo que significa que el COW **estará** en efecto en los dispositivos formateados con *btrfs*.
+:end
+
+:share_edit_status_help:
+El compartido *no* contiene ningún dato y puede ser eliminado si ya no es necesario.
+:end
+
+:share_edit_delete_help:
+El compartido no se puede eliminar mientras contenga datos. Ten en cuenta que algunos datos pueden estar ocultos. Ver también [Configuración SMB](/Settings/SMB) -> Ocultar archivos "punto".
+:end
+
+:share_edit_exclusive_access_help:
+Cuando se configura en "Sí" indica que se ha configurado un enlace simbólico directamente a un pool para el compartir en el árbol /mnt/user.
+
+Consulta [Configuración Global del Compartido](Settings/ShareSettings) -> Permitir compartidos exclusivos.
+:end
+
+:share_edit_primary_storage_help:
+**Almacenamiento primario** es donde se crean *nuevos archivos y carpetas*.  Si
+el almacenamiento primario está por debajo de la configuración mínima de espacio libre, los nuevos archivos
+y carpetas se crearán en el **almacenamiento secundario**, si está configurado.
+
+**Importante:** Para compartidos de *Acceso exclusivo*, se ignoran las configuraciones mínimas de espacio libre.
+Todas las configuraciones mínimas de espacio libre son ignoradas para los compartidos de *Acceso exclusivo*.
+:end
+
+:share_edit_secondary_storage_help:
+**Almacenamiento secundario** es donde se crean nuevos archivos y directorios si no
+hay espacio en el almacenamiento primario.  Cuando tanto el almacenamiento primario como el secundario están
+configurados, el 'mover' transferirá archivos entre ellos.
+:end
+
+:share_edit_mover_action_help:
+Esto define la dirección de transferencia de archivos entre el almacenamiento Primario y
+el almacenamiento Secundario cuando ambos están configurados.
+:end
+
+:smb_security_help:
+*Leer configuración de* se utiliza para establecer los ajustes de seguridad SMB del compartir actual seleccionado con la configuración de un compartir existente.
+
+Selecciona el nombre del compartir deseado y presiona **Leer** para copiar la configuración de seguridad SMB del origen seleccionado.
+
+*Escribir configuración a* se usa para copiar la configuración de seguridad SMB del compartir actual seleccionado a uno o más compartidos existentes.
+
+Selecciona los destinos deseados y presiona **Escribir** para copiar la configuración de acceso de usuario SMB a los compartidos seleccionados.
+:end
+
+:smb_export_help:
+Esta configuración determina si el compartir es visible y/o accesible.  La configuración 'Sí (oculto)'
+ocultará el compartir de la exploración, pero aún es accesible si conoces el nombre del compartir.
+:end
+
+:smb_time_machine_volume_help:
+Esto limita el tamaño de volumen informado, impidiendo que Time Machine use todo el espacio real del disco
+para copia de seguridad.  Por ejemplo, configurar este valor en "1024" limitaría el espacio de disco informado a 1GB.
+Ten en cuenta que Ventura 13.6 y posteriores requieren que haya un valor presente.  Ninguna entrada impedirá que Time Machine
+funcione correctamente.
+:end
+
+:smb_case_sensitive_names_help:
+Controla si los nombres de archivo son sensibles a las mayúsculas.
+
+La configuración por defecto de **auto** permite a los clientes que admiten nombres de archivo sensibles a mayúsculas/minúsculas (Linux CIFSVFS)
+indicar al servidor Samba si desean acceder al sistema de archivos de manera sensible a mayúsculas (para admitir la semántica UNIX de sensibilidad a mayúsculas).
+Ningún sistema Windows admite nombres de archivo sensibles a mayúsculas, por lo tanto, establecer esta opción en **auto** es lo mismo que establecerlo en No para ellos; de todos modos, la mayúscula de los nombres de archivos pasados por un cliente de Windows se conservará.
+Esta configuración puede resultar  en rendimiento reducido con directorios muy grandes porque Samba debe hacer una búsqueda de nombres de archivo y una coincidencia en los nombres pasados.
+Una configuración de **Sí** significa que los archivos se crean con la mayúscula que pasa el cliente, y solo son accesibles utilizando esta misma mayúscula.
+
+Esto acelerará el acceso a directorios muy grandes, pero algunas aplicaciones de Windows pueden no funcionar correctamente con esta configuración.
+Por  ejemplo, si se crea "MiArchivo" pero una aplicación de Windows intenta abrir "MIARCHIVO" (lo que está permitido en Windows), no se encontrará.
+Un valor de **Forzado a minúsculas** es especial: el caso de todos los nombres de archivos entrantes del cliente, no solo los nuevos nombres de archivo, se establecerá en minúsculas.
+
+En otras palabras, no importa qué nombre de caso mixto se cree en el lado de Windows, se almacenará y accederá en todas las minúsculas.
+Esto  asegura que todas las aplicaciones de Windows encontrarán correctamente cualquier archivo independientemente del caso, pero no se conservará el caso en las listas de carpetas.
+Nota: esta configuración solo debe configurarse para nuevos compartidos.
+:end
+:smb_security_modes_help:
+
+Resumen de los modos de seguridad:
+**Público** Todos los usuarios, incluidos invitados, tienen acceso completo de lectura/escritura.
+
+**Seguro** Todos los usuarios, incluidos invitados, tienen acceso de lectura; usted selecciona qué usuarios tienen acceso de escritura.
+
+**Privado** No hay acceso de invitado, usted selecciona qué usuarios tienen acceso de lectura/escritura, solo de lectura o ningún acceso.
+
+Firma de Servidor en Windows:
+
+Si no puedes explorar los compartidos SMB con Windows 11 versión 24H2 o más reciente, necesitas hacer algunos cambios para acomodar una nueva característica llamada Firma de Servidor.
+
+La Firma de Servidor está habilitada en Unraid y necesitas hacer cambios para acceder a los compartidos públicos.  Puedes <u><a href='https://techcommunity.microsoft.com/t5/storage-at-microsoft/accessing-a-third-party-nas-with-smb-in-windows-11-24h2-may-fail/ba-p/4154300' target='_blank'>deshabilitarlo en Windows</a></u>, o para trabajar con Unraid con la Firma de Servidor habilitada, la forma más fácil es crear un usuario (con una contraseña configurada) en Unraid con el mismo nombre que la cuenta de Windows que estás usando, Windows debería entonces pedirte las credenciales.
+Si estás usando una cuenta de Microsoft, puede ser mejor simplemente crear un usuario en Unraid con un nombre de usuario simple y establecer una contraseña, luego en Windows ir a Panel de Control -> Administrador de Credenciales -> Credenciales de Windows -> Agregar una Credencial de Windows y agregar el nombre y credenciales de servidor Unraid correctos.
+:end
+:smb_secure_access_help:
+
+*Leer configuración de* se usa para preconfigurar la configuración de Acceso de Usuario SMB del compartir seleccionado actual con la configuración de un compartir existente.
+Selecciona el nombre del compartir deseado y presiona **Leer** para copiar la configuración de seguridad SMB del origen seleccionado.
+
+*Escribir configuración a* se usa para copiar la configuración de Acceso de Usuario SMB del compartir actual a uno o más compartidos existentes.
+
+Selecciona los destinos deseados y presiona **Escribir** para copiar la configuración de acceso de usuario SMB a los compartidos seleccionados.
+
+:end
+:smb_private_access_help:
+
+*Leer configuración de* se usa para preconfigurar la configuración de Acceso de Usuario SMB del compartir seleccionado actual con la configuración de un compartir existente.
+Selecciona el nombre del compartir deseado y presiona **Leer** para copiar la configuración de seguridad SMB del origen seleccionado.
+
+*Escribir configuración a* se usa para copiar la configuración de Acceso de Usuario SMB del compartir actual a uno o más compartidos existentes.
+
+Selecciona los destinos deseados y presiona **Escribir** para copiar la configuración de acceso de usuario SMB a  los compartidos seleccionados.
+
+:end
+:nfs_security_help:
+
+*Leer configuración de* se usa para preconfigurar la configuración de seguridad NFS del compartir seleccionado actual con la configuración de un compartir existente.
+Selecciona el nombre del compartir deseado y presiona **Leer** para copiar la configuración de seguridad NFS del origen seleccionado.
+
+*Escribir configuración a* se usa para copiar la configuración de seguridad NFS del compartir seleccionado actual a uno o más compartidos existentes.
+
+Selecciona los destinos deseados y presiona **Escribir** para copiar la configuración de seguridad NFS a los compartidos seleccionados.
+
+para copiar la configuración de seguridad NFS a los compartidos seleccionados.
+:end
+
+:nfs_security_rules_help:
+Coloque la regla para cada dirección IP en una línea separada y termine la Regla con una nueva línea.
+No puedes ingresar una Regla en el formato IP1,IP2(...).  Unraid no formatea el archivo de exportaciones en ese formato.
+
+Las reglas predeterminadas para cada Regla NFS son - asincrónico y sin verificación de subárbol.
+
+**Nota:** La Regla Pública utilizada es '*(rw,sec=sys,insecure,anongid=100,anonuid=99,no_root_squash)'.
+:end
+
+:user_add_username_help:
+Los nombres de usuario pueden tener hasta 40 caracteres de longitud y deben comenzar con una **letra en minúscula** o un guion bajo,
+seguido de **letras minúsculas**, dígitos, guiones bajos o guiones. Pueden terminar con un signo de dólar.
+:end
+
+:user_add_description_help:
+Hasta 64 caracteres. No se permiten los caracteres ampersand (&amp;) quote (&quot;) y dos puntos (:). .
+:end
+
+:user_add_custom_image_help:
+La imagen será escalada a un tamaño de 48x48 píxeles. El tamaño máximo de subida de archivo de imagen es de 95 kB (97,280 bytes).
+:end
+
+:user_password_help:
+Hasta 128 caracteres.
+:end
+
+:user_edit_description_help:
+Hasta 64 caracteres. No se permiten los caracteres ampersand (&amp;) quote (&quot;) y dos puntos (:). :end
+:user_edit_custom_image_help:
+
+La imagen será escalada a un tamaño de 48x48 píxeles.
+El tamaño máximo de subida de archivo de imagen es de 512 kB (524,288 bytes). :end
+:cpu_vms_help:
+
+Esta página ofrece una vista total de las asignaciones actuales de CPU para las máquinas virtuales.<br>
+También permite modificar estas asignaciones.
+Las máquinas virtuales en ejecución se **detienen primero** y se reinician después de la modificación.<br>
+
+Las máquinas virtuales detenidas se modifican instantáneamente y las nuevas asignaciones se activan cuando la máquina virtual se inicia.
+Cuando se presiona ***Aplicar***, se realiza un escaneo para encontrar los cambios; posteriormente, solo las máquinas virtuales que tengan cambios se modifican en paralelo.
+
+*Importante: Por favor, espere hasta que todas las actualizaciones hayan terminado antes de abandonar esta página*.
+
+:end
+:end
+
+:cpu_pinning_help:
+Esta página proporciona una vista completa de las asignaciones actuales de fijación de CPU para los contenedores Docker.<br>
+También permite modificar estas asignaciones.
+
+Los contenedores en ejecución se **detienen primero** y se reinician después de la modificación.<br>
+Los contenedores detenidos se modifican instantáneamente y las nuevas asignaciones se activan cuando el usuario inicia manualmente el contenedor.
+
+Cuando se presiona ***Aplicar***, se realiza un escaneo para encontrar los cambios, y posteriormente se modificarán en paralelo los contenedores que hayan cambiado.
+
+*Importante: Por favor, espere hasta que se terminen todas las actualizaciones antes de salir de esta página*.
+
+De forma predeterminada NO se seleccionan núcleos para un contenedor Docker, lo que significa que utiliza todos los núcleos disponibles.<br>
+No seleccione **TODOS** los núcleos para los contenedores, simplemente seleccione **NINGÚN** núcleo si desea uso de núcleo sin restricciones.
+
+No seleccione núcleos para contenedores que están *aislados*.
+Por diseño, un contenedor solo utilizará un único núcleo (el núcleo con el número más bajo) cuando se seleccionen múltiples núcleos aislados.<br>
+Por lo general, esto no es lo que un usuario desea cuando selecciona múltiples núcleos.
+:end
+
+:cpu_isolation_help:
+El aislamiento de CPU permite al usuario especificar núcleos de CPU que deben estar reservados explícitamente para asignación (a VMs o contenedores Docker).
+
+Esto es increíblemente importante para que las VMs de juegos funcionen sin problemas porque incluso si usted fija manualmente sus contenedores Docker para no superponerse con su VM de juegos,
+el sistema operativo host puede seguir utilizando esos mismos núcleos que la VM de invitados necesita para cosas como devolver respuestas para el webGUI, ejecutar una comprobación de paridad, operaciones btrfs, etc.
+:end
+
+:timezone_help:
+Seleccione su zona horaria aplicable de la lista desplegable.
+:end
+
+:use_ntp_help:
+Seleccione 'Sí' para usar el Protocolo de Tiempo de Red y mantener la hora del servidor precisa.
+**Recomendamos** encarecidamente el uso de un servidor de tiempo en red, especialmente si planea usar Active Directory.
+
+Nota: si está usando servidores de tiempo `pool.ntp.org`, por favor consulte también su [documentación](http://www.pool.ntp.org/en/use.html).
+:end
+
+:ntp_server1_help:
+Este es el servidor NTP principal a usar.  Introduzca un FQDN o una dirección IP.
+:end
+
+:ntp_server2_help:
+Este es el servidor NTP alternativo a utilizar si el Servidor NTP 1 está inactivo.
+:end
+
+:ntp_server3_help:
+Este es el servidor NTP alternativo a utilizar si los Servidores NTP 1 y 2 están fuera de servicio.
+:end
+
+:ayuda_servidor_ntp:
+Este es el servidor NTP alternativo que se utilizará si los Servidores NTP 1, 2 y 3 están inactivos.
+:end
+
+:ayuda_hora_actual:
+Introduzca la hora actual del día.  Utilice el formato AAAA-MM-DD HH:MM:SS. Atenuado cuando se utiliza NTP.
+:end
+
+:ayuda_iniciar_auto_disco:
+Si se establece en 'Sí', entonces si la configuración del dispositivo es correcta al iniciar el servidor,
+el arreglo se iniciará automáticamente y se exportarán los compartidos.<br>
+Si se establece en 'No', entonces debe iniciar el arreglo usted mismo.
+:end
+
+:ayuda_retraso_bajar_disco:
+Esta configuración define el tiempo de espera 'predeterminado' para detener los discos duros después de un período
+sin actividad de entrada/salida (I/O).  Puede invalidar el valor predeterminado para un disco individual en la página de Configuraciones del Disco
+de ese disco.
+:end
+
+:ayuda_grupos_encendido_disco:
+Si se establece en 'Sí', entonces la función de grupos de encendido está habilitada.
+:end
+
+:ayuda_formato_particion_predeterminado_disco:
+Define el tipo de distribución de partición a crear al formatear discos duros de 2 TB.
+y menores **solamente**. (Todos los dispositivos superiores a 2 TB siempre son configurados con tablas de particiones GPT.)
+
+La configuración **MBR: no alineado** creará una tabla de particiones estilo MBR, donde la única
+partición 1 comenzará en el **63º sector** desde el inicio del disco.  Esta es la configuración *tradicional*
+para prácticamente todas las tablas de particiones estilo MBR.
+
+La configuración **MBR: alineado 4K** creará una tabla de particiones estilo MBR, donde la única
+partición 1 comenzará en el **64º sector** desde el inicio del disco. Dado que el tamaño del sector es de 512 bytes,
+esto *alineará* el inicio de la partición 1 en un límite de 4K bytes.  Esto es necesario para el soporte adecuado
+de las unidades llamadas *Formato Avanzado*.
+
+A menos que tenga un requisito específico, no cambie esta configuración del valor predeterminado **MBR: alineado 4K**.
+:end
+
+:ayuda_sistema_archivo_predeterminado_disco:
+Define el tipo de sistema de archivo predeterminado a crear cuando se formatea un dispositivo de arreglo *no montable*.
+
+El tipo de sistema de archivos predeterminado para un caché de dispositivo único o múltiple siempre es Btrfs.
+:end
+
+:ayuda_tiempo_apagado_servidor:
+Al apagar el servidor, esto define cuánto tiempo esperar en segundos para un apagado *gracioso* antes de forzar el
+apagado para continuar.
+:end
+
+:ayuda_intervalo_lectura_atributos_inteligentes:
+Esto define el intervalo de sondeo de atributos SMART del disco, en segundos.  Un valor de 0 deshabilita el sondeo SMART (no recomendado).
+:end
+
+:ayuda_habilitar_ncq:
+Si se establece en **No**, *el almacenamiento en cola de comandos nativo* está deshabilitado para todos los dispositivos del arreglo que soportan NCQ.
+
+**Auto** deja la configuración de cada dispositivo sin cambios.
+
+Nota: debe reiniciar después de seleccionar Auto para que la configuración surta efecto.
+:end
+
+:ayuda_definir_numero_requerimientos_disco:
+Esto define la configuración del controlador de dispositivo `nr_requests` para todos los dispositivos del arreglo.
+
+**Auto** deja la configuración de cada dispositivo sin cambios.
+
+Nota: si configura en blanco y hace clic en Aplicar, la configuración se restablece a su valor predeterminado, y debe reiniciar para que la configuración surta efecto.
+:end
+
+:ayuda_programador_tunable_disco:
+Selecciona qué planificador de E/S del kernel utilizar para todos los dispositivos del array.
+
+**Auto** deja la configuración de cada dispositivo tal cual está (mq-deadline).
+
+Nota: Debes reiniciar después de seleccionar Auto para que la configuración surta efecto.
+:end
+
+:disk_tunable_md_num_stripes_help:
+Este es el tamaño del *pool de stripes* en número de *stripes*.  Un *stripe* se refiere a una estructura de datos que facilita operaciones de lectura/escritura 4K paralelas
+necesarias para un array protegido por paridad.
+
+Nota: si lo dejas en blanco y haces clic en Aplicar, la configuración se restablece a su valor predeterminado y surtirá efecto después de reiniciar.
+:end
+
+:disk_tunable_md_queue_limit_help:
+Este es un número entre [1..100] que es el porcentaje máximo de carga constante permitido del pool de stripes a estar en uso.
+
+Nota: si lo dejas en blanco y haces clic en Aplicar, la configuración volverá a su valor predeterminado.
+:end
+
+:disk_tunable_md_sync_limit_help:
+Este es un número entre [0..100] que es el porcentaje máximo del pool de stripes asignado para la sincronización/comprobación de paridad en presencia de otras operaciones de E/S.
+
+Nota: si lo dejas en blanco y haces clic en Aplicar, la configuración volverá a su valor predeterminado.
+:end
+
+:disk_tunable_md_write_method_help:
+Selecciona el método a emplear al escribir en un disco habilitado en un array protegido por paridad.
+
+*Auto* selecciona `read/modify/write`.
+:end
+
+:disk_default_warning_utilization_help:
+La *utilización de disco de advertencia* establece el umbral de advertencia predeterminado para la utilización de todos los discos duros. Exceder este umbral resultará en una notificación de advertencia.
+
+Cuando el umbral de advertencia se establece igual o mayor que el umbral crítico, solo habrá notificaciones críticas (las advertencias no existen).
+
+Un valor de cero desactivará el umbral de advertencia (incluidas las notificaciones).
+:end
+
+:disk_default_critical_utilization_help:
+La *utilización crítica del disco* establece el umbral crítico predeterminado para la utilización de todos los discos duros. Exceder este umbral resultará en una notificación de alerta.
+
+Un valor de cero desactivará el umbral crítico (incluidas las notificaciones).
+:end
+
+:disk_default_warning_temperature_help:
+*Temperatura de advertencia del disco* establece el umbral de advertencia predeterminado para la temperatura de todos los discos duros. Exceder este umbral resultará en una notificación de advertencia.
+
+Un valor de cero desactivará el umbral de advertencia (incluidas las notificaciones).
+:end
+
+:disk_default_critical_temperature_help:
+*Temperatura crítica del disco* establece el umbral crítico predeterminado para la temperatura de todos los discos duros. Exceder este umbral resultará en una notificación de alerta.
+
+Un valor de cero desactivará el umbral crítico (incluidas las notificaciones).
+:end
+
+:ssd_default_warning_temperature_help:
+La *temperatura de advertencia del SSD* establece el umbral de advertencia predeterminado para la temperatura de todos los dispositivos SSD. Exceder este umbral resultará en una notificación de advertencia.
+
+Un valor de cero desactivará el umbral de advertencia (incluidas las notificaciones).
+:end
+
+:ssd_default_critical_temperature_help:
+*Temperatura crítica del disco* establece el umbral crítico predeterminado para la temperatura de todos los dispositivos SSD. Exceder este umbral resultará en una notificación de alerta.
+
+Un valor de cero desactivará el umbral crítico (incluidas las notificaciones).
+:end
+
+:disk_default_smart_notification_help:
+Las notificaciones SMART se generan ya sea por un aumento en el valor bruto del atributo, o una disminución en el valor NORMALIZADO que llega a un umbral predefinido por el fabricante.
+
+Esta sección se utiliza para configurar las configuraciones globales para todos los discos. Es posible ajustar la configuración para discos individuales.
+:end
+
+:disk_default_smart_tolerance_help:
+Se puede establecer un nivel de tolerancia para evitar que pequeños cambios resulten en una notificación. Establecer un nivel de tolerancia demasiado alto puede resultar en cambios críticos sin notificación.
+
+Esta sección se utiliza para establecer la configuración global para todos los discos. Es posible ajustar la configuración para discos individuales.
+:end
+
+:disk_default_smart_controller_help:
+Por defecto, la selección automática de controladores la hace smartctl para leer la información SMART. Sin embargo, ciertos controladores necesitan configuraciones específicas para que smartctl funcione.
+Usa esta configuración para seleccionar tu tipo de controlador e introducir el índice y nombre del dispositivo específicos para tu situación. Utiliza la documentación del fabricante para encontrar la información relevante.
+
+Esta sección se utiliza para establecer la configuración global para todos los discos. Es posible ajustar la configuración para discos individuales.
+:end
+
+:disk_default_smart_attribute_help:
+El usuario puede habilitar o deshabilitar las notificaciones para los atributos SMART dados. Se recomienda mantener el predeterminado, que son TODOS los atributos seleccionados,
+cuando ciertos atributos no están presentes en tu disco duro o no proporcionan la información correcta, estos pueden ser excluidos.
+Además, se pueden introducir atributos SMART personalizados para generar notificaciones. Ten cuidado en esta selección,
+puede causar una avalancha de notificaciones si se eligen atributos SMART inapropiados.
+
+Esta sección se utiliza para establecer la configuración global para todos los discos. Es posible ajustar la configuración para discos individuales.
+:end
+
+:docker_repositories_help:
+Usa este campo para añadir repositorios de plantillas.
+Las plantillas Docker se utilizan para facilitar la creación y recreación de contenedores Docker.  Por favor, configura una por línea.
+
+El uso de repositorios está obsoleto.  Para instrucciones sobre cómo hacer que las Aplicaciones Comunitarias utilicen repositorios privados, visita <a href='https://forums.unraid.net/topic/57181-docker-faq/page/2/?tab=comments#comment-1018225' target='_blank'>aquí</a>
+
+:end
+
+:docker_enable_help:
+Antes de poder iniciar el servicio Docker por primera vez, por favor, especifica un archivo de imagen para que Docker lo instale.
+
+Una vez iniciado, Docker siempre se iniciará automáticamente después de que el array haya sido iniciado.
+:end
+
+:docker_readmore_help:
+Algunos sistemas con muchos contenedores docker pueden experimentar retardo al usar la página principal de Docker.
+
+Establecer esto en "No" puede ayudar a acelerar el uso general de la página al deshabilitar el uso de readmore-js.
+En lugar de cheurones indicando más datos para asignación de Puerto y Volumen, se muestra toda la información.
+:end
+
+:docker_timeout_help:
+El tiempo en segundos para permitir que un contenedor se detenga de manera ordenada antes de forzarlo a detenerse
+:end
+
+:docker_pid_limit_help:
+Establece un Límite de PID para limitar el número de PIDs que un docker puede usar. El valor predeterminado es 2048.  Configurar en cero para PIDs ilimitados (no se recomienda).
+:end
+
+:docker_vdisk_type_help:
+Selecciona dónde mantener el estado persistente de Docker.
+
+Esto puede ser un archivo de imagen con un tamaño específico o una carpeta dedicada.
+:end
+
+:docker_vdisk_size_help:
+Si el sistema necesita crear un nuevo archivo de imagen docker, este es el tamaño predeterminado a usar especificado en GB.
+
+Para redimensionar un archivo de imagen existente, especifica el nuevo tamaño aquí. La próxima vez que se inicie el servicio Docker, el archivo (y el sistema de archivos) se incrementará al nuevo tamaño (pero nunca disminuirá).
+:end
+
+:docker_vdisk_location_help:
+Debes especificar un archivo de imagen para Docker. El sistema creará automáticamente este archivo cuando el servicio Docker se inicie por primera vez.
+
+El nombre del archivo de imagen debe tener la extensión .img, si no, la entrada no se acepta y se marca en rojo.
+
+Se recomienda crear este archivo de imagen fuera del array, por ejemplo, en el pool de Caché. Para un mejor rendimiento se prefieren los dispositivos SSD.
+:end
+
+:docker_vdisk_directory_help:
+Debes especificar una carpeta para Docker. El sistema creará automáticamente esta carpeta cuando el servicio Docker se inicie por primera vez.
+
+Se recomienda crear esta carpeta bajo un compartir que reside en el pool de Caché (configuración: cache=Only). Para un mejor rendimiento se prefieren los dispositivos SSD.
+:end
+
+:docker_storage_driver_help:
+overlay2 (predeterminado): Usará overlay2 como el controlador de almacenamiento para Docker, independientemente del sistema de archivos subyacente.
+
+nativo: El controlador de almacenamiento nativo para tu sistema de archivos subyacente será utilizado (XFS: overlay2 | ZFS: zfs | BTRFS: btrfs).
+
+ATENCIÓN: Cambiar el tipo de almacenamiento de una instalación Docker existente no es posible, debes eliminar tu directorio Docker primero, cambiar el tipo de almacenamiento y luego reinstalar tus contenedores.
+Se recomienda tomar una captura de pantalla de tus contenedores Docker antes de cambiar el tipo de almacenamiento. Después de eliminar y cambiar el tipo de almacenamiento, reinstala los contenedores haciendo clic en Agregar Contenedor en la página de Docker y selecciona uno por uno desde el menú desplegable para reinstalarlos con tus configuraciones anteriores).
+:end
+
+:docker_appdata_location_help:
+Puedes especificar una carpeta para generar automáticamente y almacenar subcarpetas que contienen archivos de configuración para cada aplicación Docker.
+
+La ruta de la carpeta debe terminar con un carácter de barra diagonal hacia adelante (/). Si no, la entrada no se acepta y se marca en rojo.
+
+Se recomienda crear esta carpeta fuera del array, por ejemplo. en el pool de Caché. Para un mejor rendimiento se prefieren los dispositivos SSD.
+
+Solo se usa al agregar nuevas aplicaciones Docker. La edición de aplicaciones Docker existentes no se verá afectada por esta configuración.
+:end
+
+:docker_log_rotation_help:
+Por defecto, la rotación de LOG está deshabilitada y creará un único archivo LOG de tamaño ilimitado.
+
+Habilita la rotación de LOG para limitar el tamaño del archivo LOG y especifica el número de archivos a mantener en el esquema de rotación.
+:end
+
+:docker_log_file_size_help:
+Especifica el tamaño máximo del LOG. Cuando se excede, ocurrirá una rotación de LOG.
+:end
+
+:docker_log_file_number_help:
+Especifica el número de archivos LOG cuando se realiza la rotación de LOG.
+:end
+
+:docker_authoring_mode_help:
+Si está configurado en **Sí**, al crear/editar contenedores, la interfaz mostrará algunos campos adicionales relacionados con la creación de plantillas.
+:end
+
+:docker_custom_network_type_help:
+El tipo **ipvlan** es mejor cuando no se necesita conexión a la red física.
+Por favor lee <u><a style="color:blue" href='https://docs.docker.com/network/ipvlan/', target='_blank'>esto</a></u> para implementar una red ipvlan.<br>
+
+El tipo de red **macvlan** permite la conexión directa a la red física.
+Por favor lee <u><a style="color:blue" href='https://docs.docker.com/network/macvlan/', target='_blank'>esto</a></u> para implementar una red macvlan.<br>
+
+**Nota:** Docker utiliza su propio servicio dhcp, que es la configuración del **Pool DHCP**.
+Cuando uses varios servidores Unraid, entonces cada servidor debe tener un rango de Pool DHCP de Docker diferente configurado.
+:end
+
+:docker_custom_network_access_help:
+Permite la comunicación directa entre el host y los contenedores usando una red **macvlan** personalizada.  Por defecto, esto está deshabilitado.
+:end
+
+:docker_user_defined_network_help:
+Las redes creadas por el usuario son redes creadas por el usuario fuera de la interfaz gráfica de usuario.  Por defecto, las redes creadas por el usuario se eliminan de Docker. Esto se hace para prevenir posibles conflictos con la generación automática de redes personalizadas.
+
+Cambia esta configuración para preservar las redes definidas por el usuario, pero es responsabilidad del usuario asegurar que estas entradas funcionen correctamente y estén libres de conflictos.
+:end
+
+:docker_include_interface_vlan_ipv4_help:
+Incluir (por defecto) o excluir las interfaces o VLANs anteriores como red personalizada para Docker.
+
+Introduce el rango de pool dentro de cada subred asignada que se utiliza para asignaciones DHCPv4 por Docker. Ej.: 192.168.1.128/25
+:end
+
+:docker_exclude_interface_vlan_ipv4_help:
+Incluir o excluir (por defecto) las interfaces o VLANs anteriores como red personalizada para Docker.
+
+Introduce el rango de pool dentro de cada subred asignada que se utiliza para asignaciones DHCPv4 por Docker. Ej.: 192.168.1.128/25
+:end
+
+:docker_include_interface_vlan_ipv6_help:
+Incluir (por defecto) o excluir las interfaces o VLANs anteriores como red personalizada para Docker.
+
+Introduce el rango de pool dentro de cada subred asignada que se utiliza para asignaciones DHCPv6 por Docker. Ej.: 2a02:abcd:9ef5:100:1::/72
+:end
+
+:docker_exclude_interface_vlan_ipv6_help:
+Incluir o excluir (por defecto) las interfaces o VLANs anteriores como red personalizada para Docker.
+
+Introduce el rango de pool dentro de cada subred asignada que se utiliza para asignaciones DHCPv6 por Docker. Ej.: 2a02:abcd:9ef5:100:1::/72
+:end
+
+:docker_version_help:
+Esta es la versión activa de Docker.
+:end
+
+:docker_vdisk_location_active_help:
+Esta es la ubicación de la imagen Docker.
+:end
+
+:docker_storage_driver_active_help:
+Este es el controlador de almacenamiento para Docker.
+:end
+
+:docker_appdata_location_active_help:
+Esta es la ubicación de almacenamiento para los contenedores Docker.
+:end
+
+:docker_log_rotation_active_help:
+Por defecto, se crea un solo archivo LOG ilimitado. De lo contrario, el tamaño del archivo LOG y el número de archivos son limitados cuando la rotación del LOG está activada.
+:end
+
+:docker_custom_network_active_help:
+Permite la comunicación directa entre el host y los contenedores utilizando una red personalizada (macvlan).<br>
+Por defecto esto está prohibido.
+:end
+
+:docker_user_defined_network_active_help:
+Muestra si las redes creadas fuera de la interfaz gráfica de usuario son eliminadas o preservadas para Docker. Cuando se preservan, las *redes definidas por el usuario* se vuelven disponibles en la lista desplegable de tipo de red de los contenedores.
+:end
+
+:docker_scrub_help:
+**Scrub** ejecuta el programa *btrfs scrub* para comprobar la integridad del sistema de archivos.
+
+Si es necesaria una reparación, debes comprobar los *Errores de sistema de archivos correctos* y ejecutar una segunda pasada de Scrub; esto permitirá que *btrfs scrub* corrija el sistema de archivos.
+:end
+
+:docker_cancel_help:
+**Cancelar** cancelará la operación de Scrub en progreso.
+:end
+
+:id_server_name_help:
+La identidad de red de tu servidor.  También conocido como *nombre de host* o *nombre de host corto*. El networking de Windows
+lo refiere como el *nombre NetBIOS* y debe tener un máximo de 15 caracteres de longitud.
+Usa solo caracteres alfanuméricos (es decir, "A-Z", "a-z", y "0-9"), guiones ("-"), y puntos (".")
+y, los primeros y últimos caracteres deben ser alfanuméricos.
+:end
+
+:id_description_help:
+Este es un campo de texto que se ve junto a un servidor cuando se lista dentro de Network o File Explorer
+(Windows), o Finder (macOS).
+:end
+
+:id_model_help:
+Este es el número de modelo del servidor.
+:end
+
+:mgmt_start_page_help:
+Selecciona la página que se abre primero al entrar en el GUI. Por defecto, se selecciona la página *Principal*.
+:end
+
+:mgmt_use_telnet_help:
+Por defecto, el acceso TELNET está habilitado. TELNET es un tipo de acceso CLI inseguro, sin embargo,
+y se recomienda altamente usar el acceso SSH en su lugar y deshabilitar el acceso TELNET.
+:end
+
+:mgmt_telnet_port_help:
+Introduce el puerto TELNET, el puerto predeterminado es 23.
+:end
+
+:mgmt_use_ssh_help:
+SSH está habilitado por defecto y ofrece una forma segura de acceso CLI. Al inicio del sistema, se generan automáticamente las claves SSH
+si aún no existen, y se almacenan en el dispositivo flash en la carpeta */config/ssh*.
+:end
+
+:mgmt_ssh_port_help:
+Ingrese el puerto SSH, el puerto predeterminado es 22.
+:end
+
+:mgmt_use_upnp_help:
+Habilitar (predeterminado) o deshabilitar la función UPnP en el servidor. Esta función permite el reenvío automático de puertos en el router, solo se aplica cuando UPnP está habilitado en el propio router.
+:end
+
+:mgmt_use_ssl_tls_help:
+Determina cómo responde el webGUI al protocolo HTTP y/o HTTPS en su LAN.
+
+Seleccione **No** para usar HTTP. Para acceder a su servidor use esta URL:
+
+`http://<nombre-del-servidor>.<TLDlocal>`
+
+o esta URL:
+
+`http://<dirección-ip-del-servidor>`
+
+Seleccione **Sí** para habilitar el uso de un certificado SSL autogenerado y autofirmado
+certificado SSL.  Use esta URL para acceder a su servidor:
+
+`https://<nombre-del-servidor>.<TLDlocal>`
+
+Tenga en cuenta que el uso de un certificado SSL autofirmado generará una advertencia del navegador
+de advertencia.
+
+Seleccione **Estricto** para habilitar el uso *exclusivo* de un SSL de myunraid.net
+certificado para acceso https (ver **Provisión** más abajo).  Tenga en cuenta que un servidor DNS
+debe ser alcanzable.
+
+**Redirecciones:** Al acceder `http://<dirección-ip-del-servidor>` o `http://<nombre-del-servidor>.<TLDlocal>`, el 
+comportamiento cambiará según el valor de la configuración de Usar SSL/TLS:
+
+* Si Usar SSL/TLS está configurado en **Estricto**, se le redirigirá a `https://<ip-lan>.<hash>.myunraid.net`
+* Si Usar SSL/TLS está configurado en **Sí**, se le redirigirá a `https://<dirección-ip-del-servidor> o https://<nombre-del-servidor>.<TLDlocal>`
+* Si Usar SSL/TLS está configurado en **No**, entonces la url http cargará directamente.
+
+Importante: **Estricto** puede no ser seleccionable si su router o servidor DNS ascendente tiene
+[protección de rebinding DNS](https://es.wikipedia.org/wiki/DNS_rebinding) habilitada. protección de rebinding DNS
+evita que DNS resuelva un rango de red IP privada. La protección de rebinding DNS está pensada como
+una característica de seguridad en una LAN que puede incluir dispositivos heredados con interfaces web defectuosas/poco seguras.
+
+Una fuente de protección de rebinding DNS podría ser su servidor DNS ISP. En este caso, el problema se puede resolver
+cambiando a un servidor DNS diferente como OpenDNS donde la protección contra rebinding DNS se puede desactivar.
+
+Más comúnmente, la protección de rebinding DNS podría estar habilitada en su router. La mayoría de los routers de consumo no implementan protección contra rebinding DNS; pero, si lo hacen, debería estar disponible una configuración para desactivarla.
+Los routers de gama alta usualmente habilitan protección contra rebinding DNS.
+
+Generalmente existen formas de desactivarla por completo o selectivamente basándose en el dominio.
+Ejemplos: **DD-WRT:** Si está utilizando "dnsmasq" con protección de rebinding DNS habilitada, puede agregar esta línea a su archivo de configuración del router
+
+de configuración:
+`rebind-domain-ok=/myunraid.net/`
+
+**pfSense:** Si está utilizando el servicio de resolución DNS interno de pfSense, puede agregar estas líneas de Opciones Personalizadas:
+
+`servidor:`<br>
+
+`dominio-privado: "myunraid.net"`
+**Router Ubiquiti USG:** puede agregar esta línea de configuración:
+
+`set service dns forwarding options rebind-domain-ok=/myunraid.net/`
+
+**OpenDNS:** Vaya a Configuración -> Seguridad y *elimine* la casilla junto a
+
+"Respuestas Sospechosas - Bloquear direcciones IP internas".
+ Es una configuración de todo o nada. Cuando todo lo demás falla, puede que puedas crear una entrada en el archivo *hosts* de tu PC para anular el DNS externo y
+
+resolver directamente los FQDN de myunraid.net de tus servidores a su dirección IP local.
+directly resolve your servers myunraid.net FQDN to its local IP address.
+:end
+
+Ingrese el puerto HTTP, el puerto predeterminado es 80.
+Enter the HTTP port, default port is 80.
+:end
+
+Ingrese el puerto HTTPS, el puerto predeterminado es 443.
+Enter the HTTPS port, default port is 443.
+:end
+
+Ingrese su dominio de nivel superior local.
+Puede estar en blanco. May be blank.
+:end
+
+:ayuda_urls_acceso_local_administracion:
+Los URLs de Acceso Local mostrados arriba se basan en la configuración actual. 
+Para ajustar URLs o redirecciones, consulte el texto de ayuda para "Usar SSL/TLS".
+:end
+
+:ayuda_urls_acceso_wg_administracion:
+Estos URLs solo funcionarán cuando estén conectados a través del túnel WireGuard apropiado, como se configura en **Ajustes > Administrador de VPN**.
+:end
+
+:ayuda_urls_acceso_tailscale_administracion:
+Estos URLs solo funcionarán cuando estén conectados a la Tailscale Tailnet apropiada.
+:end
+
+:mgmt_certificate_expiration_help:
+**Provisión** puede usarse para instalar un *SSL Certificado* de myunraid.net de forma gratuita desde
+[Let's Encrypt](https://letsencrypt.org/).
+
+El certificado SSL myunraid.net se puede usar de dos maneras.  Primero,
+tener el certificado presente permite que el servidor responda a una
+URL alternativa de la forma:
+
+`https://<lan-ip>.<hash>.myunraid.net`
+
+El valor `<hash>` es una cadena hexagonal de 40 caracteres (160 bits) única para
+su servidor.  Un servidor DDNS de Lime Technology devolverá su `<lan-ip>`
+en respuesta a una solicitud DNS en esta URL. El Sujeto del certificado está
+establecido en `*.<hash>.myunraid.net` validando así la conexión https.
+
+Puede habilitar estas URL exclusivamente en su LAN configurando **Usar
+SSL/TLS** a **Estricto**.
+
+El segundo uso de un certificado myunraid.net es para habilitar
+acceso remoto seguro disponible a través del plugin de Característica Unraid Connect.  Note
+que es posible usar acceso remoto seguro junto con
+acceso local inseguro.
+
+Después de que se haya instalado un Certificado SSL de myunraid.net, un
+servicio en segundo plano es activado:
+
+- *renuevacert* - Esto comienza 60 segundos después de que el reinicio del servidor se ha completado y contacta al Servicio de Renovación de Certificados de Lime Technology
+para determinar si su certificado SSL de myunraid.net necesita ser renovado.
+A partir de ese momento, se activa cada 24 horas. Si dentro de 30 días de expiración, se provisiona automáticamente un nuevo certificado y se descarga a su servidor.
+**Borrar** puede usarse para eliminar el archivo del certificado myunraid.net.
+
+**Detalles de manejo de certificados nginx**
+
+nginx hace uso de dos archivos de certificado almacenados en el dispositivo de arranque del flash USB:<br>
+
+- un certificado auto-firmado: `config/ssl/certs/<server-name>_unraid_bundle.pem`
+
+- un certificado de myunraid.net: `config/ssl/certs/certificate_bundle.pem`
+
+El archivo del certificado SSL auto-firmado se crea automáticamente cuando nginx arranca; y se vuelve a crear si el nombre del servidor o el TLD local se cambia.
+
+**Soporte de grapado nginx**
+El grapado OCSP está habilitado automáticamente si el certificado contiene una URL de respuesta OCSP.
+
+Por lo tanto, para certificados auto-firmados, el grapado no está habilitado; para certificados firmados por CA, el grapado está habilitado.
+
+:end
+
+:ftp_server_help:
+Habilitar o deshabilitar el demonio del servidor FTP.
+Por defecto el servidor FTP está habilitado.
+
+Esta configuración no se guarda, es decir.
+tras el reinicio del sistema, volverá a su configuración predeterminada. :end
+:ftp_users_help: Ingrese los nombres de usuario (separados por espacios) permitidos para acceder al servidor utilizando FTP.
+Para prohibir el acceso de cualquier usuario, borre esta configuración.
+
+**Nota:** no ingrese el nombre de usuario `root` ya que esto puede causar problemas en el futuro.
+:end
+:ftp_overview_help:
+
+### Descripción General
+Unraid OS incluye el popular servidor FTP `vsftpd`.
+
+La configuración de `vsftp` es actualmente muy
+simple: **Todos** los nombres de usuario ingresados anteriormente están permitidos para acceder al servidor a través de FTP y tendrán
+
+*acceso completo de lectura/escritura/eliminación* a todo el servidor, así que úselo con precaución.  :end
+:smb_enable_help:
+Seleccione 'Sí (Grupo de Trabajo)' para habilitar el soporte del protocolo SMB (Redes de Windows).
+Esto también habilita el descubrimiento de host en Windows.
+
+Seleccione 'Sí (Directorio Activo)' para habilitar la integración del Directorio Activo.
+:end :smb_hide_files_help:
+Si se establece en 'Sí', los archivos que comiencen con un punto (.) aparecerán como *archivos ocultos* y normalmente
+
+no aparecerán en las listas de carpetas de Windows a menos que tenga habilitado "Mostrar archivos y carpetas ocultos".
+:fin
+
+:ocultar_archivos_smb_ayuda:
+Si está configurado en 'Sí', entonces los archivos que comienzan con un "." (punto) aparecerán como *archivos ocultos* y normalmente
+no aparecerán en las listas de carpetas de Windows a menos que tengas habilitado "Mostrar archivos, carpetas y unidades ocultas"
+en Opciones de Carpeta de Windows.
+
+Si se establece en 'No', entonces los archivos de punto aparecerán en las listas de carpetas igual que cualquier otro archivo.
+:fin
+
+:ayuda_smb_canales_multiples:
+Cuando se establece en 'Sí', habilita el soporte de Canales Múltiples SMB en el servidor. Desde
+[microsoft](https://docs.microsoft.com/en-us/azure-stack/hci/manage/manage-smb-multichannel):
+"SMB Multichannel permite a los servidores de archivos utilizar múltiples conexiones de red simultáneamente."
+:fin
+
+:ayuda_smb_mejorado_macos:
+Cuando se establece en 'Sí', proporciona compatibilidad mejorada con los clientes de Apple SMB, resultando, por ejemplo, en una navegación más rápida en Finder y la capacidad de exportar acciones de Time Machine.
+Esto puede causar algunos problemas con los clientes de Windows, sin embargo.  Por favor, consulte también el [VFS_FRUIT MAN PAGE](https://www.mankier.com/8/vfs_fruit).
+:fin
+:ayuda_smb_netbios_habilitar:
+
+Seleccione 'Sí' para habilitar NetBIOS.
+Si está habilitado, el protocolo SMBv1 también se reconocerá.  Si está deshabilitado,  los clientes deben usar SMBv2 o superior.
+:fin
+:ayuda_smb_habilitar_wsd:
+
+Seleccione 'Sí' para habilitar WSD (WS-Discovery).
+La única razón para desactivarlo es si está ejecutando una configuración LAN antigua basada en SMBv1.  :fin
+:ayuda_smb_opciones_wsd:
+Esto es una cadena de opciones de línea de comando pasada al demonio WSD al inicio.
+
+Deje este campo en blanco, a menos que haya sido
+instruido por el soporte para poner algo aquí.
+:fin :ayuda_smb_conf_extra:
+Utilice esta página para realizar cambios en su archivo `smb-extra.conf`.
+Samba necesitará
+
+ser reiniciado para que los cambios tengan efecto.
+:fin  :ayuda_smb_boton_extra:
+Haga clic en el botón **Aplicar** para confirmar las ediciones actuales.
+Haga clic en **Restablecer** para
+
+deshacer cualquier cambio que realice (antes de Guardar).
+Haga clic en **Hecho** para salir de esta página.  :fin
+:ayuda_smb_grupo_trabajo: Ingrese el nombre del grupo de trabajo de su red local.
+Generalmente es "WORKGROUP".
+
+:fin
+:ayuda_smb_maestro_local: Si se establece en 'Sí', entonces el servidor participará plenamente en las elecciones de navegadores, y en ausencia de otros servidores, generalmente se convertirá en el Navegador Maestro Local.
+:fin
+
+:ayuda_nfs_habilitar:
+Seleccione 'Sí' para habilitar el protocolo NFS.
+:fin
+:ayuda_nfs_ajustable_fuse_recordar:
+
+Cuando se habilita NFS, este Ajustable puede ser utilizado para aliviar o resolver instancias de "Manejadores de Archivos NFS Caducos" 
+que pueda encontrar con su cliente NFS.
+En esencia, (fuse_recordar) le dice a un subsistema interno (llamado "fuse") cuánto tiempo "recordar" o "almacenar en caché" 
+
+información del archivo y del directorio asociada con las acciones del usuario.
+Cuando un cliente NFS intenta acceder a un archivo
+
+(o directorio) en el servidor, y ese archivo (o nombre de directorio) no está en caché, podría encontrar  "manejador de archivos caduco".
+El valor numérico de este ajustable es el número de segundos para almacenar en caché las entradas de nombre de archivo/directorio,
+donde el valor predeterminado de 330 indica 5 1/2 minutos.
+
+ Hay dos valores especiales que también puede establecer en esto:
+ * 0 que significa no almacenar en caché nombres de archivos/directorios, y   * -1 que significa almacenar en caché nombres de archivos/directorios para siempre (o hasta que se detenga el array)
+Un valor de 0 sería apropiado si está habilitando NFS pero solo planea usarlo para acciones de disco,
+
+no acciones de usuario.
+Un valor de -1 sería apropiado si ningún otro tiempo de espera parece resolver el "manejador de archivos caduco" en
+
+su cliente.
+Tenga en cuenta que establecer un valor de -1 hará que la huella de memoria crezca en aproximadamente
+
+108 bytes por nombre de archivo/directorio almacenado en caché.
+Dependiendo de la cantidad de RAM instalada en su servidor y de cuántos  archivos/directorios acceda vía NFS, esto puede o no llevar a condiciones de falta de memoria.
+:fin  :ayuda_nfs_max_protocolo_servidor:
+Seleccione la versión máxima del Protocolo NFS que desea que su servidor Unraid soporte.
+:fin
+
+:ayuda_nfs_max_protocolo_cliente:
+Seleccione la versión máxima del Protocolo NFS que desea usar para montar sus acciones remotas.
+:fin
+
+:ayuda_nfs_hilos:
+Establezca el número de hilos para NFS.
+Para cargas ligeras de NFS, 8 son suficientes.
+
+Para cargas más pesadas de NFS, un número mayor de hilos podría ser apropiado.
+Si no hay suficientes hilos, probablemente NFS se bloquee.  :fin :ayuda_shares_habilitar_disco:
+
+Si se establece en No, las acciones de disco no se exportarán bajo ninguna circunstancia.
+Si se establece en Sí, las acciones de disco pueden ser exportadas.
+
+**ADVERTENCIA:** No copie datos de una acción de disco a una acción de usuario
+a menos que *sepa* lo que está haciendo.
+
+Esto puede resultar en la pérdida de datos y no es soportado.  Si se establece en Automático, solo las acciones de disco que no participan en Acciones de Usuario pueden ser exportadas.
+:fin  :ayuda_shares_habilitar_shares:
+
+Si se establece en 'Sí', se activa la función de Acciones de Usuario.
+:fin
+
+:ayuda_shares_discos_incluidos:
+Esta configuración define el conjunto de discos de array que están *incluidos* en las Acciones de Usuario.
+Desmarcar todos los discos permitirá que **todos** los discos del array sean incluidos.
+
+:fin
+:ayuda_shares_discos_excluidos:
+Esta configuración define el conjunto de discos de array que están *excluidos* de las Acciones de Usuario.
+Desmarcar todos los discos para no excluir discos.
+
+**Nota:** Cada Acción de Usuario por separado también incluye su propio conjunto de discos Incluidos y Excluidos
+que representan un subconjunto de los discos Incluidos/Excluidos definidos aquí.
+:fin
+
+:ayuda_shares_compartidas_exclusivas:
+Si se establece en Sí, los directorios compartidos bajo /mnt/usuario son en realidad enlaces simbólicos al directorio compartido en un volumen de almacenamiento
+siempre que se cumplan las siguientes condiciones:
+
+* El almacenamiento Primario para un share está configurado en un pool.
+* El almacenamiento Secundario para un share está configurado en **ninguno**.
+* El share existe en un único volumen.
+
+* El share **no** está exportado sobre NFS.
+La ventaja de shares *exclusivas* es que las transferencias evaden la capa FUSE, lo cual puede
+significativamente aumentar el rendimiento de I/O.
+:fin
+
+:ayuda_shares_ajustable_enlaces_duros:
+Si se establece en Sí, entonces soporte para la operación link().
+Si se establece en No, entonces los enlaces duros no son soportados.
+
+Notas:
+* Establecerlo en Sí puede causar problemas para reproductores de medios antiguos y reproductores de dvd/bluray que acceden a comparticiones usando NFS.
+
+:fin
+
+:ayuda_syslog_tamano_archivo_local:
+
+Especifica el tamaño máximo del LOG.
+* No importa cómo se configure, el **mover** seguirá manejando correctamente cualquier enlace físico detectado.
+:end
+
+:shares_tunable_direct_io_help:
+**Experimental**: Si se configura en Sí, entonces el sistema de archivos de la Carpeta de Usuario se montará con la opción *direct_io* de FUSE.
+Esto aumentará el rendimiento en escritura, pero podría disminuir el rendimiento en lectura.
+
+*Auto* selecciona No.
+:end
+
+:shares_fuse_file_descriptors_io_help:
+Configure la cantidad de descriptores de archivo FUSE.  Con mucha actividad de archivos en el array, puede que necesite aumentar este valor.
+:end
+
+:syslog_local_server_help:
+Permitir que el servidor actúe como un servidor syslog central y recolecte mensajes syslog de otros sistemas.
+El servidor puede escuchar en UDP, TCP o ambos con un número de puerto seleccionable.
+
+La información syslog se almacena ya sea por dirección IP o por nombre de host. Es decir, cada sistema obtiene su propio archivo syslog.
+:end
+
+:syslog_local_folder_help:
+Seleccione la carpeta compartida donde se almacenarán los syslogs.
+Se recomienda usar una compartición localizada en el disco de caché para evitar el encendido de discos de array.
+:end
+
+:syslog_remote_system_identifier_help:
+Seleccione el identificador para el sistema remoto (usado en el nombre del archivo log). 
+
+* "Dirección IP" utiliza la dirección IP (IPv4 o IPv6) del sistema emisor.
+* "Nombre de host (del mensaje syslog)" utiliza el nombre de host incluido en cada mensaje syslog.
+* "Nombre de host (de búsqueda inversa DNS)" realiza una búsqueda inversa DNS para la IP de envío y utiliza el resultado.
+:end
+
+:syslog_local_rotation_help:
+Por defecto, la rotación de LOG está deshabilitada y creará un único archivo LOG de tamaño ilimitado.
+
+Habilitar la rotación de LOG para limitar el tamaño del archivo LOG y especificar el número de archivos a mantener en el esquema de rotación.
+:end
+
+:syslog_local_file_size_help:
+Especifica el tamaño máximo de LOG. Cuando se supere, ocurrirá la rotación del LOG.
+:end
+
+:syslog_local_file_number_help:
+Especifica el número de archivos LOG adicionales a mantener en el esquema de rotación.
+:end
+
+:syslog_remote_server_help:
+Ingrese un nombre o una dirección IP de un servidor syslog remoto.
+Esto enviará una copia de los mensajes syslog al servidor designado.
+:end
+
+:syslog_mirror_flash_help:
+Esta configuración es "NO" por defecto y debe usarse con cuidado para evitar el desgaste innecesario del dispositivo USB.
+
+Cambie esta configuración a "SÍ" cuando sea necesario resolver problemas y no sea posible obtener la información de diagnóstico regular.
+Una copia del archivo syslog se almacena en la carpeta **logs** del dispositivo flash.
+:end
+
+:syslog_shutdown_flash_help:
+Esta configuración es "SÍ" por defecto y permite que el sistema copie el archivo syslog al dispositivo USB al apagar o reiniciar.
+
+Después de reiniciar, el syslog de esta ejecución será visible en Herramientas > Syslog > syslog-anterior;
+también se incluirá en los diagnósticos como logs/syslog-anterior.txt
+:end
+
+:confirm_reboot_help:
+Elija si reiniciar o apagar el servidor necesita una casilla de confirmación.
+:end
+
+:confirm_array_stop_help:
+Elija si detener el array necesita una casilla de confirmación.
+:end
+
+:display_settings_help:
+Los ajustes de visualización a continuación determinan cómo se muestran los elementos en pantalla. Utilice estas configuraciones para ajustar los efectos visuales a su gusto.
+
+Puede experimentar con estas configuraciones según lo desee, solo afectan las propiedades visuales.
+:end
+
+:display_width_help:
+**Caja** es la configuración heredada que limita el ancho del contenido a un máximo de 1920 píxeles.
+
+**Ilimitado** permite que el contenido use todo el ancho disponible, lo cual puede ser útil en pantallas amplias.
+:end
+
+:display_font_size_help:
+Cambia el tamaño de la fuente en la GUI. Esta es una configuración por dispositivo. Esta es una configuración por dispositivo.
+:end
+
+:display_tty_size_help:
+Cambia el tamaño de la fuente de las ventanas de terminal.
+:end
+
+:display_page_view_help:
+Cambia cómo se muestran ciertas páginas. En modo **Con pestañas** las diferentes secciones se mostrarán en pestañas distintas,
+mientras que en modo **Sin pestañas** las secciones se muestran una debajo de la otra.
+:end
+
+:display_users_menu_help:
+El menú Usuarios puede ser parte del encabezado o del menú de Configuración.
+Puede mover el menú Usuarios si no hay suficiente espacio en el encabezado para mostrar todos los menús.
+:end
+
+:display_listing_height_help:
+**Automático**: las listas largas se muestran tal como están, y el usuario necesita desplazar toda la página para ver el final.
+
+**Fijo**: las listas largas se muestran en una ventana con un tamaño fijo, el usuario puede desplazar esta ventana para ver el final.
+:end
+
+:display_wwn_device_id_help:
+World Wide Name (WWN) es un identificador único utilizado para dispositivos conectados por SAS.
+
+Seleccione *Deshabilitado* para suprimir la adición de WWN a la identificación del dispositivo.
+
+Seleccione "Automático" para agregar WWN a la identificación del dispositivo en caso de dispositivos SAS.
+:end
+
+:display_custom_text_color_help:
+Sobrescribir el color de texto predeterminado en el encabezado. Esto puede usarse para hacer coincidir el color del texto con una imagen de fondo.
+:end
+
+:display_custom_background_color_help:
+Sobrescribir el color de fondo predeterminado en el encabezado. Esto puede usarse para hacer coincidir el color de fondo con un color de texto personalizado.
+:end
+
+:display_custom_banner_help:
+La imagen se ajustará a 1920x90 píxeles. El tamaño máximo de carga del archivo de imagen es de 512 kB (524,288 bytes).
+:end
+
+:display_temperature_unit_help:
+Selecciona la unidad de temperatura para los umbrales de temperatura del disco. Cambiar la unidad ajustará el valor existente en los umbrales de temperatura del disco según corresponda.
+
+Asegúrese de que cualquier valor recién ingresado represente la unidad de temperatura seleccionada.
+:end
+
+:display_favorites_enabled_help:
+Habilita el soporte para favoritos. Si se establece en no, dejará de mostrar el ícono de corazón para las adiciones. Si se guardan favoritos existentes, la pestaña de favoritos y las opciones preguardadas seguirán apareciendo y funcionando hasta que todos sean eliminados.
+:end
+
+:vms_enable_help:
+Detener el Administrador de VM primero intentará apagar todas las VMs en ejecución.
+:end
+
+:vms_disable_help:
+Detener VMs de autoinicio\Inicio cuando el administrador de VM se inicia o se abre desde la GUI para empezar, se verá un mensaje de error.
+:end
+
+:vms_libvirt_volume_help:
+Este es el volumen de libvirt.
+:end
+
+:vms_libvirt_vdisk_size_help:
+Si el sistema necesita crear un nuevo archivo de imagen libvirt, este es el tamaño predeterminado a utilizar especificado en GB.
+Para cambiar el tamaño de un archivo de imagen existente, especifique el nuevo tamaño aquí. La próxima vez que se inicie el servicio Libvirt, el archivo (y el sistema de archivos) se incrementará al nuevo tamaño (pero nunca se reducirá).
+:end
+
+:vms_libvirt_location_help:
+Debe especificar un archivo de imagen para Libvirt. El sistema creará este archivo automáticamente cuando se inicie por primera vez el servicio Libvirt.
+:end
+
+:vms_libvirt_storage_help:
+Especifique una carpeta de usuario que contenga todos sus subdirectorios de VM con vdisks
+:end
+
+:vms_libvirt_iso_storage_help:
+Especifique una carpeta de usuario que contenga todos sus medios de instalación para sistemas operativos.
+:end
+
+:vms_virtio_driver_help:
+Especifique el CD-ROM virtual (ISO) que contiene los controladores VirtIO para Windows proporcionados por el Proyecto Fedora.
+Descargue el último ISO desde aquí: <a href="https://docs.fedoraproject.org/en-US/quick-docs/creating-windows-virtual-machines-using-virtio-drivers/index.html#virtio-win-direct-downloads" target="_blank">fedoraproject.org</a>
+
+Al instalar Windows, llegará a un paso donde no se encontrarán dispositivos de disco. Hay una opción para buscar controladores en esa pantalla.
+Haga clic en examinar y ubique el CD-ROM adicional en el menú. Dentro habrá varias carpetas para las diferentes versiones de Windows.
+Abra la carpeta para la versión de Windows que está instalando y luego seleccione la subcarpeta AMD64 dentro (incluso si está en un sistema Intel, seleccione AMD64).
+Se encontrarán tres controladores. Seleccione todos, haga clic en siguiente, y los vDisks que haya asignado aparecerán.
+:end
+
+:vms_network_source_help:
+Seleccione el nombre de la red que desea usar como predeterminada para sus VMs.
+Puede elegir entre **'bridges'** creados en la configuración de red o
+**'libvirt'** creado con el comando virsh en el terminal.
+El puente **'virbr0'** y la red virtual asociada **'default'** son
+creados por libvirt.  
+Ambos utilizan NAT (traducción de direcciones de red) y actúan como un servidor DHCP para asignar direcciones IP directamente a las máquinas virtuales.
+Hay más selecciones opcionales para bridges en la configuración de red o para redes libvirt con el comando virsh en el terminal.
+
+**Si no está seguro, elija 'virbr0' como el valor predeterminado recomendado de Unraid.**
+
+NOTA: También puede especificar una fuente de red por VM.
+
+**IMPORTANTE: Ni Libvirt ni Unraid levantan automáticamente una interfaz que esté asignada a una red Libvirt.
+Antes de usar una red Libvirt, vaya a Configuración -> Configuración de red y, si es necesario, configure manualmente la interfaz asociada para que esté activa.**
+:end
+
+:vms_host_shutdown_help:
+Al apagar el servidor, esto define la acción a tomar sobre las VMs en ejecución. Si se elige *Hibernar VMs*,
+la VM recibirá la instrucción de hibernar (si es compatible), de lo contrario intentará apagar la VM.
+:end
+
+:vms_shutdown_timeout_help:
+Al apagar el servidor, esto define cuánto tiempo esperar en segundos para un apagado *suave* de las VMs antes de forzar el apagado para continuar.
+NOTA: Se recomienda apagar las VMs invitadas desde dentro de la VM.
+:end
+
+:vms_console_help:
+Para configurar las opciones de consola para mostrar en los menús contextuales. Web solo mostrará clientes web integrados (VNC y SPICE), 
+El Visor Remoto del Administrador Virtual solo mostrará la opción de Visor Remoto. Ambos mostrarán tanto Web como Visor Remoto.
+:end
+
+:vms_rdpopt_help:
+Agrega una opción al menú para iniciar RDP. Se descarga el archivo RDP. Necesita configurar su navegador para abrirlo cuando esté listo.
+:end
+
+:vms_usage_help:
+Mostrar métricas para el CPU, tanto porcentaje del invitado como del host, memoria, io de disco y io de red.
+:end
+
+:vms_usage_timer_help:
+Configuración en segundos para el tiempo de actualización de métricas.
+:end
+
+:vms_acs_override_help:
+*La anulación de PCIe ACS* permite que varios componentes de hardware se muestren como dispositivos aislados.
+Normalmente es suficiente aislar puertos *Downstream*.
+Un componente de hardware puede necesitar la configuración de *Multifunción* o *Ambos* para aislar aún más las diferentes funciones de hardware.<br>
+Se requiere un reinicio para que los cambios en esta configuración surtan efecto.
+
+**Advertencia: el uso de esta configuración podría causar posible corrupción de datos con ciertas configuraciones de hardware.**
+Por favor, visite los [foros de Lime Technology](https://forums.unraid.net/forum/51-vm-engine-kvm) para obtener más información.
+:end
+
+:vms_vfio_interupts_help:
+Si su sistema no admite la reasignación de interrupciones, estas pueden habilitarse al permitir interrupciones inseguras.<br>
+Se requerirá un reinicio para que los cambios en esta configuración surtan efecto.
+
+**Advertencia: el uso de esta configuración podría causar posible corrupción de datos con ciertas configuraciones de hardware.**
+Por favor, visite los [foros de Lime Technology](https://forums.unraid.net/forum/51-vm-engine-kvm) para obtener más información.
+:end
+
+:vms_libvirt_log_help:
+Ver el registro de libvirt: <a onclick="openTerminal('log','libvirt','libvirt/libvirtd.log')">Ver libvirtd.log</a>
+:end
+
+:vms_scrub_help:
+**Scrub** ejecuta el programa *btrfs scrub* para verificar la integridad del sistema de archivos.
+Si se necesita reparación, debe marcar la opción *Corregir errores del sistema de archivos* y ejecutar una segunda pasada de Scrub; esto permitirá que el *btrfs scrub* repare el sistema de archivos.
+:end
+
+:vms_cancel_help:
+**Cancelar* cancelará la operación de Scrub en progreso.
+:end
+
+:eth_interface_description_help:
+Use este campo opcional para proporcionar información adicional sobre el propósito de la conexión.
+:end
+
+:eth_mac_address_help:
+Esta es la dirección de hardware de la interfaz.
+Cuando el etiquetado está habilitado, todas las VLAN en esta interfaz compartirán la misma dirección de hardware.
+:end
+
+:eth_enable_bonding_help:
+El bonding es una característica que combina múltiples interfaces Ethernet físicas en una única interfaz *bonded* llamada **bond0**.
+Esto se puede utilizar para mejorar la redundancia de conexión y/o el rendimiento del sistema.
+Se admiten diferentes modos de bonding (ver a continuación), pero algunos modos requieren soporte adecuado del switch.
+:end
+
+:eth_bonding_mode_help:
+**Modo 0 (balance-rr)**<br>
+Este modo transmite paquetes en orden secuencial desde el primer esclavo disponible hasta el último.
+Si dos interfaces reales son esclavas en el bond y llegan dos paquetes destinados a salir de la interfaz *bonded*, el primero se transmitirá en la primera esclava y el segundo marco se transmitirá en la segunda esclava.
+El tercer paquete se enviará en el primero, y así sucesivamente. Esto proporciona balance de carga y tolerancia a fallos.
+
+**Modo 1 (active-backup) - predeterminado**<br>
+Este modo coloca una de las interfaces en un estado de respaldo y solo la activará si el enlace se pierde por la interfaz activa.
+Solo hay una esclava en el bond activa en un momento. Una esclava diferente se activa solo cuando la esclava activa falla.
+Este modo proporciona tolerancia a fallos.
+
+**Modo 2 (balance-xor)**<br>
+Este modo transmite paquetes basados en una fórmula XOR. La dirección MAC de origen se XOR con la dirección MAC de destino modula la cuenta de esclavas.
+Esto selecciona la misma esclava para cada dirección MAC de destino y proporciona balance de carga y tolerancia a fallos.
+
+**Modo 3 (broadcast)**<br>
+Este modo transmite todo en todas las interfaces esclavas. Este modo es el menos usado (solo para fines específicos) y proporciona solo tolerancia a fallos.
+
+**Modo 4 (802.3ad)**<br>
+Este modo se conoce como *Agrupación Dinámica de Enlaces*. Crea grupos de agrupación que comparten la misma configuración de velocidad y duplex.
+Requiere un switch que admita el enlace dinámico IEEE 802.3ad.
+La selección de esclavas para el tráfico saliente se realiza de acuerdo con la política de hash de transmisión, que puede cambiarse de la política XOR simple predeterminada mediante la opción xmit_hash_policy.
+Tenga en cuenta que no todas las políticas de transmisión pueden cumplir con 802.3ad, particularmente en lo que respecta a los requisitos de desorden de paquetes de la sección 43.2.4 del estándar 802.3ad.
+Las diferentes implementaciones de pares tendrán tolerancias variables para el incumplimiento.
+
+**Modo 5 (balance-tlb)**<br>
+Este modo se llama *balanceo de carga de transmisión adaptativa*. El tráfico saliente se distribuye según la carga y la cola actuales en cada interfaz esclava.
+El tráfico entrante es recibido por la esclava actual.
+
+**Modo 6 (balance-alb)**<br>
+Este modo se llama *balanceo de carga adaptativa*. Esto incluye balance-tlb + balanceo de carga de recepción (rlb) para el tráfico IPV4.
+El balanceo de carga de recepción se logra mediante la negociación ARP.
+El controlador de bonding intercepta las respuestas ARP enviadas por el servidor en su camino de salida y sobrescribe la dirección hw src con la dirección hw única de una de las esclavas en el bond.
+de modo que diferentes clientes usan diferentes direcciones hw para el servidor.
+
+El *Modo 1 (active-backup) es la configuración recomendada. Otros modos te permiten configurar un entorno específico, pero pueden requerir soporte adecuado de commutation.
+Seleccionar un modo no compatible puede resultar en una comunicación interrumpida.
+:end
+
+:eth_bonding_members_help:
+Seleccione qué interfaces son miembros de la interfaz *bonded*. Por defecto, eth0 es un miembro, mientras que otras interfaces son opcionales.
+:end
+
+:eth_enable_bridging_help:
+El puente es una característica que crea un puente virtual y permite a las VMs y contenedores Docker comunicarse directamente con el puerto Ethernet físico.
+Tanto el bonding como el bridging se pueden combinar para que las VMs o contenedores se comuniquen a través de una interfaz *bonded*.
+:end
+
+:eth_bridging_members_help:
+Seleccione qué interfaces son miembros de la interfaz *bridged*. Por defecto, eth0 es un miembro, mientras que otras interfaces son opcionales.
+:end
+
+:eth_network_protocol_help:
+Seleccione qué protocolo(s) se utilizan. Por defecto, sólo se utiliza IPv4.<br>
+Cuando se seleccionan tanto IPv4 como IPv6, cada protocolo puede configurarse de manera independiente.
+:end
+
+:eth_ipv4_address_assignment_help:
+Las siguientes configuraciones son posibles:
+
+*Automático* - el servidor intentará obtener una dirección IPv4 del servidor DHCP local<br>
+*Estático* - la dirección IPv4 se establece manualmente para esta interfaz<br>
+*Ninguno* - no se asigna ninguna dirección IPv4 a la interfaz (sólo disponible para VLANs)
+:end
+
+:eth_ipv4_address_help:
+Deshabilitado cuando se utiliza la asignación automática de IP. De lo contrario, especifique aquí la dirección IPv4 y la máscara del sistema.
+:end
+
+:eth_ipv4_default_gateway_help:
+Deshabilitado cuando se utiliza la asignación automática de IP. De lo contrario, especifique aquí la dirección IPv4 de su router.
+:end
+
+:eth_ipv4_dns_server_assignment_help:
+Si se establece en *Automático*, el servidor utilizará el(los) servidor(es) DNS IPv4 devuelto por la asignación automática local.<br>
+Si se establece en *Estático*, puede ingresar su propia lista.
+
+Esto es útil en configuraciones de Active Directory donde necesita establecer la primera entrada del Servidor DNS en la dirección IP de su servidor de dominio AD.
+:end
+
+:eth_ipv4_dns_server_help:
+Este es el servidor DNS primario IPv4 a utilizar. Ingrese una dirección IPv4.
+
+Nota: para *Active Directory* debe asegurarse de que esto esté configurado a la dirección IP de su servidor de dominio AD.
+:end
+
+:eth_ipv4_dns_server2_help:
+Este es el servidor DNS IPv4 a utilizar cuando el servidor de DNS IPv4 1 está caído.
+:end
+
+:eth_ipv4_dns_server3_help:
+Este es el servidor DNS IPv4 a utilizar cuando los servidores DNS IPv4 1 y 2 están caídos.
+:end
+
+:eth_ipv6_address_assignment_help:
+Las siguientes configuraciones son posibles:
+
+*Automático* - el servidor intentará obtener una dirección IPv6 del servidor DHCP local o Anuncio de Router (RA)<br>
+*Estático* - la dirección IPv6 se establece manualmente para esta interfaz<br>
+*Ninguno* - no se asigna ninguna dirección IPv6 a la interfaz (sólo disponible para VLANs)
+:end
+
+:eth_ipv6_address_help:
+Deshabilitado cuando se utiliza la asignación automática de IP. De lo contrario, especifique aquí la dirección IPv6 del sistema.
+:end
+
+:eth_ipv6_default_gateway_help:
+Deshabilitado cuando se utiliza la asignación automática de IP. De lo contrario, especifique aquí la dirección IPv6 de su router.
+:end
+
+:eth_ipv6_privacy_extensions_help:
+Habilite o deshabilite la generación de un identificador de interfaz IPv6 aleatorio según RFC4941. Esto es similar a la generación de dirección IPv6 temporal en máquinas Windows.
+:end
+
+:eth_ipv6_dns_server_assignment_help:
+Si se establece en *Automático*, el servidor utilizará el(los) servidor(es) DNS IPv6 devuelto por la asignación automática local.<br>
+Si se establece en *Estático*, puede ingresar su propia lista.
+:end
+
+:eth_ipv6_dns_server_help:
+Este es el servidor DNS primario IPv6 a utilizar. Ingrese una dirección IPv6.
+:end
+
+:eth_ipv6_dns_server2_help:
+Este es el servidor DNS IPv6 a utilizar cuando el servidor DNS IPv6 1 está caído.
+:end
+
+:eth_ipv6_dns_server3_help:
+Este es el servidor DNS IPv6 a utilizar cuando los servidores DNS IPv6 1 y 2 están caídos.
+:end
+
+:eth_desired_mtu_help:
+Este es el tamaño MTU a utilizar en la interfaz Ethernet física.
+Si se deja en blanco, la MTU se determinará automáticamente (por defecto 1500 bytes).
+:end
+
+:eth_enable_vlans_help:
+Por defecto no se configuran VLANs.<br>
+Habilitar VLANs extiende el número de conexiones lógicas sobre la misma conexión física.
+
+Nota: su router y switch también deben soportar VLANs cuando se utiliza esta función.
+:end
+
+:eth_vlan_number_help:
+Proporcione a cada VLAN un identificador único. Los números varían de 1 a 4095.
+:end
+
+:eth_network_rules_help:
+Las reglas de asignación de interfaces pueden cambiarse aquí y es posible que se requiera para establecer la interfaz preferida para gestionar Unraid - *tinyan con cuidado, generalmente no hay necesidad de cambiar*.
+
+**eth0** es la interfaz principal utilizada para gestionar el sistema Unraid. Las otras interfaces son opcionales y pueden ser usadas según lo desee.
+Cada interfaz debe estar identificada de forma única mediante su dirección MAC (hardware).
+
+La asignación de la interfaz se almacena en el dispositivo flash bajo */config/network-rules.cfg*. Este archivo puede ser visto con cualquier editor, pero se recomienda realizar cambios a través de la interfaz webGUI solo.<br>
+Borrar el archivo *network-rules.cfg* del dispositivo flash restaurará la asignación automática de la interfaz después de un reinicio del sistema.
+:end
+
+:eth_routing_table_help:
+Introduzca una ruta IPv4 válida en el formato *nnn.nnn.nnn.nnn/xx*, por ejemplo, *192.168.1.0/24*<br>
+O introduzca una ruta IPv6 válida en el formato *nnnn:nnnn:nnnn::nnnn/xxx*, por ejemplo, *fe80::3ad8:2fff:fe25:9709/64*
+
+Seleccione el gateway de la lista desplegable o introduzca una dirección IPv4/IPv6 válida como valor del gateway.
+
+El valor métrico es opcional, por defecto es 1. Úsense para seleccionar el gateway preferido cuando existe más de una entrada de la misma ruta.
+:end
+
+:eth_network_extra_include_help:
+Introduzca uno o más nombres de interfaces o direcciones IP que estarán incluidas en la lista de interfaces de escucha para servicios locales del sistema.
+
+Esto es particularmente útil cuando ha creado interfaces personalizadas (por ejemplo, túnel VPN de tailscale) que se utilizan para acceder a servicios locales del sistema. :end
+:end
+
+:eth_network_extra_exclude_help:
+Ingrese uno o más nombres de interfaz o direcciones IP que se excluirán de la lista de interfaces de escucha para los servicios del sistema local.
+
+Esto se puede usar para excluir interfaces locales dedicadas (por ejemplo, conexiones punto a punto) o excluir interfaces dinámicas (túneles WireGuard) de usar servicios del sistema local.
+:end
+
+:apc_ups_daemon_help:
+Establecer en 'Sí' para habilitar apcupsd e iniciar el demonio, establecer en 'No' para deshabilitar apcupsd y detener el demonio.
+:end
+
+:apc_ups_cable_help:
+Define el tipo de cable que conecta el UPS a su computadora. Las opciones genéricas posibles para 'cable' son:
+
++ USB, Simple, Smart, Ether, o Personalizado para especificar un cable especial.
+:end
+
+:apc_ups_custom_cable_help:
+Especifique un cable especial por número de modelo, solo aplicable cuando *Cable UPS* está configurado en Personalizado.
+
++ 940-0119A, 940-0127A, 940-0128A, 940-0020B
++ 940-0020C, 940-0023A, 940-0024B, 940-0024C
++ 940-1524C, 940-0024G, 940-0095A, 940-0095B
++ 940-0095C, 940-0625A, M-04-02-2000
+:end
+
+:apc_ups_type_help:
+Defina un *tipo de UPS*, que corresponde al tipo de UPS que tiene (consulte la Descripción para obtener más detalles).
+
++ **USB** - la mayoría de los nuevos UPS son USB
++ **APCsmart** - dispositivo de carácter serial más nuevo, apropiado para modelos SmartUPS que utilizan un cable serial (no USB)
++ **Net** - enlace de red a un apcupsd maestro a través del Servidor de Información de Red de apcupsd. Esto se utiliza si el UPS que alimenta su computadora está conectado a una computadora diferente para su monitoreo
++ **SNMP** - enlace de red SNMP a un dispositivo UPS habilitado para SNMP
++ **Dumb** - dispositivo de carácter serial antiguo para su uso con UPS con señalización simple
++ **PCnet** - protocolo de Apagado de Red PowerChute que se puede utilizar como una alternativa al SNMP con la familia de tarjetas de ranura inteligente AP9617
++ **ModBus** - dispositivo serial para su uso con los modelos SmartUPS más nuevos que admiten el protocolo MODBUS
+:end
+
+:apc_ups_device_help:
+Ingrese el *dispositivo* que corresponde a su situación, solo aplicable cuando *tipo de UPS* no está configurado en USB.
+
++ **apcsmart** - /dev/tty**
++ **net** - nombre de host:puerto. El nombre de host es la dirección IP del servidor NIS. El puerto predeterminado es el 3551
++ **snmp** - nombre de host:puerto:proveedor:comunidad. El nombre de host es la dirección IP o el nombre de host del SAI en la red. El proveedor puede ser "APC" o "APC_NOTRAP". "APC_NOTRAP" deshabilitará la captura de traps SNMP; generalmente desea "APC". El puerto suele ser 161. La comunidad suele ser "private"
++ **dumb** - /dev/tty**
++ **pcnet** - ipaddr:nombredeusuario:frasedecontraseña:puerto. ipaddr es la dirección IP de la tarjeta de gestión del SAI. nombredeusuario y frasedecontraseña son las credenciales para las que se ha configurado la tarjeta. El puerto es el número de puerto en el que escuchar los mensajes del SAI, normalmente 3052. Si este parámetro está vacío o falta, se utilizará el valor predeterminado de 3052
++ **modbus** - /dev/tty**
+:end
+
+:apc_ups_override_ups_capacity_help:
+Si su dispositivo no informa de forma nativa la Potencia Nominal (`NOMPOWER`) desde `apcupsd`, pero sí informa el Porcentaje de Carga (`LOADPCT`), puede definir manualmente la capacidad nominal del SAI en Vatios (W) (este es el valor de 'potencia real' en vatios (W), no la 'potencia aparente' en Voltios Amperios (VA), y debe detallarse en el manual de su SAI o en la lista de productos) y el complemento calculará dinámicamente una estimación virtual de la Potencia Nominal (`≈`) comparando la Capacidad Anulada del SAI (W) y el Porcentaje de Carga actual. Es solo una estimación, ya que no considera elementos como la eficiencia del SAI.
+:end
+
+:apc_battery_level_help:
+Si durante un fallo de energía, el porcentaje restante de batería (según lo informado por el SAI) es igual o inferior a *nivel de batería*, apcupsd iniciará un apagado del sistema.
+:end
+
+:apc_runtime_left_help:
+Si durante un fallo de energía, el tiempo de ejecución restante en minutos (calculado internamente por el SAI) es igual o inferior a este campo, apcupsd iniciará un apagado del sistema.
+:end
+
+:apc_battery_time_help:
+Si durante un fallo de energía, el SAI ha funcionado con baterías durante *tiempo de espera* segundos o más; apcupsd iniciará un apagado del sistema. Un valor de cero desactiva este temporizador.
+
+Si tiene un SAI Inteligente, probablemente querrá desactivar este temporizador configurándolo en cero.
+De esta manera, su SAI continuará en baterías hasta que el% de carga restante caiga a o por debajo de *nivel de batería* o el tiempo restante de batería caiga a o por debajo de *minutos*.
+
+Por supuesto, cuando se esté probando, configurarlo en 60 provocará un apagado rápido del sistema si desconecta el enchufe de la corriente.
+Si tiene un SAI antiguo tonto, querrá configurar esto a menos del tiempo que sabe que puede funcionar con las baterías.
+:end
+
+:apc_note_help:
+**Nota:** *nivel de batería*, *tiempo de ejecución restante* y *tiempo en batería* funcionan conjuntamente, por lo que el primero que ocurra iniciará un proceso de apagado.
+:end
+
+:apc_killups_help:
+Configúrelo en *Sí* para apagar la energía del SAI después de un apagado.
+:end
+
+:parity_check_scheduled_help:
+Por defecto, no se programa ninguna verificación de paridad. Seleccione aquí la programación deseada. Esto puede ser uno de los horarios preestablecidos para diario, semanal, mensual, anual o un horario personalizado.
+:end
+
+:parity_day_of_the_week_help:
+Cuando se selecciona un horario **semanal** o **personalizado**, elija aquí el *día de la semana* preferido, en los otros horarios esta configuración no se utiliza y no está disponible.
+:end
+
+:parity_week_of_the_month_help:
+Cuando se selecciona un horario **mensual** o **anual**, elija aquí el *día del mes* preferido.
+Cuando se selecciona un horario **personalizado**, elija aquí la *semana del mes* preferida, en los otros horarios esta configuración no se utiliza y no está disponible.
+:end
+
+:parity_time_of_the_day_help:
+Elija la *hora del día* deseada para iniciar el programa. La granularidad del tiempo se da en períodos de media hora.
+:end
+
+:parity_month_of_the_year_help:
+Cuando se selecciona una programación **anual** o **personalizada**, elija aquí el *mes del año* preferido, en las otras programaciones esta configuración no se utiliza y no está disponible.
+:end
+
+:parity_write_corrections_help:
+Seleccione aquí si se deben corregir en el disco de Paridad los errores de paridad encontrados durante la verificación o no.
+:end
+
+:parity_cumulative_check_help:
+Cambie esta configuración a **Sí** para dividir las verificaciones de paridad de larga duración en varios períodos. Esto es útil cuando el sistema necesita estar disponible y una verificación de paridad solo se ejecuta fuera del horario laboral.
+:end
+
+:parity_accumulation_frequency_help:
+Especifica cómo se ejecutan los períodos de acumulación.
+
+**Diario** significa que cada día subsiguiente la verificación de la paridad continúa hasta que finaliza
+
+**Semanal** significa que cada semana subsiguiente la verificación de la paridad continúa hasta que finaliza
+:end
+
+:parity_accumulation_duration_help:
+Especifica cuánto dura cada período acumulado, expresado en horas. La **Hora del día** especifica la hora de inicio del período.
+:end
+
+:mover_schedule_help:
+Elija un horario del moviemiento que va desde cada hora, diario, semanal y mensual.
+
+El intervalo determina la rapidez con la que se activará el mover, funciona en segundo plano.
+:end
+
+:mover_day_of_the_week_help:
+Elija un día cuando el horario semanal esté seleccionado. De lo contrario está deshabilitado.
+:end
+
+:mover_day_of_the_month_help:
+Elija una fecha cuando se selecciona el horario mensual. De lo contrario está deshabilitado.
+:end
+
+:mover_time_of_the_day_help:
+Cuando se selecciona un horario por horas, esto establece el intervalo en horas. Un intervalo siempre comienza en la hora completa (minuto 0).
+
+Para los otros horarios, elija aquí la hora del día en que debería comenzar el mover.
+:end
+
+:mover_logging_help:
+Escriba los mensajes del mover en el archivo syslog.
+:end
+
+:notifications_display_help:
+En vista *Detallada* todas las notificaciones se mostrarán en la pantalla tan pronto como lleguen.<br>
+Las notificaciones se pueden reconocer individualmente o todas a la vez.
+
+En vista *Resumen*, las notificaciones solo se contabilizarán y el número de notificaciones no leídas se mostrará en el encabezado del menú por categoría.<br>
+Haga clic en los contadores para reconocer o ver las notificaciones no leídas.
+:end
+
+:notifications_display_position_help:
+Elija la posición donde las notificaciones aparezcan en la pantalla en vista *Detallada*. Varias notificaciones están apiladas, de abajo hacia arriba o
+de arriba hacia abajo según la ubicación seleccionada.
+:fin
+
+:ayuda_cierre_automatico_notificaciones:
+Número de segundos antes de que las notificaciones se cierren automáticamente en la vista detallada.<br>
+Un valor de 0 desactiva el cierre automático.
+:fin
+
+:ayuda_formato_fecha_notificaciones:
+Seleccione el formato de fecha deseado que se usa en el archivo de notificaciones. Se recomienda YYYY-MM-DD, lo que hace que la columna de fecha/hora se pueda ordenar de manera sensata.
+:fin
+
+:ayuda_formato_hora_notificaciones:
+Seleccione el formato de hora deseado que se usará en el archivo de notificaciones. Se recomienda el formato de 24 horas, lo que hace que la columna de fecha/hora se pueda ordenar de manera sensata.
+:fin
+
+:ayuda_almacenamiento_flash_notificaciones:
+Por defecto, las notificaciones se almacenan en el disco RAM, lo que se perderá al reiniciar el sistema.
+Las notificaciones pueden almacenarse permanentemente en la unidad flash en la carpeta '/boot/config/plugins/dynamix'.
+:fin
+
+:ayuda_sistema_notificaciones:
+Por defecto, el sistema de notificaciones está desactivado. Actívelo aquí para comenzar a recibir notificaciones.
+Las siguientes secciones brindan más opciones sobre qué tipo de notificaciones se enviarán.
+:fin
+
+:ayuda_actualización_os_notificaciones:
+Inicie una verificación periódica y notifique al usuario cuando se detecte una nueva versión del sistema operativo Unraid.
+Use las casillas de verificación a continuación para seleccionar cómo deben darse las notificaciones; mediante el navegador, por correo electrónico o por agente personalizado.
+:fin
+
+:ayuda_actualización_plugins_notificaciones:
+Inicie una verificación periódica y notifique al usuario cuando se detecte una nueva versión de uno o más de los plugins instalados.
+Use las casillas de verificación a continuación para seleccionar cómo deben darse las notificaciones; mediante el navegador, por correo electrónico o por agente personalizado.
+:fin
+
+:ayuda_actualización_docker_notificaciones:
+Inicie una verificación periódica y notifique al usuario cuando se detecte una nueva versión de uno o más de los dockers instalados.
+Use las casillas de verificación a continuación para seleccionar cómo deben darse las notificaciones; mediante el navegador, por correo electrónico o por agente personalizado.
+:fin
+
+:ayuda_estado_array_notificaciones:
+Inicie una verificación periódica de salud del array y notifique al usuario el resultado de esta verificación.
+:fin
+
+:ayuda_selección_agente_notificaciones:
+Use las casillas de verificación arriba para seleccionar qué y cómo necesitan darse las notificaciones; mediante el navegador, por correo electrónico y/o por servicio.<br>
+<b>Consejo:</b> puede usar agentes de notificación personalizados; simplemente agréguelos al directorio '/boot/config/plugins/dynamix/notification/agents' y marque 'Agentes'.
+:fin
+
+:ayuda_clasificación_notificaciones:
+Las notificaciones se clasifican como:
+
+*aviso* - estas son notificaciones informativas y no indican una situación problemática, por ejemplo. una nueva versión está disponible<br>
+*advertencia* - estas son notificaciones de advertencia y pueden indicar problemas futuros, por ejemplo. un disco duro está más caliente de lo habitual<br>
+*alerta* - estas son notificaciones serias y requieren atención inmediata, por ejemplo. un disco duro fallando<br>
+
+Elija para cada clasificación cómo desea ser notificado.
+:fin
+
+:ayuda_servicio_prefijado_smtp:
+Seleccione un servicio prefijado para establecer la configuración básica del servicio.
+:fin
+
+:ayuda_dirección_correo_smtp:
+Dirección de correo electrónico de su cuenta de correo. Esta dirección se usa como remitente de las notificaciones.
+:fin
+
+:ayuda_destinatarios_smtp:
+Destinatarios de notificaciones de estado y error. Especifique una o más direcciones de correo electrónico, separe varias direcciones de correo electrónico con un espacio.
+:fin
+
+:ayuda_prioridad_smtp:
+Configurar encabezado de correo electrónico con alta importancia, cuando hay un problema detectado por Unraid OS.
+:fin
+
+:ayuda_prefijo_asunto_smtp:
+Establezca un prefijo para facilitar el reconocimiento de los mensajes de Unraid OS.
+:fin
+
+:ayuda_servidor_correo_smtp:
+Especifique el nombre del servidor de correo electrónico. Use la selección de servicio prefijado para completar esta información automáticamente.
+:fin
+
+:ayuda_puerto_servidor_correo_smtp:
+Especifique el puerto del servidor de correo electrónico. Use la selección de servicio prefijado para completar esta información automáticamente.
+:fin
+
+:ayuda_uso_ssl_tls_smtp:
+Especifica si usar SSL/TLS para comunicarse con el servidor SMTP.
+:fin
+
+:ayuda_uso_starttls_smtp:
+Especifica si usar STARTTLS antes de comenzar la negociación SSL - Consulte RFC 2487.
+:fin
+
+:ayuda_definición_cert_tls_smtp:
+Seleccione solo cuando tenga un certificado necesario para la comunicación.
+:fin
+
+:ayuda_ubicación_cert_tls_smtp:
+El nombre de archivo de un certificado RSA para usar en TLS - según sea necesario.
+:fin
+
+:ayuda_método_autenticación_smtp:
+Seleccione el método de autenticación correcto para su servidor de correo electrónico. Use la prueba para verificar que el acceso está funcionando correctamente.
+:fin
+
+:ayuda_usuario_contraseña_smtp:
+Ingrese el nombre de usuario y la contraseña para iniciar sesión en su cuenta de correo electrónico. Tenga en cuenta que la contraseña se almacena sin cifrar en el archivo de configuración de correo electrónico.
+:fin
+
+:ayuda_instalación_plugin:
+Para descargar e instalar un plugin, ingrese el URL del archivo plg y haga clic en **Instalar**. Se abrirá una ventana
+que muestra el progreso de la instalación. No cierre esta ventana hasta que la instalación haya concluido. También puede especificar
+el nombre de archivo local de una extensión.
+:fin
+
+:ayuda_error_plugin:
+Estos plugins no se instalaron debido a algún tipo de error de instalación.  Debería eliminar estos
+plugins y luego **reiniciar** su servidor.*
+:fin
+
+:ayuda_obsoleto_plugin:
+Estos plugins no se instalaron porque ya existe un código más reciente.  Es seguro simplemente eliminar estos.
+:fin
+
+:ayuda_general_cliente_docker:
+Las plantillas son una manera más rápida de configurar Contenedores Docker en su servidor Unraid.  Hay dos tipos de plantillas:
+
+**Plantillas por defecto**<br>
+Cuando se añaden repositorios válidos a su página de Repositorios Docker, aparecerán en una sección de este desplegable para que elija (agrupado por autor, luego por plantilla de aplicación).
+Después de seleccionar una plantilla por defecto, la página se llenará con nueva información sobre la aplicación en el campo de Descripción, y normalmente proporcionará instrucciones para configurar el contenedor.
+Seleccione una plantilla por defecto cuando sea la primera vez que configure esta aplicación.
+
+**Plantillas definidas por el usuario**<br>
+Una vez que ha agregado una aplicación a su sistema a través de una plantilla por defecto,
+los ajustes que especificó se guardan en su dispositivo flash USB para facilitar la reconstrucción de sus aplicaciones en caso de que un upgrade falle o si ocurre otro problema.
+Para reconstruir, simplemente seleccione la aplicación previamente cargada de la lista definida por el usuario y todos los ajustes para el contenedor aparecerán poblados desde su configuración previa.
+Al hacer clic en crear se volverán a descargar los archivos necesarios para la aplicación y debería restaurarlo a un estado de funcionamiento.
+Para eliminar una plantilla definida por el usuario, selecciónela de la lista arriba y haga clic en la X roja a la derecha de la misma.
+:fin
+
+:ayuda_nombre_cliente_docker:
+Asigne un nombre al contenedor o déjelo como por defecto.  Dos caracteres como mínimo.  El primer carácter debe ser a-z A-Z 0-9 Los caracteres restantes a-z A-Z 0-9 . - _ :fin
+:ayuda_resumen_cliente_docker:
+
+Una descripción para el contenedor de la aplicación.
+Soporta formato básico HTML.  :fin
+:ayuda_requisitos_adicionales_cliente_docker:
+
+Cualquier requisito adicional que tenga el contenedor.
+Soporta formato básico HTML.  :fin
+:ayuda_repositorio_cliente_docker:
+
+El repositorio para la aplicación en el Registro Docker.
+Formato de nombre de autor/nombre de aplicación.  Opcionalmente puede añadir un : después del nombre de la aplicación y solicitar una versión específica para la imagen del contenedor.
+:fin
+:ayuda_hilo_soporte_cliente_docker:
+
+Enlace a un hilo de soporte en el foro de Lime-Technology.
+:fin
+:ayuda_página_proyecto_cliente_docker:
+
+Enlace a la página del proyecto (ej: www.plex.tv)
+:fin
+:ayuda_lectura_cliente_docker:
+
+Enlace a un archivo de lectura o página
+:fin
+:ayuda_url_hub_cliente_docker:
+
+La ruta a la ubicación del repositorio del contenedor en Docker Hub.
+:fin
+:ayuda_url_plantilla_cliente_docker:
+
+Este URL se usa para mantener la plantilla actualizada.
+:fin
+:ayuda_url_icono_cliente_docker:
+
+Enlace a la imagen del icono para su aplicación (solo se muestra en el tablero si Mostrar aplicaciones del tablero bajo Configuración de Pantalla está configurado en Iconos).
+:fin
+:ayuda_webui_cliente_docker:
+
+Cuando hace clic en un icono de aplicación desde la página de Contenedores Docker, la opción WebUI enlazará la ruta en este campo.
+Use [IP] para identificar el IP de su anfitrión y [PORT:####] reemplazando los # por su puerto.
+:fin
+:ayuda_parametros_adicionales_cliente_docker:
+
+Si desea añadir comandos adicionales a su contenedor Docker en tiempo de ejecución, puede especificarlos aquí.<br>
+Para todos los posibles comandos de tiempo de ejecución Docker, vea aquí: <a href="https://docs.docker.com/reference/run/" target="_blank">https://docs.docker.com/reference/run/</a>
+:fin
+:ayuda_argumentos_post_cliente_docker:
+
+Si desea añadir argumentos adicionales DESPUÉS de la definición del contenedor, puede especificarlos aquí.
+El contenido de este campo es específico del contenedor.
+:fin
+:ayuda_asignación_cpu_cliente_docker:
+
+Seleccionar un núcleo de CPU(s) limitará el contenedor a ejecutarse solo en los núcleos seleccionados.
+Al no seleccionar núcleos, el contenedor se ejecutará en todos los núcleos disponibles (por defecto) :fin
+:ayuda_ip_fijo_cliente_docker:
+
+Si se selecciona el tipo de Puente, el acceso a la red de la aplicación estará restringido a comunicarse solo en los puertos especificados en la sección de mapeo de puertos.
+Si se selecciona el tipo de Host, a la aplicación se le dará acceso para comunicarse usando cualquier puerto en el host que no esté ya mapeado a otra aplicación/servicio en uso.
+En general, se recomienda dejar este ajuste en su valor por defecto según lo especificado por la plantilla de aplicación.
+NOTA IMPORTANTE: Si ajusta el mapeo de puertos, no modifique la configuración para el puerto del Contenedor, ya que solo el puerto Host se puede ajustar.
+
+:fin
+:ayuda_red_contenedor_cliente_docker:
+
+Esto permite que su contenedor utilice la configuración de red de otro contenedor.
+Seleccione el contenedor apropiado de la lista.<br>Este ajuste puede ser particularmente beneficioso si desea enrutar el tráfico de su contenedor a través de un VPN. :fin
+:end
+
+:docker_tailscale_help:
+Habilita Tailscale para añadir este contenedor como una máquina en tu Tailnet.
+:end
+
+:docker_tailscale_hostname_help:
+Proporciona el hostname para este contenedor. No es necesario que coincida con el nombre del contenedor, pero debe ser único en tu Tailnet. Ten en cuenta que se generará un certificado HTTPS para este hostname, lo que significa que se registrará en un libro público, por lo que usa un nombre que no te importe que sea público.
+Para más información, consulta <a href="https://tailscale.com/kb/1153/enabling-https" target="_blank">habilitar https</a>.
+:end
+
+:docker_tailscale_be_exitnode_help:
+Activa esta opción si otras máquinas en tu Tailnet deben enrutar su tráfico de Internet a través de este contenedor. 
+Asegúrate de autorizar este nodo de salida en tu <a href="https://login.tailscale.com/admin/machines" target="_blank">Panel de administración de máquinas Tailscale</a>.
+Para más detalles, consulta la documentación de Tailscale sobre <a href="https://tailscale.com/kb/1103/exit-nodes" target="_blank">nodos de salida</a>.
+:end
+
+:docker_tailscale_exitnode_ip_help:
+De manera opcional, enruta el tráfico de Internet saliente de este contenedor a través de un nodo de salida en tu Tailnet. Elige el nodo de salida o ingresa su dirección IP de Tailscale.
+Para más detalles, consulta <a href="https://tailscale.com/kb/1103/exit-nodes" target="_blank">nodos de salida</a>.
+:end
+
+:docker_tailscale_lanaccess_help:
+Solo se aplica cuando este contenedor está utilizando un nodo de salida. Habilita esto para permitir que el contenedor acceda a la red local.
+
+<b>ADVERTENCIA:</b>&nbsp;Incluso con esta función habilitada, es posible que los sistemas en tu LAN no puedan acceder al contenedor a menos que tengan Tailscale instalado.
+:end
+
+:docker_tailscale_userspace_networking_help:
+Cuando está habilitado, este contenedor operará en un entorno restringido. El DNS de Tailscale no funcionará, y el contenedor no podrá iniciar conexiones a otras máquinas de Tailscale. Sin embargo, otras máquinas en tu Tailnet aún podrán comunicarse con este contenedor.
+
+Cuando está deshabilitado, este contenedor tendrá acceso completo a tu Tailnet. El DNS de Tailscale funcionará, y el contenedor podrá comunicarse completamente con otras máquinas en el Tailnet.
+Sin embargo, es posible que los sistemas en tu LAN no puedan acceder al contenedor a menos que tengan Tailscale instalado.
+:end
+
+:docker_tailscale_ssh_help:
+Tailscale SSH es similar a la opción "Consola" de Docker en el webGUI de Unraid, excepto que te conectas con un cliente SSH y autenticas a través de Tailscale.
+Para más detalles, consulta la documentación de <a href="https://tailscale.com/kb/1193/tailscale-ssh" target="_blank">Tailscale SSH</a>.
+:end
+
+:docker_tailscale_serve_mode_help:
+Habilitar <b>Serve</b> creará un proxy inverso automáticamente para el servicio web principal de este contenedor y lo hará disponible en tu Tailnet usando https con un certificado válido. 
+
+Ten en cuenta que al acceder a la URL de <b>Tailscale WebUI</b>, no se añade una capa de autenticación adicional más allá de restringirlo a tu Tailnet: el contenedor sigue siendo responsable de gestionar los nombres de usuario/contraseñas permitidos para acceder a él. Dependiendo de tu configuración, el acceso directo al contenedor también puede ser posible.
+
+Para más detalles, consulta la documentación de <a href="https://tailscale.com/kb/1312/serve" target="_blank">Tailscale Serve</a>.
+
+Si la documentación recomienda configuraciones adicionales para un caso de uso más complejo, habilita "Mostrar configuraciones avanzadas de Tailscale". El soporte para estas configuraciones avanzadas no está disponible más allá de confirmar que los comandos se pasan correctamente a Tailscale.
+
+<b>Funnel</b> es similar a <b>Serve</b>, excepto que el servicio web está disponible en Internet abierto. Úsalo con cuidado, ya que es probable que el servicio sea atacado. Al igual que con <b>Serve</b>, el propio contenedor es responsable de gestionar cualquier autenticación.
+
+Recomendamos leer la documentación de <a href="https://tailscale.com/kb/1223/funnel" target="_blank">Tailscale Funnel</a> antes de habilitar esta función.
+
+<b>Nota:</b>&nbsp;Habilitar <b>Serve</b> o <b>Funnel</b> publica el hostname de Tailscale en un libro público.
+Para más detalles, consulta la documentación de Tailscale: <a href="https://tailscale.com/kb/1153/enabling-https" target="_blank">Habilitación de HTTPS</a>.
+:end
+
+:docker_tailscale_serve_port_help:
+Este campo debe especificar el puerto para el servicio web principal que este contenedor ofrece. Nota: debe especificar el puerto dentro del contenedor, no un puerto remapeado en el host.
+
+El sistema intentó determinar el puerto correcto automáticamente. Si usó el valor incorrecto, entonces es probable que haya un problema con el campo "Web UI" para este contenedor, visible cambiando de "Vista básica" a "Vista avanzada" en la esquina superior derecha de esta página. 
+
+En la mayoría de los casos, este puerto es todo lo que necesitas especificar para publicar el sitio web en este contenedor, aunque hay opciones adicionales disponibles a continuación para contenedores más complejos.
+
+Este valor se pasa a la parte `<serve_port>` de este comando, que inicia serve o funnel:<br>
+`tailscale [serve|funnel] --bg --<protocol><protocol_port><path> <serve_target>:<serve_port><local_path>`<br>
+Para más detalles, consulta la documentación de la línea de comandos de <a href="https://tailscale.com/kb/1242/tailscale-serve" target="_blank">Tailscale Serve</a>.
+:end
+
+:docker_tailscale_show_advanced_help:
+¡Aquí hay dragones!
+:end
+
+:docker_tailscale_serve_target_help:
+Cuando no se especifica, este valor predetermina a http://localhost. Se pasa a la cláusula `<serve_target>` de este comando que inicia serve o funnel:<br>
+`tailscale [serve|funnel] --bg --<protocol><protocol_port><path> <serve_target>:<serve_port><local_path>`<br>
+Para más detalles, consulta la documentación de la línea de comandos de <a href="https://tailscale.com/kb/1242/tailscale-serve" target="_blank">Tailscale Serve</a>.
+Tenga en cuenta que solo se soportan `localhost` o `127.0.0.1`.
+:end
+
+:docker_tailscale_serve_local_path_help:
+Cuando no se especifica, este valor predetermina a una cadena vacía. Se pasa a la cláusula `<local_path>` de este comando que inicia serve o funnel:<br>
+`tailscale [serve|funnel] --bg --<protocol><protocol_port><path> <serve_target>:<serve_port><local_path>`<br>
+Para más detalles, consulta la documentación de la línea de comandos de <a href="https://tailscale.com/kb/1242/tailscale-serve" target="_blank">Tailscale Serve</a>.
+:end
+
+:docker_tailscale_serve_protocol_help:
+Cuando no se especifica, este valor predetermina a "https". Se pasa a la cláusula `<protocol>` de este comando que inicia serve o funnel:<br>
+`tailscale [serve|funnel] --bg --<protocol>=<protocol_port><path> <serve_target>:<serve_port><local_path>`<br>
+Para más detalles, consulta la documentación de la línea de comandos de <a href="https://tailscale.com/kb/1242/tailscale-serve" target="_blank">Tailscale Serve</a>.
+:end
+
+:docker_tailscale_serve_protocol_port_help:
+Cuando no se especifica, este valor predetermina a "=443". Se pasa a la cláusula `<protocol_port>` de este comando que inicia serve o funnel:<br>
+`tailscale [serve|funnel] --bg --<protocol><protocol_port><path> <serve_target>:<serve_port><local_path>`<br>
+Para más detalles, consulta la documentación de la línea de comandos de <a href="https://tailscale.com/kb/1242/tailscale-serve" target="_blank">Tailscale Serve</a>.
+:end
+
+:docker_tailscale_serve_path_help:
+Cuando no se especifica, este valor predetermina a una cadena vacía. Se pasa a la cláusula `<path>` de este comando que inicia serve o funnel:<br>
+`tailscale [serve|funnel] --bg --<protocol><protocol_port><path> <serve_target>:<serve_port><local_path>`<br>
+Para más detalles, consulta la documentación de la línea de comandos de <a href="https://tailscale.com/kb/1242/tailscale-serve" target="_blank">Tailscale Serve</a>.
+:end
+
+:docker_tailscale_serve_webui_help:
+Si <b>Serve</b> está habilitado, esta será una URL https con un nombre de dominio adecuado que es accesible a través de tu Tailnet, ¡sin necesidad de puerto!
+
+Si <b>Funnel</b> está habilitado, el mismo URL estará disponible en Internet.
+
+Si están deshabilitados, entonces el URL se generará desde el campo "Web UI" principal del contenedor, pero modificado para usar el IP de Tailscale. Si se especifica el puerto incorrecto aquí, cambia de "Vista básica" a "Vista avanzada" y revisa el campo "Web UI" para este contenedor.
+:end
+
+:docker_tailscale_advertise_routes_help:
+Si lo deseas, especifica cualquier ruta que deba pasarse al parámetro **`--advertise-routes=`** al ejecutar **`tailscale up`**.
+Para más detalles, consulta la documentación sobre <a href="https://tailscale.com/kb/1019/subnets#connect-to-tailscale-as-a-subnet-router" target="_blank">enrutadores de subred</a>.
+:end
+
+:docker_tailscale_accept_routes_help:
+Cuando esté habilitado, esto aceptará tus rutas de subred desde otros dispositivos, agregando el parámetro **`--accept-routes`** al ejecutar **`tailscale up`**.
+Para más detalles, consulta la documentación sobre <a href="https://tailscale.com/kb/1019/subnets?q=allow+routes#use-your-subnet-routes-from-other-devices" target="_blank">uso de tus rutas de subred desde otros dispositivos</a>.
+:end
+
+:docker_tailscale_daemon_extra_params_help:
+Especifica cualquier parámetro adicional para pasar al iniciar **`tailscaled`**.
+Para más detalles, consulta la documentación de <a href="https://tailscale.com/kb/1278/tailscaled" target="_blank">tailscaled</a>.
+:end
+
+:docker_tailscale_extra_param_help:
+Especifica cualquier parámetro adicional para pasar al ejecutar **`tailscale up`**.
+Para más detalles, consulta la documentación del <a href="https://tailscale.com/kb/1080/cli#up" target="_blank">CLI de Tailscale</a>.
+:end
+
+:docker_tailscale_statedir_help:
+Si la detección del directorio de estado falla al iniciar, puedes especificar un directorio persistente en el contenedor para anular la detección automática. `/ruta-del-contenedor/.tailscale_state`
+:end
+
+:docker_tailscale_troubleshooting_packages_help:
+Habilita esto para instalar `ping`, `nslookup`, `curl`, y `speedtest-cli` en el contenedor para ayudar a solucionar problemas de red. Una vez resueltos los problemas, recomendamos deshabilitar esto para reducir el tamaño del contenedor.
+:end
+
+:docker_privileged_help:
+Para contenedores que requieran el uso de acceso directo al dispositivo del host o necesiten una exposición completa a las capacidades del host, se deberá seleccionar esta opción.
+Para más información, consulta este enlace: <a href="https://docs.docker.com/engine/reference/run/#runtime-privilege-and-linux-capabilities" target="_blank">https://docs.docker.com/engine/reference/run/#runtime-privilege-and-linux-capabilities</a>
+:end
+
+; sysdevs ayuda - añadido el 18 de mayo de 2020
+:sysdevs_iommu_groups_help:
+Esto muestra una lista de los grupos IOMMU disponibles en su sistema junto con la salida del comando `lspci` para cada grupo IOMMU.  Los identificadores numéricos se utilizan para configurar el paso de PCI (PCI pass-through).
+
+Los dispositivos seleccionados serán vinculados al controlador vfio-pci al iniciar, lo cual los hace disponibles para su asignación a una máquina virtual y también previene que el núcleo de Linux los vincule automáticamente a cualquier controlador de host presente.
+
+**Tenga en cuenta que seleccionar un dispositivo vinculará no solo el/los dispositivo(s) especificado(s), sino *todos* los demás dispositivos en el mismo grupo IOMMU también.**
+
+&nbsp;<i class="fa fa-circle orb green-orb middle"></i>&nbsp;Este símbolo indica que el dispositivo está actualmente vinculado al controlador vfio-pci.
+
+&nbsp;<i class="fa fa-retweet grey-orb middle"></i>&nbsp;&nbsp;&nbsp;Este símbolo indica que el dispositivo soporta FLR (Restablecimiento a nivel de función).
+
+<input type="checkbox" value="" disabled>&nbsp;&nbsp;Si una casilla de verificación está desactivada, significa que el dispositivo está en uso por el sistema operativo Unraid y no puede ser transferido.
+:end
+
+:sysdevs_thread_pairings_help:
+Esto muestra una lista de emparejamientos de hilos de CPU.
+:end
+
+:sysdevs_usb_devices_help:
+Esto muestra la salida del comando `lsusb`.  Los identificadores numéricos se utilizan para configurar el paso de PCI.
+:end
+
+:sysdevs_scsi_devices_help:
+Esto muestra la salida del comando `lsscsi`.  Los identificadores numéricos se utilizan para configurar el paso de PCI.
+
+Tenga en cuenta que Linux agrupa dispositivos ATA, SATA y SAS con dispositivos SCSI verdaderos.
+:end
+
+; ayuda de unraid.net - añadida el 11 de marzo de 2021
+:unraidnet_wanpanel_help:
+El puerto WAN es el número de puerto TCP externo configurado en su router para NAT/Port Forward el tráfico de internet a este servidor Unraid SSL para tráfico web seguro.
+Puerto SSL del servidor Unraid para tráfico web seguro.
+:end
+
+:unraidnet_inactivespanel_help:
+Haga clic en Activar para configurar un repositorio git local para su dispositivo flash USB y conectarse a un remoto dedicado en unraid.net vinculado a este servidor.
+:end
+
+:unraidnet_changespanel_help:
+El estado No actualizado indica que hay archivos locales que han cambiado respecto al remoto en unraid.net. el remoto en unraid.net.
+
+Haga clic en Actualizar para subir cambios al remoto.
+
+Haga clic en Cambios para ver qué ha cambiado.
+:end
+
+:unraidnet_uptodatepanel_help:
+El estado Actualizado indica que su configuración local coincide con la almacenada en el remoto unraid.net.
+:end
+
+:unraidnet_activepanel_help:
+Haga clic en Desactivar para pausar la comunicación con su remoto en unraid.net.
+
+Haga clic en Reinicializar para borrar todo el historial de cambios tanto en local como en remoto unraid.net.
+:end
+
+:unraidnet_extraorigins_help:
+Proporcione una lista separada por comas de URLs que están permitidos para acceder al unraid-api (https://abc.myreverseproxy.com,https://xyz.rvrsprx.com,…)
+:end
+
+:myservers_remote_t2fa_help:
+Cuando "2FA Transparente para el Acceso Remoto" está habilitado, accederá a su servidor haciendo clic en el enlace "Acceso Remoto" en la <a href="https://connect.myunraid.net/" target="_blank" rel="noopener noreferrer">Ir a Conectar</a>. El sistema solicitará transparentemente un token 2FA de su servidor y lo incrustará en el formulario de inicio de sesión del servidor. Su servidor negará cualquier intento de inicio de sesión de Acceso Remoto que no incluya un token válido. Cada token solo puede usarse una vez y es válido solo por cinco minutos.
+:end
+
+:myservers_local_t2fa_help:
+Cuando "2FA Transparente para el Acceso Local" está habilitado, accederá a su servidor haciendo clic en el enlace "Acceso Local" en la <a href="https://connect.myunraid.net/" target="_blank" rel="noopener noreferrer">Ir a Conectar</a>. El sistema solicitará transparentemente un token 2FA de su servidor y lo incrustará en el formulario de inicio de sesión del servidor. Su servidor negará cualquier intento de inicio de sesión de Acceso Local que no incluya un token válido. Cada token solo puede usarse una vez y es válido solo por cinco minutos.
+
+Esto es bastante extremo para el Acceso Local, y en la mayoría de los casos no es necesario. Requiere una conexión a Internet sólida. Si necesita acceder a la interfaz web mientras el Internet está caído, use SSH en el servidor y ejecute 'use_ssl no'. Esto le dará acceso a través de http://<?=$nginx['NGINX_LANIP']?><?=$nginx['NGINX_PORT'] !== '80' ? ':' . $nginx['NGINX_PORT'] : '' ?>. ':'.$nginx['NGINX_PORT'] : '' ?>
+:end
+
+; Texto de ayuda de WireGuard
+
+:wg_local_name_help:
+Use este campo para establecer un nombre para esta conexión y hacerla fácilmente reconocible. El mismo nombre aparecerá en la configuración de cualquier par.
+:end
+
+:wg_generate_keypair_help:
+Use el botón **Generar Par de Claves** para crear automáticamente una combinación única de clave privada y pública.<br>
+O pegue una clave privada existente, generada por WireGuard. ¡NO comparta esta clave privada con otros!
+:end
+
+:wg_local_tunnel_network_pool_help:
+Los túneles WireGuard necesitan una dirección IP interna. Asigne un conjunto de red utilizando la red IPv4 predeterminada <?=$netpool['wg0']?>/24
+o la red IPv6 predeterminada <?=$netpool6['wg0']?>/64 o asigne su propio conjunto de red del cual se puede hacer una asignación automática tanto para este servidor como para cualquier par.
+
+El *conjunto de red del túnel* debe ser una red única que no exista ya en el servidor ni en ninguno de los pares.
+:end
+
+:wg_local_tunnel_network_pool_X_help:
+Los túneles WireGuard necesitan una dirección IP interna. Asigne un conjunto de red utilizando la red IPv4 predeterminada, 
+la red IPv6 predeterminada, o asigne su propio conjunto de red del cual se puede hacer una asignación automática tanto para este servidor como para cualquier par.
+
+El *conjunto de red del túnel* debe ser una red única que no exista ya en el servidor ni en ninguno de los pares.
+:end
+
+:wg_local_tunnel_address_help:
+Este campo se llena automáticamente cuando se crea un conjunto de red de túnel local. Se permite sobrescribir la asignación, pero normalmente no es necesario. Use con cuidado al cambiar manualmente.
+:end
+
+:wg_local_tunnel_address_help:
+Este campo se llena automáticamente cuando se crea un conjunto de red de túnel local. Se permite sobrescribir la asignación, pero normalmente no es necesario. Use con cuidado al cambiar manualmente.
+:fin
+
+:wg_local_endpoint_ayuda:
+Este campo se rellena automáticamente con el nombre de dominio de gestión pública *&lt;wan-ip&gt;.&lt;hash&gt;.myunraid.net* o la dirección pública del servidor.<br>
+Esto permite que se establezcan túneles VPN desde pares externos hacia el servidor.<br>
+Configure el reenvío de puertos correcto en su enrutador (el puerto predeterminado es <?=$netport['wg0']?>, pero esto se puede cambiar) para permitir que las conexiones entrantes lleguen al servidor.
+
+Los usuarios con un nombre de dominio registrado pueden usar este campo para especificar cómo se conoce su servidor en Internet. Por ejemplo. www.miserver.midominio.<br>
+Asegúrese de nuevo de que su enrutador esté configurado correctamente.
+
+Nota para los usuarios de Cloudflare: el proxy de Cloudflare está diseñado para tráfico http, no puede gestionar el tráfico VPN. Debe desactivar el proxy de Cloudflare para poder usar VPN con su dominio.
+:fin
+
+:wg_local_endpoint_X_ayuda:
+Este campo se rellena automáticamente con el nombre de dominio de gestión pública *&lt;wan-ip&gt;.&lt;hash&gt;.myunraid.net* o la dirección pública del servidor.<br>
+Esto permite que se establezcan túneles VPN desde pares externos hacia el servidor.<br>
+Configure el reenvío de puertos correcto en su enrutador para permitir que las conexiones entrantes lleguen al servidor.
+
+Los usuarios con un nombre de dominio registrado pueden usar este campo para especificar cómo se conoce su servidor en Internet. Por ejemplo. www.miserver.midominio.<br>
+Asegúrese de nuevo de que su enrutador esté configurado correctamente.
+
+Nota para los usuarios de Cloudflare: el proxy de Cloudflare está diseñado para tráfico http, no puede gestionar el tráfico VPN. Debe desactivar el proxy de Cloudflare para poder usar VPN con su dominio.
+:fin
+
+:wg_local_server_uses_nat_ayuda:
+Cuando el NAT está habilitado, el servidor utiliza su propia dirección de LAN al reenviar tráfico del túnel a otros dispositivos en la red LAN.
+Utilice esta configuración cuando no se deseen modificaciones al enrutador, pero este enfoque no funciona con contenedores Docker que utilizan direcciones IP personalizadas.
+
+Cuando el NAT está deshabilitado, el servidor utiliza la dirección del túnel de WireGuard al reenviar tráfico.
+En este caso, es necesario que la puerta de enlace predeterminada (enrutador) tenga una ruta estática configurada para referirse a la dirección del túnel de vuelta al servidor.
+:fin
+
+:wg_local_gateway_uses_upnp_ayuda:
+Por defecto, está en SÍ si la puerta de enlace local tiene UPnP habilitado y está respondiendo a las solicitudes.<br>
+Cuando UPnP está habilitado, no es necesario configurar el reenvío de puertos en el enrutador para permitir conexiones entrantes de túneles. Esto se hace automáticamente.
+:fin
+
+:wg_local_tunnel_firewall_ayuda:
+La función de firewall controla el acceso remoto a través del túnel de WireGuard a hosts y/o subredes específicas.<br>
+La regla predeterminada es "denegar" y bloquea las direcciones especificadas en este campo, mientras permite todas las demás.<br>
+Cambiar la regla a "permitir" invierte la selección, lo que significa que sólo las direcciones especificadas están permitidas y todas las demás están bloqueadas.<br>
+Use una coma como separador cuando se ingrese más de una dirección IP.
+:fin
+
+:wg_mtu_size_help:
+Deje esto en el modo automático predeterminado para seleccionar el tamaño MTU. Este tamaño de MTU es común para todas las conexiones de pares.
+:fin
+
+:wg_peer_configuration_help:
+El icono <i class='fa fa-fw fa-eye'></i> se utiliza para ver la configuración de un par. Una configuración se puede descargar o leer directamente para la configuración instantánea del par.<br>
+El icono está deshabilitado cuando no existe configuración de pares o el usuario ha realizado cambios en la configuración existente que aún no se han aplicado.
+
+El icono <i class='fa fa-fw fa-key'></i> se utiliza para mostrar u ocultar las claves privadas, públicas y precompartidas. Tenga en cuenta que estos campos siempre se muestran cuando no se han configurado claves.
+:fin
+
+:wg_peer_name_help:
+Use este campo para establecer un nombre para esta conexión de par y facilitar su reconocimiento. El mismo nombre aparecerá en la configuración del par en el lado opuesto.
+:fin
+
+:wg_peer_preshared_key_help:
+Para mayor seguridad, se puede utilizar una clave precompartida. Use el botón **Generar Clave** para crear automáticamente una clave precompartida única.<br>
+Esta clave es la misma en ambos lados, servidor y par, y se agrega también a la configuración del par.
+:fin
+
+:wg_peer_tunnel_address_help:
+Este campo se rellena automáticamente cuando se crea un pool de red de túneles local. Se permite sobrescribir la asignación, pero normalmente no es necesario. Utilice con cuidado al cambiar manualmente.<br>
+Cada par debe tener una dirección IP de túnel única.
+:fin
+
+:wg_peer_endpoint_help:
+Cuando este campo se deja vacío, el servidor opera en *modo pasivo* para establecer el túnel. Debe ser el par quien inicie el túnel.
+
+Cuando se ingresa una dirección IP para conectarse al par, el servidor opera en *modo activo* y establece el túnel al par tan pronto como haya datos para enviar.
+
+*Nota: este campo es obligatorio para conexiones "servidor a servidor" y "LAN a LAN"*
+:fin
+
+:wg_peer_allowed_ips_help:
+Este campo se rellena automáticamente con la dirección del túnel del par. Esto permite que el servidor llegue al par a través del túnel.<br>
+Cuando el par es otro servidor o enrutador con redes adicionales, sus subredes se pueden agregar aquí para hacer estas redes accesibles a través del túnel.
+:fin
+
+:wg_peer_dns_server_help:
+Utilice esta entrada para sobrescribir la asignación actual del servidor DNS del Par
+:fin
+
+:wg_activado_keepalive_help:
+Por defecto, un túnel de WireGuard permanece en silencio cuando no hay tráfico, lo que puede causar que la conexión se suspenda.
+Normalmente, esto no es un problema, ya que un túnel de WireGuard se reestablece automáticamente cuando se necesita.<br>
+Un temporizador de keepalive mantendrá la conexión abierta, para la mayoría de situaciones un valor de 20 segundos es adecuado.
+
+Note que para dispositivos móviles, esto usará más datos y agotará su batería más rápidamente.
+:fin
+
+:sysdrivers_intro_ayuda:
+Esta página muestra todos los controladores disponibles en este sistema. Filtre la lista según si el controlador está en uso o no, o busque un controlador específico si lo desea.
+
+Cualquier controlador de terceros instalado por un complemento tendrá un símbolo de soporte al lado.
+
+Haga clic en el botón de edición para agregar/modificar/eliminar cualquier archivo config/modprobe.d en el directorio modprobe.d en el disco flash.
+:fin
+
+:console_teclado_ayuda:
+Seleccione su mapa de teclas predeterminado para la consola local (no para el Terminal web).
+:fin
+
+:console_pantalla_ayuda:
+**Por defecto:** 'Por defecto' establecerá el tiempo de espera de apagado en 15 minutos y el ahorro de energía en 60 minutos.
+
+**Deshabilitado:** 'Deshabilitado' desactivará el temporizador de apagado y de ahorro de energía.
+
+**Todos los demás valores:** Establecerá el temporizador de apagado al valor seleccionado y desactivará el temporizador de ahorro de energía.
+:fin
+
+:console_bash_ayuda:
+Si está configurado en 'Sí', el historial de bash persistirá tras reinicios, configurado en 'No' para desactivarlo.
+
+**ATENCIÓN:** ¡El historial de bash se escribirá en el dispositivo de arranque USB, lo que provocará mayor desgaste!
+
+**Nota:** Al desactivar y activar se eliminará todo el historial de bash.
+:fin
+
+:WOL_introde_ayuda:
+Esta página permite configurar el inicio/reanudación y detención de VMs, Contenedores (Docker y LXC) utilizando paquetes mágicos WOL.
+
+No configura el despertar del servidor Unraid.
+
+El proceso buscará la dirección mac definida dentro del servicio (VM o contenedor) con la excepción de los dockers. Los dockers no tienen una dirección mac hasta que están en funcionamiento, por lo que deberá definir una dirección mac de usuario para permitirle iniciarlos.
+
+Si el servicio está pausado, un Paquete WOL lo reanudará. 
+
+Para cada servicio, puede establecer: habilitar, deshabilitar o habilitar y apagar.
+
+Cuando se establece habilitar y apagar, si el servicio está ejecutándose cuando se recibe el próximo paquete WOL se efectuará un apagado.
+:fin
+
+:WOL_habilitar_ayuda:
+Si está configurado en sí, se establece que el demonio unraidwold se ejecute.
+:fin
+
+:WOL_run_docker_ayuda:
+Si está configurado en sí, cuando se reciben paquetes de despertar por LAN, se verificarán los dockers, de lo contrario, serán ignorados.
+:fin
+
+:WOL_run_VM_ayuda:
+Si está configurado en sí, cuando se reciben paquetes de despertar por LAN, se verificarán las máquinas virtuales, de lo contrario, serán ignoradas.
+:fin
+
+:WOL_run_LXC_ayuda:
+Si está configurado en sí, cuando se reciben paquetes de despertar por LAN, se verificarán los LXC, de lo contrario, serán ignorados. Se necesita tener instalado el complemento LXC para procesar los LXC. :fin.
+:WOL_run_shutdown_ayuda:
+
+:WOL_run_shutdown_help:
+Si está configurado en sí, cuando se reciben paquetes de despertar por LAN, se realizan comprobaciones y, si están habilitadas para el servicio y ese servicio está en ejecución, la entidad se apagará. El sistema debe estar configurado en Habilitado y Apagado para que sea ejecutado.
+:fin
+
+:WOL_interface_ayuda:
+Especifique la interfaz a la que se debe vincular el demonio. Algunas interfaces pueden no ser capaces de recibir paquetes etherframe. Se recomienda vincular a una interfaz física.
+:fin
+
+:WOL_modo_promiscuo_ayuda:
+Habilite para configurar la NIC que no filtre paquetes.
+:fin
+
+:WOL_archivo_de_registro_ayuda:
+El valor predeterminado es registrar en syslog, pero si desea una ubicación diferente para el registro, establezca el nombre del archivo.
+:fin

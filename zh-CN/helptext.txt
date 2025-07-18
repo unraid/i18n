@@ -1,0 +1,2762 @@
+:main_array_devices_help:
+**彩色状态指示器** 在*阵列设备*的每行开头颜色指示器的重要性如下：
+
+<i class='fa fa-circle orb green-orb'></i>正常运行，设备处于激活状态。
+
+<i class='fa fa-circle orb grey-orb'></i>设备处于备用模式（关闭旋转）。
+
+<i class='fa fa-warning orb yellow-orb'></i>设备内容被模拟。
+
+<i class='fa fa-times orb red-orb'></i>设备已禁用，内容被模拟。
+
+<i class='fa fa-square orb blue-orb'></i>新设备。
+
+<i class='fa fa-square orb grey-orb'></i>无设备存在，位置为空。
+
+**识别标识** 是唯一标识存储设备的*签名*。 该签名包含设备型号、序列号、Linux设备ID和设备大小。
+包含设备型号、序列号、Linux设备ID和设备大小。
+
+**温度** 是直接从设备读取的。 您可以在[显示首选项](Settings/DisplaySettings)页面上配置使用的单位。
+我们不读取旋转硬盘的温度，因为这通常会导致它们旋转起来；相反，我们显示符号`*`。  我们也为SSD和闪存设备显示符号`*`，尽管有时这些设备会报告有效温度，有时它们会返回值`0`。
+drives since this typically causes them to spin up; instead we display the `*` symbol.  **大小、已用、空闲** 报告设备的总大小、已用空间和剩余空间。
+这些单位也可以在[显示首选项](Settings/DisplaySettings)页面配置。
+即使对于空磁盘，由于文件系统开销，已用空间也会非零。
+
+*注意：对于多设备缓存池，该数据适用于btrfs返回的整个池。*  **读取、写入** 是发送到设备I/O驱动程序的I/O请求计数。
+units are also configured on the [Display Preferences](Settings/DisplaySettings) page.  这些统计数据可以随时清除，详见下文中的数组状态部分。
+**错误** 统计设备I/O驱动程序报告的*不可恢复*错误的数量。
+
+由于无法恢复的阵列读取错误而导致的数据丢失由奇偶校验重建即时填充（我们会尝试将该数据写回失败的扇区）。
+
+任何不可恢复的写入错误都会导致*禁用*硬盘。  **文件系统** 指示设备分区1检测到的文件系统。
+**查看** 列包含一个文件夹图标，表示设备已*挂载*。
+
+单击图标以浏览文件系统。
+如果在[显示首选项](Settings/DisplaySettings)页面上启用了“显示数组总计”，则会包含一行**总计**，其中提供设备统计的总计，包括设备的平均温度。 必须停止数组才能更改阵列设备分配。
+未绑定数组由一或两个奇偶校验磁盘和多个数据磁盘组成。 数据磁盘专用于存储用户数据，而奇偶校验磁盘提供必要的冗余以从磁盘故障中恢复。
+由于数据未跨阵列条带化，因此奇偶校验磁盘必须与最大的存储数据磁盘一样大或更大。
+
+奇偶校验磁盘也应该是性能最高的驱动器。
+
+每个数据磁盘都有自己的文件系统，且可以作为单独的共享导出。 单击设备名称以配置单个设备设置并启动某些实用程序。
+:end
+
+:main_slots_help:
+**插槽** 选择您的服务器中分配给阵列设备的设备插槽数量。
+阵列插槽的最小数量是2，并且必须至少分配一个设备到阵列。
+
+:end
+
+:cache_devices_help: **彩色状态指示器** 在*池设备*的每行开头颜色指示器的重要性如下：
+<i class='fa fa-circle orb green-orb'></i>正常运行，设备处于激活状态。
+<i class='fa fa-circle orb grey-orb'></i>设备处于备用模式（关闭旋转）。
+
+<i class='fa fa-square orb blue-orb'></i>新设备。
+<i class='fa fa-square orb grey-orb'></i>无设备存在，位置为空。  **池设备** 是单一设备或多个设备的池，*不在*未绑定阵列中。
+
+与阵列设备一样，它可以导出以进行网络访问。
+由于不在未绑定阵列中，写入访问速度显着提高。
+
+Click on the Device name to configure individual device settings and launch certain utilities.
+有两种方法可以配置池设备：
+
+:main_slots_help:
+**插槽** 选择服务器中用于阵列设备的设备插槽数量。
+阵列插槽的最小数量为2，您至少需要为阵列指定一个设备。
+:end
+
+:cache_devices_help:
+**彩色状态指示灯** 指示 *池设备* 每行开头颜色指示器的意义如下：
+
+<i class='fa fa-circle orb green-orb'></i>正常运行，设备处于活动状态。
+
+<i class='fa fa-circle orb grey-orb'></i>设备处于待机模式（已停机）。
+
+<i class='fa fa-square orb blue-orb'></i>新设备。
+
+<i class='fa fa-square orb grey-orb'></i>无设备，位置为空。
+
+**池设备** 是单个设备或多个设备的池，*不在* unRAID 阵列中。  它可以像阵列设备一样导出以供网络访问
+与阵列设备相同。  位于unRAID 阵列之外会显著提高写入速度。
+
+可以通过两种方式配置池设备：
+
+1. 作为单个设备，或
+2. 作为多设备池。
+
+配置为单个设备时，您可以使用任何支持的文件系统（btrfs、reiserfs或xfs）格式化设备。
+因此，即使单个池设备故障，池也可以承受单盘故障而不会丢失数据。  btrfs允许向池中添加任意数量的设备，确保每份数据都写入两个不同设备。
+通过这种配置，可以达到最高性能，但代价是没有数据保护——如果池设备故障，所有数据可能丢失。
+
+当配置为多设备池时，Unraid OS将自动选择 *btrfs-raid1* 格式（用于数据和元数据）。
+当启用[用户共享](/Settings/ShareSettings)时，用户共享可配置为自动利用池设备以加速写入。  有一个名为 *mover* 的特殊后台过程，可定期安排运行，将用户共享文件从缓存移动到阵列。
+:end  :cache_slots_help:
+
+**插槽** 选择服务器中用于缓存设备的设备插槽数量。
+:end
+:boot_device_help:  重要的阵列配置保存在 USB 闪存设备上；因此，必须保持其插入服务器。
+点击[闪存](/Main/Flash?name=flash)以查看GUID和注册信息，并配置导出设置。
+由于USB闪存设备使用FAT文件系统格式化，因此只能通过SMB协议导出。
+
+:end
+:array_status_help:
+**彩色状态指示灯** 指示*阵列*颜色指示器的意义如下：
+
+<i class='fa fa-circle orb green-orb'></i>阵列已启动且奇偶校验有效。
+<i class='fa fa-circle orb grey-orb'></i>阵列已停止，但奇偶校验有效。
+<i class='fa fa-warning orb yellow-orb'></i>阵列已启动，但奇偶校验无效。  <i class='fa fa-warning orb grey-orb'></i>阵列已停止，奇偶校验无效。
+:end  :array_devices_help:
+#### 分配设备
+unRAID 磁盘阵列由若干数据磁盘和最多两个奇偶校验磁盘组成。
+
+数据
+磁盘专门用于存储用户数据，而奇偶校验磁盘提供必要的冗余以从任何单盘或双盘故障中恢复。
+
+请注意，在提到阵列存储设备时我们仔细使用术语*磁盘*。
+
+我们
+
+在提到实际的硬盘（HDD）设备时使用 *硬盘*（或有时仅使用 *驱动器*）这一术语。这是因为在 RAID 系统中，可能会读取/写入相应硬盘已禁用甚至丢失的阵列磁盘！
+
+此外，可以询问"哪个设备被分配为奇偶校验磁盘？"；或者，"哪个设备对应于 disk2？"。
+
+因此，我们需要一种方法将硬盘分配给阵列磁盘。
+
+在阵列停止时可以在主页面中完成此操作。
+每个阵列磁盘都有一个下拉框列出所有未分配的设备。
+
+要分配设备，只需从列表中选择即可。 每次进行设备分配时，系统都会更新配置文件以记录分配情况。
+#### 要求
+与传统 RAID 系统不同，后者将数据条带化在所有阵列设备上，Unraid 服务器将文件存储在各个硬盘中。
+
+因此，所有文件写入操作都将涉及文件正在写入的数据磁盘和奇偶校验磁盘。  因此，
+* 奇偶校验磁盘的大小必须与任何数据磁盘一样大或更大，并且
+* 在有选择的情况下，奇偶校验磁盘应是您集合中最快的磁盘。 #### 指导方针
+以下是您在设计 unRAID 磁盘阵列时应遵循的步骤： 1.
+决定将哪个硬盘用作奇偶校验，以及您将用作数据磁盘1、磁盘2等的硬盘，并以某种方式标记它们。
+
+此外，请查找每个硬盘的序列号，并将其记下；您稍后将需要此信息。 2.
+安装您的硬盘设备，启动服务器并打开 webGUI。 如果这是新系统构建，则主页将显示未安装磁盘。
+这并不意味着系统无法检测到您的硬盘；这只是意味着尚未分配任何硬盘。 3. 记得您在步骤1中记录的序列号吗？对于奇偶校验和每个数据磁盘，根据序列号从下拉列表中选择合适的硬盘。
+#### 热插拔
+
+如果您的硬件支持，您还可以将硬盘*热插拔*到服务器中。
+
+例如，
+如果您使用硬盘笼，可以在服务器通电且阵列停止时将它们插入服务器。 刷新主页以将新的未分配设备显示在分配下拉列表中。
+#### 下一步  为所有硬盘分配后，请参阅下面的阵列状态部分并启动阵列。
+
+:end
+
+:encryption_help:
+
+#### 加密输入
+
+在阵列停止时，用户可以指定新加密密钥。
+
+请注意，一旦设备使用特定密钥格式化，只有使用相同的密钥才能打开。更改加密密钥需要重新格式化加密的设备 **这将导致该设备上所有现有数据永久丢失。**
+
+#### 口令 输入最多512个字符的口令。
+强烈建议仅使用前128个字符中的95个可打印字符[ASCII表](https://en.wikipedia.org/wiki/ASCII)，因为它们的二进制表示始终相同。 其他字符的编码可能因系统配置而异，更换编码后，您的口令将无效。
+如果希望使用更长的口令或包含二进制数据，请上传密钥文件。
+
+有关*安全*口令的标准，请参阅 [cryptsetup FAQ](https://gitlab.com/cryptsetup/cryptsetup/wikis/FrequentlyAskedQuestions#5-security-aspects)。 **请牢记**此口令。 **如果丢失，加密内容将无法恢复！**
+#### 密钥文件 选择具有存储加密密钥或者二进制文件的本地密钥文件。
+密钥文件的最大大小为8M（8388608字节）。
+
+**备份** 您的本地密钥文件。 **如果丢失，加密内容将无法恢复！** :end
+:info_warning_temp_help:
+
+*警告磁盘温度* 设置此硬盘温度的警告阈值。超过此阈值将导致警告通知。
+
+值为零将禁用警告阈值（包括通知）。 :end
+:info_critical_temp_help:
+*关键磁盘温度* 设置此硬盘温度的关键阈值。超过此阈值将导致警报通知。 值为零将禁用关键阈值（包括通知）。
+:end
+
+:info_file_system_help:
+
+输入所需的文件系统类型。
+更改设备的文件系统类型允许您使用新文件系统重新格式化该设备。
+请注意，**设备上的所有现有数据会丢失**。
+
+:end
+:info_comments_help:
+
+此文本将显示在Windows资源管理器的*评论*列下。 输入您喜欢的内容，最多256个字符。
+:end :info_warning_utilization_help:
+*警告磁盘利用率*设置此硬盘利用率的警告阈值。超过此阈值将导致警告通知。
+
+如果警告阈值等于或大于关键阈值，将只有关键通知（不再有警告）。
+
+值为零将禁用警告阈值（包括通知）。 :end
+:info_critical_utilization_help:
+*关键磁盘利用率* 设置此硬盘利用率的关键阈值。超过此阈值将导致警报通知。 值为零将禁用关键阈值（包括通知）。
+:end :info_btrfs_balance_help:
+
+**平衡**将运行*btrfs balance*程序以在所有池设备上重新分配条带，例如，将池从raid1转换为raid0或反之亦然。
+执行*全面平衡*时，它基本上会重写当前文件系统中的所有内容。
+
+*模式转换*影响btrfs数据条带；元数据始终使用raid1，并且必要时由任何平衡操作转换为raid1。 运行时间可能非常长，具体取决于文件系统大小和设备速度。
+
+Unraid OS在创建多设备池时使用以下默认选项：
+
+`-dconvert=raid1 -mconvert=raid1` 有关更完整的文档，请参阅 btrfs-balance [手册](https://man7.org/linux/man-pages/man8/btrfs-balance.8.html)
+
+*注意：Linux社区普遍认为 raid5 和 raid6 仍然是**实验性的*** :end
+:info_balance_cancel_help:
+
+**取消** 将取消正在进行的平衡操作。
+:end :info_btrfs_scrub_help:
+
+**擦洗**运行*btrfs scrub*程序，它将从所有设备读取所有数据和元数据块，并验证校验和。
+如果有正确的副本可用，*btrfs scrub* 将修复损坏的块。
+
+:end
+:info_zfs_scrub_help: **擦洗**运行*zfs scrub*程序，它将从所有
+
+设备读取所有数据和元数据块，并验证校验和。
+点击**升级池**按钮可升级 ZFS 池以启用最新的 ZFS 功能。
+
+:end
+:info_scrub_cancel_help:  **取消** 将取消正在进行的擦洗操作。
+:end  :info_btrfs_check_help:
+**检查**将运行*btrfs check*程序以检查设备上的文件系统完整性。
+
+*选项*字段初始化为*--readonly*，指定仅检查。
+如果需要维修，您应该运行第二次检查，设置*选项*为*--repair*；这将允许*btrfs check*来修复文件系统。
+警告：除非开发人员或经验丰富的用户建议，否则**不要使用** *--repair*；并且只有在接受无法通过fsck成功修复所有类型的文件系统损坏之后才可进行操作。
+例如。
+
+某些其他软件或硬件错误可能会致命地损坏卷。
+启动检查后，您应该刷新以监视进度和状态。 超过此阈值将导致警告通知。
+
+当警告阈值设置为等于或大于临界阈值时，将只会有临界通知（不存在警告）。
+
+值为零将禁用警告阈值（包括通知）。
+:end
+
+:info_critical_utilization_help:
+*临界磁盘使用率*设置此硬盘使用率的临界阈值。 超过此阈值将导致警报通知。
+
+值为零将禁用临界阈值（包括通知）。
+:end
+
+:info_btrfs_balance_help:
+**均衡**将运行*btrfs均衡*程序，以在所有池设备间重排分配。
+例如，将池从raid1转换为raid0或反之亦然。
+
+进行*完整均衡*时，它基本上重写当前文件系统中的所有内容。
+
+*模式转换*影响btrfs数据分配；元数据始终使用raid1，必要时由任何均衡操作转换为raid1。
+
+运行时间可能非常长，具体取决于文件系统的大小和设备的速度。
+
+Unraid OS在创建多设备池时使用这些默认选项：
+
+`-dconvert=raid1 -mconvert=raid1`
+
+有关更完整的文档，请参阅btrfs-balance [Manpage](https://man7.org/linux/man-pages/man8/btrfs-balance.8.html)
+
+*注意：Linux社区通常仍将raid5和raid6视为**实验性**。*
+:end
+
+:info_balance_cancel_help:
+**取消**将取消正在进行的均衡操作。
+:end
+
+:info_btrfs_scrub_help:
+**查看**运行*btrfs查看*程序，它将读取所有数据和元数据块
+从所有设备中并验证校验和。
+
+如果有可用的正确副本，*btrfs scrub*将修复损坏的块。
+:end
+
+:info_zfs_scrub_help:
+**查看**运行*zfs查看*程序，它将读取所有数据和元数据块
+从所有设备中并验证校验和。
+
+单击**升级池**按钮以升级ZFS池，启用最新的ZFS功能。
+:end
+
+:info_scrub_cancel_help:
+**取消**将取消正在进行的查看操作。
+:end
+
+:info_btrfs_check_help:
+**检查**将运行*btrfs检查*程序以检查设备上的文件系统完整性。
+
+*选项*字段初始化为*--readonly*，它仅指定检查。  如果需要修复，您应该运行
+第二次检查传递，将*选项*设置为*--repair*；这将允许*btrfs检查*修复文件系统。
+
+警告：**请勿使用** *--repair*，除非开发人员或有经验的用户建议您这样做，并且在接受没有适当修复成功修复所有类型文件系统损坏的情况下。
+例如，
+某些其他软件或硬件错误可能会使卷遭到致命破坏。 启动检查后，您应该刷新以监视进度和状态。
+
+根据  根据
+文件系统的大小以及可能存在的错误，该操作可能需要**很长时间**才能完成（几个小时）。
+窗口中不会打印太多信息，但您可以通过观察读/写计数器来验证操作正在运行
+在主页上设备的读/写计数器增加。
+:end
+
+:info_check_cancel_help:
+**取消**将取消正在进行的检查操作。
+:end
+
+:info_reiserfs_check_help:
+**检查**将运行*reiserfsck*程序，检查设备上的文件系统完整性。
+
+选项字段可以填入用于修复文件系统中问题的特定选项。 通常，你
+先运行一次检查通过，保持选项为空。  完成后，如果*reiserfsck* 发现任何问题，必须
+使用第一次*reiserfsck*通过的特定选项重新运行检查通过。
+
+启动检查后，您应该刷新以监控进度和状态。  根据
+文件系统的大小以及可能存在的错误，该操作可能需要**很长时间**才能完成（几个小时）。
+窗口中不会打印太多信息，但您可以通过观察读/写计数器来验证操作正在运行
+在主页上设备的读/写计数器增加。
+:end
+
+:info_reiserfs_cancel_help:
+**取消**将取消正在进行的检查操作。
+:end
+
+:info_xfs_check_help:
+**检查**将运行*xfs_repair*程序，检查设备上的文件系统完整性。
+
+*选项*字段初始为*-n*，指定仅进行检查。  如果需要修复，您应该运行
+一次二次检查，重新填空*选项*；这将允许*xfs_repair*修复文件系统。
+
+启动检查后，您应该刷新以监控进度和状态。  根据
+文件系统的大小以及可能存在的错误，该操作可能需要**很长时间**才能完成（几个小时）。
+窗口中不会打印太多信息，但您可以通过观察读/写计数器来验证操作正在运行
+在主页上设备的读/写计数器增加。
+:end
+
+:info_xfs_cancel_help:
+**取消**将取消正在进行的检查操作。
+:end
+
+:info_smart_notifications_help:
+SMART 通知在属性的 RAW 值增加或 NORMALIZED 值降低达到制造商设置的预定义阈值时生成。
+
+每个磁盘可能有自己的特定设置覆盖'默认'设置（请参见磁盘设置下的全局 SMART 设置）。
+:end
+
+:info_tolerance_level_help:
+可以设置一个容忍水平以防止小变化导致通知。 设置过高的容忍水平可能导致严重变化没有通知。
+
+每个磁盘可能有自己的特定设置覆盖'默认'设置（请参见磁盘设置下的全局 SMART 设置）。
+:end
+
+:info_controller_type_help:
+默认情况下，自动控制器选择由smartctl进行，以读取SMART信息。 然而，某些控制器需要特定设置才能令smartctl正常工作。
+使用此设置选择您的控制器类型，并填写特定的磁盘索引和设备名称。 请查阅制造商的文档以找到相关信息。
+
+每个磁盘可能有自己的特定设置覆盖'默认'设置（请参见磁盘设置下的全局 SMART 设置）。
+:end
+
+:info_attribute_notifications_help:
+用户可以为给定的SMART属性启用或禁用通知。 建议保留默认值，即选择全部属性，
+当某些硬盘属性不存在或者不提供正确的信息时，这些属性可能会被排除。
+此外，可以输入自定义 SMART 属性，以生成通知。 在此选择时需谨慎，
+如果选择了不当的SMART属性，可能会引起大量通知。
+
+每个磁盘可能有自己的特定设置覆盖'默认'设置（请参见磁盘设置下的全局 SMART 设置）。
+:end
+
+:selftest_history_help:
+按**显示**以查看磁盘本身保存的自检历史记录。
+此功能仅在磁盘处于活动模式时可用。
+:end
+
+:selftest_error_log_help:
+按**显示**以查看磁盘本身保存的错误报告。
+此功能仅在磁盘处于活动模式时可用。
+:end
+
+:selftest_short_test_help:
+启动*简短*SMART自检，预估持续时间可在*功能*部分查看。 这通常需要几分钟。
+
+当磁盘关闭时，它将中止任何正在运行的自检。
+此功能仅在磁盘处于活动模式时可用。
+:end
+
+:selftest_long_test_help:
+启动*扩展*SMART自检，预估持续时间可在*功能*部分查看。 这通常需要几个小时。
+
+当磁盘关闭时，它将中止任何正在运行的自检。 建议禁用磁盘的关闭计时器
+以避免此自检被打断。
+
+此功能仅在磁盘处于活动模式时可用。
+:end
+
+:selftest_result_help:
+当没有测试运行时，它将在此处显示最新得到的自检结果（如果有）。
+否则，正在运行的测试将显示进度指示器（百分比值）。
+:end
+
+:smart_attributes_help:
+此列表显示此磁盘支持的SMART属性。 关于每个SMART属性的更多信息，建议在线搜索。
+
+*橙色*中的属性可能需要注意。 它们的**原始值**大于零，并可能表明磁盘故障正在等待。
+
+特别关注当某个属性的原始值开始随时间增加时。 有疑问时，请咨询Limetech论坛以获取建议。
+:end
+
+:smart_capabilities_help:
+此列表显示此磁盘支持的SMART功能。
+
+在此处查看SMART短期和扩展自检的预估时间。
+:end
+
+:smart_identity_help:
+此列表显示此磁盘的SMART身份信息
+:end
+
+:open_devices_help:
+这些设备安装在您的服务器中，但未分配给保护阵列或缓存磁盘/池。
+它们可以用作其他非持久性存储。
+:end
+
+:flash_backup_help:
+使用*闪存备份*创建闪存设备当前内容的单个zip文件，并将其存储在计算机上。
+:end
+
+:syslinux_cfg_help:
+使用此页面对`syslinux.cfg`文件进行更改。
+您需要重启服务器以使这些更改生效。
+:end
+
+:syslinux_button_help:
+点击**默认**按钮初始化编辑框为
+出厂默认内容。  您仍需点击**应用**以
+提交更改。
+
+点击**应用**按钮提交当前编辑。  点击**重置**以
+撤销您所做的任何更改（在保存前）。 点击**完成**退出此页面。
+:end
+
+:info_share_assignment_help:
+选择的池可用于用户共享。
+:end
+
+:info_free_space_help:
+这定义了卷中剩余可用空间的"下限"。
+如果可用空间小于此值，则通过用户共享写入的新文件将因"空间不足"错误而失败。
+
+输入一个带有以下后缀之一的数值：
+
+**KB** = 1,000<br>
+**MB** = 1,000,000<br>
+**GB** = 1,000,000,000<br>
+**TB** = 1,000,000,000,000<br>
+**K** = 1,024 (即 2^10)<br>
+**M** = 1,048,576 (即 2^20)<br>
+**G** = 1,073,741,824 (即 2^30)<br>
+**T** = 1,099,511,627,776 (即 2^40)<br>
+
+如果没有后缀，假定为 1024 字节块的计数。
+:end
+
+:share_list_help:
+**彩色状态指示灯**——*用户共享* 每行开头颜色指示器的意义如下：
+
+<i class='fa fa-circle orb green-orb'></i>所有文件都在受保护的存储中。
+
+<i class='fa fa-warning orb yellow-orb'></i>部分或全部文件位于未受保护的存储中。
+
+**安全模式：**
+
++ '-' -- 用户共享未导出，且在网络上不可用
++ *公开* -- 所有用户（包括来宾）都拥有完整的读写权限（开放访问）
++ *安全* -- 所有用户（包括来宾）都有读权限，写权限由用户设置（有限访问）
++ *私有* -- 不允许来宾访问，读写权限或只读权限由用户设置（关闭访问）
+
+**特殊模式：**
+
++ *受斜体显示的 SMB 安全* 模式表示导出的隐藏用户共享。
++ NFS 没有用户共享的特殊模式。
+:end
+
+:disk_list_help:
+**彩色状态指示灯**——*磁盘共享* 每行开头颜色指示器的意义如下：
+
+<i class='fa fa-circle orb green-orb'></i>已挂载，底层设备具有冗余/保护。
+
+<i class='fa fa-warning orb yellow-orb'></i>已挂载，底层设备不具备冗余/保护。
+
+**安全模式：**
+
++ '-' -- 磁盘共享未导出，且在网络上不可用
++ *公开* -- 所有用户（包括来宾）都拥有完整的读写权限（开放访问）
++ *安全* -- 所有用户，包括访客，均有读取权限，写入权限按用户设置（限制访问）
++ *私密* -- 完全没有访客访问权限，读写或只读权限按用户设置（封闭访问）
+
+**特殊模式：**
+
++ *斜体显示SMB安全模式* 表示导出的隐藏磁盘共享。
++ NFS 对磁盘共享没有特殊模式。
+:end
+
+:share_edit_global1_help:
+一个 *共享*，也称为*用户共享*，只不过是一个或多个存储卷（数组磁盘和池）上存在的顶级目录名称。
+每个共享都可以导出以便网络访问。  浏览共享时，我们会返回该顶级目录在每个存储设备上存在的所有文件和子目录的综合视图。  *从中读取设置*用于使用现有共享的设置预设新共享的设置。
+选择所需的共享名称并按**读取**以从选定的源复制设置。
+
+:end
+
+:share_edit_global2_help:
+*写入设置到* 用于将当前共享的设置复制到一个或多个其他现有共享。
+
+选择所需的目的地并按**写入**以将设置复制到所选共享。
+:end
+
+:share_edit_name_help:
+共享名称最长可达40个字符，并区分大小写，有以下限制：
+
+* 不能包含双引号字符 (") 或以下字符：/ \ * < > |
+* 不能是以下保留的共享名称：flash, cache, cache2, .., disk1, disk2, ..
+
+我们强烈建议您使生活更加简单，避免使用特殊字符。
+:end
+
+:share_edit_comments_help:
+您可以输入任何内容，最多256个字符。
+
+:share_edit_allocation_method_help:
+此设置决定当创建新文件或目录时，Unraid OS 选择使用哪个磁盘：
+:end
+
+选择编号较低的磁盘，其空闲空间仍高于当前的*高水位线*。
+*高水位线* 初始化为最大数据光盘大小的一半。
+
+如果没有磁盘的空闲空间高于当前的*高水位线*，则将*高水位线*除以2后重新选择。
+**高水位**的目标是尽可能多地将数据写入每个磁盘（以最小化磁盘启动频率），同时尝试保持  每个磁盘上的空闲空间保持一致（以确保数据均匀分布在数组中）。
+**填充**  选择编号最少的磁盘，该磁盘的空闲空间仍高于当前的**最低空闲空间**
+设置。
+
+**大多数空闲**
+选择当前空闲空间最多的磁盘。
+:end
+
+:share_edit_free_space_help:
+*最小空闲空间*是允许写入共享的任何磁盘可用的最小空闲空间。<br>
+选择一个值，该值等于或大于您打算复制到共享的最大单个文件大小。
+
+根据需要包括单位KB、MB、GB和TB，例如10MB。
+:end
+:share_edit_split_level_help:
+
+决定目录是否允许扩展到多个磁盘。
+**根据需要自动拆分任何目录**
+
+当需要在共享中创建新文件或子目录时，Unraid OS 首先根据配置的*分配方法*选择要创建在哪个磁盘上。
+如果包含新文件或子目录的父目录在此磁盘上不存在，则Unraid OS 会首先创建所有必需的父目录，然后创建新文件或子目录。
+**根据需要仅自动拆分顶层目录**
+
+当在共享的第一级子目录中创建新文件或子目录时，如果该第一级子目录不存在于正在写入的磁盘上，则将首先创建子目录。
+如果在共享的第二级或更低级子目录中创建新文件或子目录，则新文件或子目录将在与其父目录相同的磁盘上创建。
+
+**根据需要仅自动拆分顶层“N”级目录**
+与以前相似：当新文件或子目录正在创建时，如果父目录在级“ N ”，且未在所选磁盘上存在，Unraid OS 将首先创建所有必需的父目录。
+如果新文件或子目录的父目录超出级别“ N ”，则在父目录存在的同一磁盘上创建新文件或子目录。  **手动：不自动拆分目录**
+当需要在共享中创建新文件或子目录时，Unraid OS 将仅考虑父目录已存在的磁盘。
+:end
+
+:share_edit_included_disks_help:
+指定可供共享使用的磁盘。默认情况下，所有磁盘都包括在内；也就是说，如果此处未选择特定磁盘，则共享可能会扩展到*所有*数组磁盘。
+:end
+:share_edit_excluded_disks_help:
+指定*不*被共享使用的磁盘。默认情况下，没有磁盘被排除。
+
+:end
+:share_edit_cache_pool_help:
+指定是否可以在存在缓存磁盘/池的情况下将新文件和目录写入共享。  此设置还影响*mover*的行为。
+**否**禁止在缓存磁盘/池上写入新文件和子目录。
+*Mover*不会进行任何操作，因此该共享上的任何现有文件将保留在那里。
+
+**是**表示所有新文件和子目录都应写入缓存磁盘/池，前提是
+缓存磁盘/池上仍有足够的空闲空间。
+如果缓存磁盘/池上的空间不足，则在存储阵列上创建新文件和目录。
+调用*mover*时，将从缓存磁盘/池传输文件和子目录至阵列。
+
+**仅**表示所有新文件和子目录必须写入缓存磁盘/池。
+如果缓存磁盘/池上的空闲空间不足，*创建*操作将因*空间不足*状态而失败。 :end
+:shares_excluded_disks_help:
+此设置定义被*排除*在用户共享之外的阵列磁盘集合。
+
+取消选中所有磁盘以不排除任何磁盘
+**注意：**每个独立的用户共享还包含其自身的包含和排除磁盘集合，这些磁盘集合代表此处定义的包含/排除磁盘的子集。 默认情况下，不排除任何磁盘。
+:end
+
+:share_edit_cache_pool_help:
+指定新文件和目录写入共享时是否可以写入Cache磁盘/池（如果存在）。
+此设置也会影响*mover*行为。
+
+**否**禁止将新文件和子目录写入Cache磁盘/池。
+*mover*将不采取任何行动，因此该共享在缓存上的任何现有文件将保留在那里。
+
+**是**表示所有新文件和子目录应写入Cache磁盘/池，前提是
+Cache磁盘/池上存在足够的可用空间。
+如果Cache磁盘/池上没有足够的空间，则新的文件和目录将在阵列上创建。
+当调用*mover*时，文件和子目录将从Cache磁盘/池传输到阵列中。
+
+**仅**表示所有新文件和子目录必须写入Cache磁盘/池。
+如果Cache磁盘/池上的可用空间不足，*创建*操作将以*空间不足*状态失败。
+*Mover* 将不会采取任何操作，因此任何现有的此共享文件位于阵列上的文件将保留在那里。
+
+**首选** 表示所有新文件和子目录应写入缓存磁盘/池，条件是
+缓存磁盘/池上有足够的可用空间。
+如果缓存磁盘/池上的空间不足，那么新文件和目录就会在阵列上创建。
+当调用 *mover* 时，文件和子目录将从阵列转移到缓存磁盘/池上。
+
+**注意：** mover 永远不会移动当前正在使用的任何文件。
+这意味着如果您想移动与系统服务相关联的文件，如 Docker 或虚拟机，那么您需要
+在 mover 运行时禁用这些服务。
+:end
+
+:share_edit_copy_on_write_help:
+设置为 **否** 以使 *btrfs* NOCOW（无写入时复制）属性设置在创建时在使用 *btrfs* 文件系统格式化的设备上创建的共享目录上。
+允许设备上的新创建的文件和子目录继承 NOCOW 属性。  一旦设置，在设备上新创建的文件和子目录将继承 NOCOW 属性。
+此设置对非 btrfs 文件系统无效。 设置为 **自动** 以进行正常操作，意味着 COW 将在使用 *btrfs* 格式化的设备上有效。
+
+Set to **Auto** for normal operation, meaning COW **will** be in effect on devices formatted with *btrfs*.
+:end
+
+共享不包含任何数据，如不再需要，可以删除。
+Share does *not* contain any data and may be deleted if not needed any longer.
+:end
+
+:share_edit_delete_help:
+只要共享包含数据，就不能删除共享。 请注意，有些数据可能会隐藏。 另请参阅[SMB 设置](/Settings/SMB) -> 隐藏“点”文件。
+:end
+
+:share_edit_exclusive_access_help:
+设置为“是”表示在 /mnt/user 树中为共享设置了直接指向池的符号链接。
+
+请参阅[全局共享设置](Settings/ShareSettings) -> 允许专属共享。
+:end
+
+:share_edit_primary_storage_help:
+**主要存储**是创建*新文件和文件夹*的地方。  如果
+主存储低于最小空闲空间设置，则会在**次要存储**中创建新文件和文件夹（如果已配置）。
+**重要提示：** 对于*专属访问*共享，最小空闲空间设置将被忽略。
+
+**Important:** For *Exclusive access* shares, the Min free space
+settings are ignored.
+:end
+
+**次要存储**是当主要存储没有空间时，新文件和目录被创建的地方。
+当配置了主存储和次要存储时，“移动器”将文件在它们之间传输。
+room on Primary storage.  When both Primary and Secondary storage are
+configured the 'mover' will transfer files between them.
+:end
+
+这定义了在配置了主存储和次要存储时文件传输的方向。
+This defines the direction of file transfer between Primary and
+Secondary storage when both are configured.
+:end
+
+:smb_security_help:
+**从读取设置**用于预设当前选定共享的 SMB 安全设置，并使用现有共享的设置。
+
+选择所需的共享名称并按 **读取** 以从所选源复制 SMB 安全设置。
+
+**写入设置**用于将当前选定共享的 SMB 安全设置复制到一个或多个其他现有共享。
+
+选择所需的目标并按 **写入** 以将 SMB 安全设置复制到所选共享。
+:end
+
+:smb_export_help:
+此设置确定共享是否可见和/或可访问。  “是（隐藏）”设置
+将*隐藏*共享以供*浏览*，但如果您知道共享名称，则仍可访问。
+:end
+
+:smb_time_machine_volume_help:
+这限制了报告的卷大小，防止 Time Machine 使用整个实际磁盘空间
+用于备份。  例如，将此值设置为“1024”将把报告的磁盘空间限制为1GB。
+请注意， Ventura 13.6 及更高版本要求存在该值。  未输入将阻止 Time Machine 正确工作。
+from working correctly.
+:end
+
+:smb_case_sensitive_names_help:
+控制文件名是否区分大小写。
+
+默认设置为 **自动** 允许支持大小写的文件名的客户端（Linux CIFSVFS）
+告诉 Samba 服务器，它们希望以区分大小写的方式访问文件系统（支持 UNIX 区分大小写语义）。
+没有 Windows 系统支持区分大小写的文件名，因此设置此选项为 **自动** 对于它们来说与 将此选项设置为“否”相同；
+然而，将保留 Windows 客户端传递的文件名的大小写。  此设置可能会导致非常大的目录的性能下降，因为 Samba 必须对传递的名称进行文件名搜索和匹配。
+设置为 **是** 意味着文件将以客户端传递的大小写创建，并且只能使用相同的大小写访问。
+
+这将加速非常大的目录访问，但某些 Windows 应用程序可能无法正常工作。
+例如，如果创建了“MyFile”，但是一个 Windows 应用程序试图打开“MYFILE”（在 Windows 中允许），它将找不到该文件。  例如，如果创建了“MyFile”，但是一个 Windows 应用程序试图打开“MYFILE”（在 Windows 中允许），则将找不到。
+"强制小写" 的值是特殊的：所有传入客户端文件名（不仅是新文件名）的大小写，将被设置为小写。
+
+换句话说，不管在 Windows 端创建了什么混合大小写名称，它都将以全小写存储并访问。
+这将确保所有 Windows 应用程序都能正确地找到任何文件，而不管大小写，但在文件夹列表中大小写不会被保留。  请注意，此设置只应为新共享配置。
+ensures all Windows apps will properly find any file regardless of case, but case will not be preserved in folder listings.
+Note this setting should only be configured for new shares.
+:end
+
+:smb_security_modes_help:
+安全模式总结：
+
+**公开** 所有用户，包括访客，均具有完整的读/写权限。
+
+**安全** 所有用户，包括访客，均有读取权限，您可以选择哪些用户拥有写入权限。
+
+**私有** 没有访客访问权限，您选择哪些用户拥有读/写、只读或没有访问权限。
+
+Windows 服务器签名：
+
+如果您无法通过 Windows 11 版本 24H2 或更高版本浏览 SMB 共享，则需要进行一些更改以适应称为服务器签名的新功能。  Unraid 启用服务器签名，您需要进行更改以访问公用共享。
+您可以<u><a href='https://techcommunity.microsoft.com/t5/storage-at-microsoft/accessing-a-third-party-nas-with-smb-in-windows-11-24h2-may-fail/ba-p/4154300' target='_blank'>在 Windows 中禁用它</a></u>，或者要使用已启用服务器签名的 Unraid ，最简单的方法是使用与您正在使用的 Windows 账户相同的名称在 Unraid 中创建一个用户（设置密码），此时 Windows 应会要求您输入凭据。
+如果您使用的是 Microsoft 帐户，最好只在 Unraid 中创建一个用户名简单的用户并设置密码，然后在 Windows 中转到控制面板 -> 凭据管理器 -> Windows 凭据 -> 添加 Windows 凭证并输入正确的 Unraid 服务器名称和凭证。
+:end
+
+:smb_secure_access_help:
+**读取设置来自**用于预设当前选定共享的 SMB 用户访问设置，并使用现有共享的设置。
+
+选择所需的共享名称并按 **读取** 以从所选源复制 SMB 安全设置。
+
+**写入设置至**用于将当前共享的 SMB 用户访问设置复制到一个或多个其他现有共享。
+
+选择所需的目标并按 **写入** 以将 SMB 用户访问设置复制到所选共享。
+:end
+
+:smb_private_access_help:
+**读取设置来自**用于预设当前选定共享的 SMB 用户访问设置，并使用现有共享的设置。
+
+选择所需的共享名称并按 **读取** 以从所选源复制 SMB 安全设置。
+
+**写入设置至**用于将当前共享的 SMB 用户访问设置复制到一个或多个其他现有共享。
+
+选择所需的目标并按 **写入** 以将 SMB 用户访问设置复制到所选共享。
+:end
+
+:nfs_security_help:
+**读取设置来自**用于预设当前选定共享的 NFS 安全设置，并使用现有共享的设置。
+
+选择所需的共享名称并按 **读取** 以从所选源复制 NFS 安全设置。
+
+**写入设置**用于将当前选定共享的 NFS 安全设置复制到一个或多个其他现有共享。
+
+选择所需的目标并按 **写入** 以将 NFS 安全设置复制到所选共享。
+:end
+
+:nfs_security_rules_help:
+将每个 IP 地址的规则放在单独一行，并在规则结束后用一个新行作为终止。
+您不能以 IP1，IP2(...) 格式输入规则。  Unraid 不会以该格式格式化导出文件。
+
+每个 NFS 规则的默认规则是 - async 和 no_subtree_check。
+
+**注意：** 使用的公共规则是 '*(rw,sec=sys,insecure,anongid=100,anonuid=99,no_root_squash)'。
+:end
+
+:user_add_username_help:
+用户名最长可为 40 个字符，并且必须以**小写字母**或下划线开头，
+后跟**小写字母**，数字，下划线或破折号。 它们可以以美元符号结尾。
+:end
+
+:user_add_description_help:
+最多 64 个字符。 不允许使用和号 (&) 引号 (&q quot;) 和冒号 (:)。
+:end
+
+:user_add_custom_image_help:
+图像将缩放到 48x48 像素大小。 最大图像文件上传大小为 95 kB（97,280 字节）。
+:end
+
+:user_password_help:
+最多 128 个字符。
+:end
+
+:user_edit_description_help:
+最多 64 个字符。 不允许使用 & （和号），" （双引号）和 : （冒号）。
+:end
+
+:user_edit_custom_image_help:
+图像将被缩放到 48x48 像素的大小。 最大图像文件上传大小为 512 kB (524,288 字节)。
+:end
+
+:cpu_vms_help:
+本页展示了当前虚拟机的 CPU pinning 分配的总体视图。<br>
+还可以修改这些分配。
+
+运行中的虚拟机会**首先停止**并在修改后重新启动。<br>
+已停止的虚拟机立即修改，新分配在虚拟机启动时变为有效。
+
+当按下 ***应用*** 时，会进行扫描以查找更改，随后只有更改的虚拟机会并行修改。
+
+*重要提示：请等待所有更新完成后再离开此页面*。
+:end
+
+:cpu_pinning_help:
+本页展示了当前 Docker 容器的 CPU pinning 分配的总体视图。<br>
+还可以修改这些分配。
+
+正在运行的容器会**首先停止**，并在修改后重新启动。<br>
+停止的容器会立即修改，当用户手动启动容器时，新分配会变为有效。
+
+当按下 **应用*** 时，会进行扫描以查找更改，随后更改后的容器会并行修改。
+
+*重要提示：请等待所有更新完成后再离开此页面*。
+
+默认情况下，Docker 容器没有选择核心，这意味着它使用所有可用的核心。<br>
+如果您希望不受限制地使用核心，请不要为容器选择**所有**核心，只需选择 **否** 核心即可。
+
+不要为**隔离**的容器选择核心。
+根据设计，当选择多个隔离核心时，容器仅使用单个核心（编号最低的核心）。<br>
+通常，这不是用户在选择多个核心时想要的。
+:end
+
+:cpu_isolation_help:
+CPU 隔离允许用户指定要明确保留以供分配（给虚拟机或 Docker 容器）的 CPU 核心。
+
+对于游戏型虚拟机的流畅运行，这非常重要，因为即使你手动将 Docker 容器分配给不与游戏型虚拟机重叠的地方，
+主机操作系统仍然可以利用虚拟机所需的相同的核心来处理 webGUI 的响应、运行校验、 btrfs 操作等。
+:end
+
+:timezone_help:
+从下拉列表中选择适用的时区。
+:end
+
+:use_ntp_help:
+选择“Yes”以使用网络时间协议来使服务器时间保持准确。
+我们**非常**推荐使用网络时间服务器，特别是如果您计划使用活动目录。
+
+请注意：使用 `pool.ntp.org` 时间服务器，如时间同步方请参阅[其文档](http://www.pool.ntp.org/en/use.html) 。
+:end
+
+:ntp_server1_help:
+这是要使用的主要 NTP 服务器。  输入一个完全合格的域名或 IP 地址。
+:end
+
+:ntp_server2_help:
+这是要在 NTP 服务器 1 关闭时使用的备用 NTP 服务器。
+:end
+
+:ntp_server3_help:
+这是要在NTP 服务器1和2都关闭时使用的备用 NTP 服务器。
+:end
+
+:ntp_server4_help:
+这是要在 NTP 服务器1、2和3都关闭时使用的备用NTP服务器。
+:end
+
+:current_time_help:
+输入当前时间。  使用格式 YYYY-MM-DD HH：MM：SS。 使用NTP时灰显。
+:end
+
+:disk_enable_autostart_help:
+如果设置为“是”，则在服务器启动时，如果设备配置正确，阵列将自动启动并导出共享。<br>
+如果设置为“否”，那么您必须自行启动阵列。
+If set to 'No' then you must Start the array yourself.
+:end
+
+:disk_spindown_delay_help:
+此设置定义当没有 I/O 活动时硬盘驱动器的默认超时时间。
+您可以在磁盘设置页面为单个磁盘覆盖默认值。  You may override the default value for an individual disk on the Disk Settings
+页面为该磁盘。
+:end
+
+:disk_spinup_groups_help:
+如果设置为'是'，则启用自旋组功能。
+:end
+
+:disk_default_partition_format_help:
+定义格式化尺寸为2TB及以下硬盘时创建的分区布局类型，**只限**。
+（所有大于2TB的设备始终设置为GPT分区表。） **MBR: 非对齐**设置将创建MBR样式的分区表，其中单个分区1将从磁盘起始位置的**第63个扇区**开始。
+
+这是几乎所有 MBR 样式分区表的*传统*设置。
+**MBR: 4K对齐** 设置将创建一个 MBR 样式的分区表，其中单个分区 1 将从磁盘起始位置的 **第64个扇区** 开始。  由于扇区大小为512字节，
+这样会*对齐*分区 1 的开始到4K字节的边界上。
+
+这对于支持所谓的*高级格式*驱动器是必须的。
+除非您有特定要求，请不要将默认设置从 **MBR: 4K对齐** 更改。 Since the sector size is 512 bytes,
+this will *align* the start of partition 1 on a 4K-byte boundary.  定义默认的文件系统类型，在格式化一个*无法挂载*的阵列设备时创建它。
+对于单个或多设备缓存，默认的文件系统类型始终是 Btrfs。
+
+Unless you have a specific requirement do not change this setting from the default **MBR: 4K-aligned**.
+:end
+
+:disk_default_file_system_help:
+关机时，此定义在*优雅*关闭前等待的时间（以秒为单位）然后再强制关闭继续。
+
+The default file system type for a single or multi-device cache is always Btrfs.
+:end
+
+:disk_shutdown_timeout_help:
+关机服务器时，此定义在 *优雅* 之前等待的时间，以秒为单位关闭，然后强制关闭继续。
+shutdown to continue.
+:end
+
+:disk_tunable_poll_attributes_help:
+这定义了磁盘 SMART 轮询间隔，以秒为单位。  值为 0 表示禁用 SMART 轮询（不推荐）。
+:end
+
+:disk_tunable_enable_ncq_help:
+如果设置为 **否** ，则为支持 NCQ 的所有阵列设备禁用*本地命令队列*。
+
+**自动**将每个设备的设置保持原样。
+
+注意：选择自动后，您必须重新启动以使设置生效。
+:end
+
+:disk_tunable_nr_requests_help:
+这定义了所有阵列设备的 ``nr_requests`` 设备驱动程序设置。
+
+** 自动 ** 将每个设备的设置保留原样。
+
+注意：如果您将其设置为空白并单击应用，设置将恢复为默认状态，您必须重新启动以使设置生效。
+:end
+
+:disk_tunable_scheduler_help:
+选择要用于所有阵列设备的内核I/O调度器。
+
+**自动**将会保持每个设备的设置不变（mq-deadline）。
+
+注意：选择自动生效需要重启。
+:end
+
+:disk_tunable_md_num_stripes_help:
+*条纹池*的大小以*条纹*的数量表示。  *条纹*是指一种数据结构，便于并行4K读/写。
+在需要奇偶保护阵列的操作。
+
+注意：如果设置为空白并点击应用，设置将恢复为默认，并在重启后生效。
+:end
+
+:disk_tunable_md_queue_limit_help:
+这是一个在[1..100]范围内的数字，代表条纹池的最大稳定负荷百分比。
+
+注意：如果设置为空白并点击应用，设置将恢复为默认。
+:end
+
+:disk_tunable_md_sync_limit_help:
+这是一个在[0..100]范围内的数字，代表分配给其他I/O操作的奇偶校验同步/检查的条纹池最大百分比。
+
+注意：如果设置为空白并点击应用，设置将恢复为默认。
+:end
+
+:disk_tunable_md_write_method_help:
+选择在奇偶保护阵列中写入启用磁盘时采用的方法。
+
+*自动*选择 `读/修改/写`。
+:end
+
+:disk_default_warning_utilization_help:
+*警告磁盘使用率* 设置所有硬盘使用的默认警告阈值。 超过此阈值将导致警告通知。
+
+当警告阈值设置等于或大于关键阈值时，将只有关键通知（无警告）。
+
+值为零将禁用警告阈值（包括通知）。
+:end
+
+:disk_default_critical_utilization_help:
+*关键磁盘使用* 设置所有硬盘使用的默认关键阈值。 超过此阈值将导致警报通知。
+
+值为零将禁用关键阈值（包括通知）。
+:end
+
+:disk_default_warning_temperature_help:
+*警告磁盘温度* 设置所有硬盘温度的默认警告阈值。 超过此阈值将导致警告通知。
+
+值为零将禁用警告阈值（包括通知）。
+:end
+
+:disk_default_critical_temperature_help:
+*关键磁盘温度* 设置所有硬盘温度的默认关键阈值。 超过此阈值将导致警报通知。
+
+值为零将禁用关键阈值（包括通知）。
+:end
+
+:ssd_default_warning_temperature_help:
+*警告SSD温度* 设置所有SSD设备温度的默认警告阈值。 超过此阈值将导致警告通知。
+
+值为零将禁用警告阈值（包括通知）。
+:end
+
+:ssd_default_critical_temperature_help:
+*关键磁盘温度* 设置所有SSD设备温度的默认关键阈值。 超过此阈值将导致警报通知。
+
+值为零将禁用关键阈值（包括通知）。
+:end
+
+:disk_default_smart_notification_help:
+智能通知是生成在属性的RAW值增加或标准化值下降时达到制造商设定的预定义阈值。
+
+此部分用于设置所有磁盘的全局设置。 可以调整单独磁盘的设置。
+:end
+
+:disk_default_smart_tolerance_help:
+可以给出一个容忍度以防止小变化导致通知。 设置过高的容忍度可能导致关键变化而不通知。
+
+此部分用于设置所有磁盘的全局设置。 可以调整单独磁盘的设置。
+:end
+
+:disk_default_smart_controller_help:
+默认情况下，自动控制器选择是由smartctl进行，以读取智能信息。 某些控制器需要为smartctl设置特定的设置才能工作。
+使用此设置选择您的控制器类型，并填写适合您情况的特定磁盘索引和设备名称。 使用制造商的文档查找相关信息。
+
+此部分用于设置所有磁盘的全局设置。 可以调整单独磁盘的设置。
+:end
+
+:disk_default_smart_attribute_help:
+用户可以启用或禁用给定智能属性的通知。 建议保持默认设置，即选择所有选定属性。
+当某些属性在您的硬盘上不存在或未提供正确的信息时，可以排除这些属性。
+此外，还可以输入自定义智能属性以生成通知。 在此选择时要小心。
+如果选择了不适当的智能属性，可能会导致通知的大量增加。
+
+此部分用于设置所有磁盘的全局设置。 可以调整单独磁盘的设置。
+:end
+
+:docker_repositories_help:
+使用此字段添加模板文件库。
+Docker模板用来简化docker容器的创建与重新创建。  请每行设置一个。
+
+使用库已弃用。  有关如何让社区应用程序利用私有库的说明，请访问 <a href='https://forums.unraid.net/topic/57181-docker-faq/page/2/?tab=comments#comment-1018225' target='_blank'>这里</a>
+
+:end
+
+:docker_enable_help:
+在您首次启动Docker服务之前，请指定一个供Docker安装的镜像文件。
+
+启动后，Docker将在阵列启动后始终自动启动。
+:end
+
+:docker_readmore_help:
+在使用主Docker页面时，一些系统包含许多docker容器可能会体验延迟。
+
+将此设置为“否”可通过禁用readmore-js来帮助加速页面的常规使用。
+端口和体积映射不再由转换符号显示更多数据，而是全部数据都显示。
+:end
+
+:docker_timeout_help:
+允许容器优雅停止的时间，以秒为单位，超时后将强制停止
+:end
+
+:docker_pid_limit_help:
+设置PID限制以限制docker所能使用的PID数量。 默认值是2048。  设置为零表示无限制的PID（不推荐）。
+:end
+
+:docker_vdisk_type_help:
+选择Docker持久状态的存放位置。
+
+这可以是具有特定大小的镜像文件或专用文件夹。
+:end
+
+:docker_vdisk_size_help:
+如果系统需要创建一个新的docker镜像文件，这是默认的使用大小，以GB为单位。
+
+要调整现有镜像文件的大小，请在此处指定新大小。 下次启动Docker服务时，文件（及文件系统）将增加到新大小（但从未减少）。
+:end
+
+:docker_vdisk_location_help:
+您必须为Docker指定一个镜像文件。 当Docker服务首次启动时，系统会自动创建此文件。
+
+镜像文件名必须以 .img 扩展名结尾，如果没有，输入将不被接受并标为红色。
+
+建议在阵列外创建此镜像文件，例如： 在缓存池上。 为获得最佳性能，优选使用SSD设备。
+:end
+
+:docker_vdisk_directory_help:
+您必须为Docker指定一个文件夹。 当Docker服务首次启动时，系统将自动创建此文件夹。
+
+建议在驻留在缓存池上的共享下创建此文件夹（设置：cache=Only）。 为获得最佳性能，优选使用SSD设备。
+:end
+
+:docker_storage_driver_help:
+overlay2（默认）：将使用overlay2作为Docker的存储驱动程序，无论底层文件系统为何。
+
+native: 将使用底层文件系统的本地存储驱动程序 (XFS: overlay2 | ZFS: zfs | BTRFS: btrfs).
+
+注意：无法从现有的Docker安装更改存储类型，您必须先删除您的Docker目录，更改存储类型，然后重新安装您的容器。
+建议在更改存储类型之前从您的Docker容器拍摄屏幕截图。 删除和更改存储类型后，通过单击Docker页面上的添加容器并从下拉列表中一个个选择来重新安装容器，以便根据先前的设置重新安装。
+:end
+
+:docker_appdata_location_help:
+您可以指定一个文件夹来自动生成和存储子文件夹，其中包含每个Docker应用程序的配置文件（通过 /config 映射卷）。
+
+文件夹路径必须以斜杠（/）字符结尾。 如果没有则不接受输入并标为红色。
+
+建议在阵列外创建此文件夹，例如在缓存池上。 为最佳性能，优选使用SSD设备。 仅在添加新的Docker应用时使用。
+
+编辑现有的Docker应用将不受此设置影响。 :end
+:docker_log_rotation_help:
+
+默认情况下，日志轮换被禁用，将创建一个无限大小的日志文件。
+启用日志轮换以限制日志文件的大小，并指定轮换方案中要保留的文件数量。
+
+:end
+:docker_log_file_size_help:
+
+指定日志的最大大小。
+超过时将进行日志轮换。 :end
+:docker_log_file_number_help:
+
+指定日志轮换时的日志文件数量。
+:end
+:docker_authoring_mode_help:
+
+如果设置为**是**，则在创建/编辑容器时，会出现一些与模板作者相关的额外字段。
+:end
+:docker_custom_network_type_help:
+
+**ipvlan** 类型适用于不需要连接到物理网络时。
+请点击<u><a style="color:blue" href='https://docs.docker.com/network/ipvlan/', target='_blank'>此处</a></u>，了解实施 ipvlan 网络。<br>
+**macvlan** 网络类型允许直接连接到物理网络。
+
+请点击 <u><a style="color:blue" href='https://docs.docker.com/network/macvlan/', target='_blank'>此处</a></u>，了解实施 macvlan 网络。<br>
+**注意：** Docker 使用其自己的 dhcp 服务，即**DHCP Pool** 设置。
+
+当您使用多个Unraid服务器时，则每个服务器必须配置不同的Docker **DHCP Pool**范围。
+:end
+:docker_custom_network_access_help:
+
+允许主机与使用自定义**macvlan**网络连接的容器直接通信。
+默认情况下，这是禁用的。  :end
+:docker_user_defined_network_help:
+
+用户创建的网络是由用户在GUI之外创建的网络。
+默认情况下，用户创建的网络将从Docker中移除。  这样做是为了防止自定义网络的自动生成时发生潜在的冲突。 更改此设置以保留用户定义网络，但用户需确保这些条目正确工作且不存在冲突。
+
+:end
+:docker_include_interface_vlan_ipv4_help:
+
+包含（默认）或排除上述接口或VLAN作为Docker的自定义网络。
+在每个分配的子网内输入用于Docker的DHCPv4分配的池范围。
+
+例如: 192.168.1.128/25 :end
+:docker_exclude_interface_vlan_ipv4_help:
+
+包含或排除（默认）上述接口或VLAN作为Docker的自定义网络。
+在每个分配的子网内输入用于Docker的DHCPv4分配的池范围。
+
+例如: 192.168.1.128/25 :end
+:docker_include_interface_vlan_ipv6_help:
+
+包含（默认）或排除上述接口或VLAN作为Docker的自定义网络。
+在每个分配的子网内输入用于Docker的DHCPv6分配的池范围。
+
+例如: 2a02:abcd:9ef5:100:1::/72 :end
+:docker_exclude_interface_vlan_ipv6_help:
+
+包含或排除（默认）上述接口或VLAN作为Docker的自定义网络。
+在每个分配的子网内输入用于Docker的DHCPv6分配的池范围。
+
+例如: 2a02:abcd:9ef5:100:1::/72 :end
+:docker_version_help:
+
+这是活动的Docker版本。
+:end
+:docker_vdisk_location_active_help:
+
+这是Docker映像的位置。
+:end
+:docker_storage_driver_active_help:
+
+这是Docker的存储驱动程序。
+:end
+:docker_appdata_location_active_help:
+
+这是Docker容器的存储位置。
+:end
+:docker_log_rotation_active_help:
+
+默认情况下，将创建一个无限大小的日志文件。
+如果启用了日志轮换，则日志文件大小和文件数量将被限定。 :end
+:docker_custom_network_active_help:
+
+允许主机与使用自定义（macvlan）网络的容器直接通信。<br>
+默认情况下，这是被禁止的。
+:end
+:docker_user_defined_network_active_help:
+
+显示是否删除或保留GUI之外创建的网络以供Docker使用。
+当保留时，*用户定义的网络* 将在容器的 *网络类型* 下拉列表中可用。 :end
+:docker_scrub_help:
+
+**Scrub**运行*btrfs scrub*程序以检查文件系统完整性。
+如果需要修复，您应该选中**修正文件系统错误**并运行第二次Scrub；这将允许*btrfs scrub*修复文件系统。
+
+:end
+:docker_cancel_help:
+
+**取消**将取消正在进行中的Scrub操作。
+:end
+:id_server_name_help:
+
+服务器的网络身份。
+也称作*主机名*或*短主机名*。  Windows网络 称之为*NetBIOS名称*，长度必须少于15个字符。
+仅使用字母数字字符（即“A-Z”、“a-z”和“0-9”）、破折号（“-”）和点（“.”）；
+并且，首尾字符必须为字母数字字符。
+:end
+:id_description_help:
+
+这是一个文本字段，在网络或文件资源管理器（Windows）或查找器（macOS）中在服务器旁边看到。
+（Windows）或Finder（macOS）。
+:end
+:id_model_help:
+
+这是服务器型号。
+:end
+:mgmt_start_page_help:
+
+选择进入GUI时首先打开的页面。
+默认情况下选择了*主*页面。 :end
+:mgmt_use_telnet_help:
+
+默认情况下启用TELNET访问。TELNET是一种不安全的CLI访问，
+建议使用SSH访问并禁用TELNET访问。 :end
+:mgmt_telnet_port_help:
+输入TELNET端口，默认端口为23。
+
+:end
+:mgmt_use_ssh_help:
+默认情况下启用SSH，提供一种安全的CLI访问方式。
+
+系统启动时如果尚不存在，SSH密钥将自动生成
+并存储在闪存设备的*/config/ssh*文件夹中。 :end
+:mgmt_ssh_port_help:
+输入SSH端口，默认端口为22。
+
+:end
+输入 SSH 端口，默认端口为 22。
+:end
+
+:mgmt_use_upnp_help:
+在服务器上启用（默认）或禁用 UPnP 功能。 此功能允许在路由器上自动转发端口，仅当路由器本身启用 UPnP 时适用。
+:end
+
+:mgmt_use_ssl_tls_help:
+确定 webGUI 如何响应 LAN 上的 HTTP 和/或 HTTPS 协议。
+
+选择 **否** 使用 HTTP。 要访问您的服务器，请使用 URL：
+
+`http://<服务器名>.<本地TLD>`
+
+或者使用这个 URL：
+
+`http://<服务器IP地址>`
+
+选择 **是** 启用自动生成的自签名
+SSL 证书。  使用此 URL 访问您的服务器：
+
+`https://<服务器名>.<本地TLD>`
+
+请注意，使用自签名的 SSL 证书会产生浏览器
+警告。
+
+选择 **严格** 以启用 **专属** 使用 myunraid.net SSL
+证书进行 https 访问（请参阅下文 **Provision**）。  请注意，DNS
+服务器必须可达。
+
+**重定向：** 当访问 `http://<服务器IP地址>` 或 `http://<服务器名>.<本地TLD>` 时， 
+具体行为将根据“使用 SSL/TLS”设置的值而变化：
+
+* 如果使用 SSL/TLS 设置为 **严格**，您将被重定向到 `https://<lan-ip>.<hash>.myunraid.net`
+* 如果使用 SSL/TLS 设置为 **是**，您将被重定向到 `https://<服务器IP地址> 或 https://<服务器名>.<本地TLD>`
+* 如果使用 SSL/TLS 设置为 **否**，则 http URL 将直接加载。
+
+重要提示：如果您的路由器或上游 DNS 服务器启用了
+[DNS 重绑定保护](https://en.wikipedia.org/wiki/DNS_rebinding)，则可能无法选择 **严格**。 DNS 重绑定
+保护可以防止 DNS 解析专用 IP 网络范围。 DNS 重绑定保护是
+局域网上的一项安全功能，其中可能包括带有漏洞或不安全“网页”界面的旧设备。
+
+DNS 重绑定保护的一个来源可能是您 ISP 的 DNS 服务器。 在这种情况下，可以通过
+切换到 OpenDNS 等其他 DNS 服务器来解决问题，OpenDNS 可以关闭 DNS 重绑定保护。
+
+更常见的是，DNS 重绑定保护可能在您的路由器中启用。 大多数消费者路由器不实施 DNS
+重绑定保护；但是，如果它们确实实施，则应提供一个配置设置来关闭它。
+
+高端路由器通常会启用 DNS 重绑定保护。 通常有关闭它的方法
+全部或根据域选择性关闭。 示例：
+
+**DD-WRT:** 如果您使用启用 DNS 重绑定保护的 “dnsmasq”，可以将此行添加到路由器
+配置文件：
+
+`rebind-domain-ok=/myunraid.net/`
+
+**pfSense:** 如果您使用的是 pfSense 内部 DNS 解析服务，可以添加这些自定义选项行：
+
+`server:`<br>
+`private-domain: "myunraid.net"`
+
+**Ubiquiti USG 路由器：**您可以添加此配置行：
+
+`set service dns forwarding options rebind-domain-ok=/myunraid.net/`
+
+**OpenDNS:** 转到“设置”->“安全性”并 *取消选中* 
+  "可疑响应 - 阻止内部 IP 地址"。 这是一个全有全无的设置。
+
+在所有其他方法都无效时，您可以在 PC 的 *hosts* 文件中创建一个条目以覆盖外部 DNS，并
+直接解析您服务器的 myunraid.net FQDN 到其本地 IP 地址。
+:end
+
+:mgmt_http_port_help:
+输入 HTTP 端口，默认端口为 80。
+:end
+
+:mgmt_https_port_help:
+输入 HTTPS 端口，默认端口为 443。
+:end
+
+:mgmt_local_tld_help:
+输入您的本地顶级域名。 可以为空。
+:end
+
+:mgmt_local_access_urls_help:
+上面显示的本地访问 URL 是基于您当前的设置。 
+要调整 URL 或重定向，请参阅 “使用 SSL/TLS” 帮助文本。
+:end
+
+:mgmt_wg_access_urls_help:
+这些 URL 仅当通过 ***设置 > VPN 管理器*** 中配置的适当 WireGuard 隧道连接时有效
+:end
+
+:mgmt_tailscale_access_urls_help:
+这些 URL 仅在连接到适当的 Tailscale Tailnet 时有效。
+:end
+
+:mgmt_certificate_expiration_help:
+**Provision** 可以用来从
+[Let's Encrypt](https://letsencrypt.org/) 安装一个 *免费的* myunraid.net SSL 证书。
+
+myunraid.net SSL 证书可以通过两种方式使用。  首先,
+拥有证书可使您的服务器响应
+形式为以下格式的备用 URL：
+
+`https://<lan-ip>.<hash>.myunraid.net`
+
+`<hash>` 值是您服务器唯一的 40 字节的十六进制字符串（160 位）。
+您的 `<lan-ip>` 将由 Lime Technology DDNS 服务器返回  作为此 URL 上 DNS 请求的响应。
+证书主题是 设置为 `*.<hash>.myunraid.net` 从而验证 https 连接。
+您可以通过将 **Use
+
+SSL/TLS** 设置为 **Strict** 来专门在您的 LAN 上启用此 URL。
+myunraid.net 证书的第二种用途是启用通过 Unraid Connection 插件功能可用的安全
+
+远程访问。请注意，可以将安全远程访问与
+不安全的本地访问结合使用。  安装 myunraid.net SSL 证书后，
+启动后台服务：
+- *renewcert* - 服务器重启完成后 60 秒启动，并联系 Lime Technology
+
+证书续订服务，以确认您的 myunraid.net SSL 证书是否需要续订。
+此后，每 24 小时苏醒一次。
+
+如果在到期前 30 天内，则自动
+装配并下载到您的服务器。
+**删除** 可以用来删除 myunraid.net 证书文件。 **nginx 证书处理详细信息**
+nginx 使用存储在 USB 闪存引导设备上的两个证书文件：<br>
+
+- 自签名证书：`config/ssl/certs/<服务器名>_unraid_bundle.pem`
+
+- myunraid.net 证书：`config/ssl/certs/certificate_bundle.pem`
+
+nginx 启动时会自动创建自签名的 SSL 证书文件；如果服务器主机名或本地 TLD 发生更改，则会重新创建。
+
+**nginx 装订支持**
+
+如果证书包含 OCSP 响应程序 URL，则会自动启用 OCSP 装订。
+
+因此，对于自签名证书不会启用装订；对于 CA 签名证书
+启用装订。
+
+:end
+
+:ftp_server_help:
+
+启用或禁用 FTP 服务器守护程序。
+默认情况下启用 FTP 服务器。
+此设置未保存，即。
+
+系统重启后，它将恢复为默认设置。
+:end :ftp_users_help:
+输入允许使用 FTP 访问服务器的用户名（用空格分隔）。 要禁止任何用户访问，请清除此设置。
+**注意：** 请勿输入用户名 `root`，因为这可能导致将来的问题。
+
+:end
+:ftp_overview_help:
+### 概述
+
+Unraid OS 包含流行的 `vsftpd` FTP 服务器。
+`vsftp` 的配置当前非常
+
+简单：**所有** 上面输入的用户名都可以通过 FTP 访问服务器，并拥有
+对整个服务器的*完全读/写/删除访问*，因此请谨慎使用。
+
+:end  :smb_enable_help:
+选择 '是（工作组）' 以启用 SMB（Windows 网络）协议支持。
+这
+也启用 Windows 主机发现。
+
+选择 '是（活动目录）' 以启用 Active Directory 集成。
+:end :smb_hide_files_help:
+如果设置为 '是'，则以 '.'（点）开头的文件将显示为*隐藏文件*，并且通常
+
+不会出现在 Windows 文件夹列表中，除非您在 Windows 文件夹选项中启用了 "显示隐藏文件、文件夹和驱动器"
+如果设置为“否”，则点文件将在文件夹列表中与其他文件一样显示。
+
+:end
+:smb_multi_channel_help:
+当设置为 '是' 时，启用服务器中的 SMB 多通道支持。来自
+[微软](https://docs.microsoft.com/en-us/azure-stack/hci/manage/manage-smb-multichannel)：
+
+"SMB 多通道使文件服务器能够同时使用多个网络连接。"
+:end
+
+:smb_enhanced_macos_help:
+当设置为 '是' 时，为 Apple SMB 客户端提供增强的兼容性，从而，例如，更快速 Finder 浏览能力和导出 Time Machine 共享的能力。
+然而，这可能会给 Windows 客户端带来一些问题。
+有关更多信息，请参阅 [VFS_FRUIT 手册页](https://www.mankier.com/8/vfs_fruit)。
+:end
+
+:smb_enable_netbios_help:
+选择 '是' 以启用 NetBIOS。
+如果启用，则还能识别 SMBv1 协议。  如果禁用，
+客户端必须使用 SMBv2 或更高版本。
+:end
+
+:smb_enable_wsd_help:
+选择 '是' 以启用 WSD（WS-Discovery）。  关闭此选项的唯一原因是您正在运行基于 SMBv1 的旧局域网设置。  :end
+:smb_wsd_options_help:
+这是在启动时传递给 WSD 守护程序的命令行选项字符串。除非支持指示您在此处放置内容，否则请保持此字段为空。
+
+:end
+:smb_extra_conf_help:  使用此页面更改您的 `smb-extra.conf` 文件。 Samba 需要
+重新启动，以便更改生效。
+:end
+
+:smb_extra_button_help:
+单击 **应用** 按钮以提交当前编辑。 单击 **重置** 来
+撤消您所做的任何更改（在保存之前）。
+单击 **完成** 以退出此页面。
+
+:end
+:smb_workgroup_help:  输入本地网络工作组名称。通常是 "WORKGROUP"。
+:end
+:smb_local_master_help:
+
+如果设置为是，则服务器将参与浏览器选举，并在没有其他服务器的情况下，通常会成为本地主浏览器。
+:end  :nfs_enable_help:
+选择 '是' 以启用 NFS 协议。 :end
+:nfs_tunable_fuse_remember_help:
+
+启用 NFS 时，您可以使用此可调参数缓解或解决使用 NFS 客户端时遇到的“NFS 陈旧文件句柄”问题。
+实质上，(fuse_remember) 告诉内部子系统（称为 "fuse"）需要多长时间"记住"或"缓存"与用户共享相关的文件和目录信息。当 NFS 客户端尝试访问 服务器上的文件（或目录）时，并且该文件（或目录）名未缓存时，您可能会遇到
+"陈旧文件句柄"的问题。
+
+此可调参数的数值为缓存文件/目录名称条目的秒数，默认值为 330 表示 5 分半钟。您还可以设置两个特殊值
+这个计算结果是：
+* 0 表示不缓存文件/目录名称，
+* -1 表示永久缓存文件/目录名（或直到阵列停止）
+
+如果您启用了 NFS，但仅计划将其用于磁盘共享，而不是用于用户共享，则将其设置为 0 会很合适。
+如果没有其他超时似乎可以解决客户端上的“陈旧文件句柄”，则将其值设置为 -1 会比较合适。
+请注意，设置 -1 的值将使内存占用量按每个缓存的文件/目录名增长约 108 字节。取决于您的服务器上安装了多少 RAM 以及通过 NFS 访问了多少
+
+文件/目录，这可能会也可能不会导致内存不足的情况。
+:end
+
+:nfs_server_max_protocol_help:  选择您希望您的 Unraid 服务器支持的最大 NFS 协议版本。
+:end
+:nfs_client_max_protocol_help:
+
+选择您希望用于挂载远程共享的最大 NFS 协议版本。
+:end  :nfs_threads_help:
+设置 NFS 的线程数量。
+
+对于轻度 NFS 负载，8 足够了。
+对于较重的 NFS 负载，可能需要更高数量的线程。
+
+如果线程不足，NFS 可能会崩溃。
+:end
+
+:shares_enable_disk_help:
+如果设置为否，则磁盘共享无条件不导出。  如果设置为是，磁盘共享可能会被导出。 **警告：** 请勿将数据从磁盘共享复制到用户共享
+除非您*了解* 您在做什么。  这可能会导致数据丢失且不受支持。
+如果设置为自动，则仅导出不参与用户共享的磁盘共享。
+:end
+
+:shares_enable_shares_help:
+如果设置为 '是'，用户共享功能将被激活。
+:end
+
+:shares_included_disks_help:
+此设置定义了在用户共享中包含的磁盘数组。
+取消选中所有磁盘将允许**所有** 阵列磁盘被包括在内。
+
+:end
+:shares_excluded_disks_help:  此设置定义了从用户共享中排除的磁盘阵列。 取消选中所有磁盘以不排除任何磁盘
+
+**注意：** 每个单独的用户共享还包括在此处定义的包含/排除磁盘集的子集合。
+:end
+
+:shares_exclusive_shares_help:
+如果设置为是，则 /mnt/user 下的共享目录实际上是指向存储卷上共享目录的符号链接
+
+前提是满足以下条件：  * 共享的主要存储设置为池。
+* 共享的二级存储设置为 **none**。  * 共享存在于单个卷上。
+
+* 共享**不**通过 NFS 导出。
+*独占*共享的优点是传输绕过 FUSE 层，这可能会显着
+
+提高 I/O 性能。
+:end
+:shares_tunable_hard_links_help:
+
+如果设置为是，则支持 link() 操作。
+如果设置为否，则不支持硬链接。
+注意：
+* 设置为是可能会导致旧媒体和 dvd/bluray 播放器通过 NFS 访问共享时出现问题。
+
+:end
+:shares_exclusive_shares_help:
+如果设置为是，则/mnt/user下的共享目录实际上是共享目录在存储卷上的符号链接，
+
+如果满足以下条件：
+* 共享的主存储设置为池。
+* 共享的次级存储设置为*无*。
+
+* 共享存在于单个卷上。
+* 共享**未**通过NFS导出。
+*独占*共享的优点是传输绕过FUSE层，可以显著
+
+提高I/O性能。
+:end
+:shares_tunable_hard_links_help:
+如果设置为是，则支持link()操作。
+
+如果设置为否，则不支持硬链接。
+注释：
+* 将设置为“是”可能会导致通过NFS访问共享的较旧的媒体和DVD/蓝光播放器出现问题。
+
+:shares_tunable_hard_links_help:
+如果设置为是，则支持link()操作。
+
+如果设置为否，则不支持硬链接。
+
+注意:
+
+*设置为是可能会导致较旧的媒体和通过NFS访问共享的DVD/蓝光播放器出现问题。
+* 无论此项如何设置，**mover** 仍然能正确处理任何检测到的硬链接。
+:end
+
+:shares_tunable_direct_io_help:
+**实验特性**：如果设置为“是”，则挂载用户共享文件系统时将使用 FUSE *direct_io* 挂载选项。
+这样会提高写入性能，但可能会降低读取性能。
+
+*自动*选择“否”。
+:end
+
+:shares_fuse_file_descriptors_io_help:
+设置 fuse 文件描述符的数量。  如果阵列上有大量文件活动，可能需要增加此值。
+:end
+
+:syslog_local_server_help:
+让服务器作为中央 syslog 服务器，收集来自其他系统的 syslog 信息。
+服务器可以在 UDP、TCP 或两者的可选端口上监听。
+
+Syslog 信息可以按 IP 地址或主机名存储。 这意味着每个系统都获得自己的 syslog 文件。
+:end
+
+:syslog_local_folder_help:
+选择存储 syslog 的共享文件夹。
+建议使用位于缓存驱动器上的共享，以防止阵列磁盘的旋转。
+:end
+
+:syslog_remote_system_identifier_help:
+选择远程系统的标识符（用于日志文件名）。 
+
+* "IP 地址" 使用发送系统的 IP 地址 (IPv4 或 IPv6)。
+* "主机名 (来自 syslog 消息)" 使用每条 syslog 消息中包含的主机名。
+* "主机名 (通过 DNS 反向查找)" 进行发送 IP 的 DNS 反向查找并使用结果。
+:end
+
+:syslog_local_rotation_help:
+默认情况下，日志轮换被禁用，将创建一个不限大小的日志文件。
+
+启用日志轮换以限制日志文件的大小，并指定要保留在轮换计划中的文件数量。
+:end
+
+:syslog_local_file_size_help:
+指定日志的最大大小。 当超过此限制时，将发生日志轮换。
+:end
+
+:syslog_local_file_number_help:
+指定日志轮换时要保留的额外日志文件数量。
+:end
+
+:syslog_remote_server_help:
+输入远程 syslog 服务器的名称或 IP 地址。
+这将把 syslog 消息的副本发送到指定的服务器。
+:end
+
+:syslog_mirror_flash_help:
+此设置默认是“否”，必须小心使用以避免不必要地磨损 USB 设备。
+
+需要进行故障排除且无法获取常规诊断信息时，请将此设置更改为“是”。
+syslog 文件的镜像存储在闪存设备的 **logs** 文件夹中。
+:end
+
+:syslog_shutdown_flash_help:
+默认情况下此设置为“是”，使系统能够在关机或重启时将 syslog 文件复制到 USB 设备。
+
+重启后，本次运行的 syslog 将显示在工具 > Syslog > syslog-previous 中；
+它还会包含在诊断中作为 logs/syslog-previous.txt
+:end
+
+:confirm_reboot_help:
+选择在重启或关闭服务器时是否需要确认复选框。
+:end
+
+:confirm_array_stop_help:
+选择停止阵列时是否需要确认复选框。
+:end
+
+:display_settings_help:
+以下显示设置决定了物品在屏幕上的显示方式。 使用这些设置来调整视觉效果，以满足您的喜好。
+
+您可以按照需要对这些设置进行试验，它们仅影响视觉属性。
+:end
+
+:display_width_help:
+**方框式**是旧版设置，将内容宽度限制在最大 1920 像素。
+
+**无限制**允许内容使用所有可用宽度，这在宽屏幕上可能有用。
+:end
+
+:display_font_size_help:
+更改 GUI 中的字体大小。 这是一种每个设备的设置。
+:end
+
+:display_tty_size_help:
+更改终端窗口的字体大小。
+:end
+
+:display_page_view_help:
+更改某些页面的显示方式。 在**选项卡模式**下，不同部分将在不同的选项卡中显示；
+而在**非选项卡模式**下，各部分将彼此下面显示。
+:end
+
+:display_users_menu_help:
+用户菜单可以是标题的一部分或设置菜单的一部分。
+如果标题中没有足够的空间显示所有菜单，您可以移动用户菜单。
+:end
+
+:display_listing_height_help:
+**自动**：长的列表按原样显示，用户需要滚动整个页面才能看到底部。
+
+**固定**：长的列表显示在固定大小的窗口中，用户可以滚动此窗口查看底部。
+:end
+
+:display_wwn_device_id_help:
+全球名称 (WWN) 是 SAS 连接设备使用的唯一标识符。
+
+选择*禁用*可抑制 WWN 附加到设备识别。
+
+选择“自动”以在 SAS 设备情况下将 WWN 添加到设备识别。
+:end
+
+:display_custom_text_color_help:
+覆盖标题中的默认文本颜色。 这可以用于将文本颜色与背景图像匹配。
+:end
+
+:display_custom_background_color_help:
+覆盖标题中的默认背景颜色。 这可以用于将背景颜色与自定义文本颜色匹配。
+:end
+
+:display_custom_banner_help:
+图像将被缩放到 1920x90 像素。 图像文件的最大上传大小为 512 kB (524,288 字节)。
+:end
+
+:display_temperature_unit_help:
+选择磁盘温度阈值的温度单位。 更改单位将适当地调整磁盘温度阈值中的现有值。
+
+确保任何新输入的值代表选定的温度单位。
+:end
+
+:display_favorites_enabled_help:
+启用收藏支持。 若设置为否，将停止显示心形图标以进行添加。 如果已保存现有收藏，收藏标签和预先保存的选项将继续显示和运行，直到所有收藏被删除。
+:end
+
+:vms_enable_help:
+在停止虚拟机管理器时，将首先尝试关闭所有正在运行的虚拟机。
+在60秒后，任何剩余的虚拟机实例将被终止。
+
+:end
+:vms_disable_help:
+停止虚拟机管理器启动时自动启动/启动的虚拟机或从 GUI 启动时运行。错误信息将被看到。
+
+:end
+:vms_libvirt_volume_help:
+这是 libvirt 卷。
+
+:end
+:vms_libvirt_vdisk_size_help:
+如果系统需要创建新的 libvirt 图像文件，这是要使用的默认大小，单位为 GB。 要调整现有图像文件的大小，请在此处指定新大小。
+下次启动 Libvirt 服务时，文件（和文件系统）将增加到新大小（但不会减少）。
+
+:end
+:vms_libvirt_location_help: 您必须为 Libvirt 指定图像文件。
+系统将在首次启动 Libvirt 服务时自动创建此文件。
+
+:end
+:vms_libvirt_storage_help:
+指定包含所有 VM 子目录及虚拟磁盘的用户共享。
+
+:end
+:vms_libvirt_iso_storage_help:
+指定包含所有操作系统安装介质的用户共享。
+
+:end
+:vms_virtio_driver_help:
+指定包含 Fedora 项目提供的 VirtIO Windows 驱动程序的虚拟 CD-ROM (ISO)。
+
+从此处下载最新的 ISO: <a href="https://docs.fedoraproject.org/en-US/quick-docs/creating-windows-virtual-machines-using-virtio-drivers/index.html#virtio-win-direct-downloads" target="_blank">fedoraproject.org</a> 在安装 Windows 时，您将进入设备不可见的步骤。
+该屏幕上有一个浏览驱动程序的选项。 点击“浏览”并在菜单中找到附加的 CD-ROM。
+里面将有不同版本 Windows 的文件夹。
+打开您正在安装的 Windows 版本文件夹，然后选择其中的 AMD64 子文件夹（即使您使用的是 Intel 系统，也请选择 AMD64）。 将找到三个驱动程序。
+全选后点击下一步，您分配的 vDisks 将会出现。
+
+:end
+:vms_network_source_help:
+选择您希望为您的虚拟机默认使用的网络名称。
+您可以在网络设置下选择**桥接**创建的网络，或
+在终端中使用 virsh 命令创建的 **libvirt** 网络。
+桥接 **virbr0** 和关联的虚拟网络 **default** 由 libvirt创建。  
+两者均利用 NAT（网络地址转换），并充当 DHCP 服务器，直接为虚拟机分配 IP 地址。
+在网络设置中，桥接下有更多可选的选择，或者使用 virsh 命令在终端中创建 libvirt 网络。
+
+**如果您不确定，请选择 ‘virbr0’ 作为推荐的 Unraid 默认值。**
+
+注意：您还可以为每个虚拟机指定网络源。
+
+**重要提醒：Libvirt 和 Unraid 均不自动启动分配给 Libvirt 网络的接口。
+在使用 Libvirt 网络之前，请前往设置 -> 网络设置，必要时手动将相关接口设置为启用。**
+:end
+
+:vms_host_shutdown_help:
+当关闭服务器时，此设置定义正在运行的虚拟机的处理动作。
+如果选择 *虚拟机休眠* ，虚拟机将被指示进入休眠状态（如果支持），否则将尝试关闭虚拟机。
+:end
+
+:vms_shutdown_timeout_help:
+当关闭服务器时，此设置定义在强制继续关闭之前，等待*优雅的*虚拟机关闭的秒数。
+注意：建议从虚拟机内部关闭客户虚拟机。
+:end
+
+:vms_console_help:
+用于设置上下文菜单中显示控制台选项的设置。 网络将显示仅内置的网络客户端（VNC 和 SPICE）， 
+虚拟管理器远程查看器将仅显示远程查看器选项。 两者都将显示网络和远程查看器。
+:end
+
+:vms_rdpopt_help:
+在菜单中添加选项以启动 RDP。 RDP 文件会下载。 您需要设置浏览器以便于准备就绪时打开。
+:end
+
+:vms_usage_help:
+显示 CPU 使用率的指标，包括客户和主机百分比、内存、磁盘 io 和网络 io。
+:end
+
+:vms_usage_timer_help:
+用于设置指标刷新时间的秒数。
+:end
+
+:vms_acs_override_help:
+PCIe ACS 覆盖允许各种硬件组件通过隔离的设备显示自身。
+通常仅隔离*下行端口*即可。
+硬件组件可能需要设置*多功能*或*两者*以进一步隔离不同的硬件功能。<br>
+要使对该设置的更改生效，需要重启。
+
+**警告：使用该设置可能会导致某些硬件配置的数据损坏。**
+请访问 [Lime Technology 论坛](https://forums.unraid.net/forum/51-vm-engine-kvm) 获取更多信息。
+:end
+
+:vms_vfio_interupts_help:
+如果您的系统不支持中断重映射，则可通过允许不安全的中断来启用这些中断。<br>
+要使对该设置的更改生效，需要重启。
+
+**警告：使用该设置可能会导致某些硬件配置的数据损坏。**
+请访问 [Lime Technology 论坛](https://forums.unraid.net/forum/51-vm-engine-kvm) 获取更多信息。
+:end
+
+:vms_libvirt_log_help:
+查看 libvirt 日志：<a onclick="openTerminal('log','libvirt','libvirt/libvirtd.log')">查看 libvirtd.log</a>。
+:end
+
+:vms_scrub_help:
+**擦洗** 运行 *btrfs scrub* 程序来检查文件系统完整性。
+如果需要修复，则应检查*纠正文件系统错误*并运行第二次擦洗过程；这将允许 *btrfs scrub* 修复文件系统。
+:end
+
+:vms_cancel_help:
+**取消** 将取消正在进行的擦洗操作。
+:end
+
+:eth_interface_description_help:
+使用此可选字段提供有关连接用途的其他信息。
+:end
+
+:eth_mac_address_help:
+这是接口的硬件地址。
+当启用标记时，此接口上的所有 VLAN 将共享相同的硬件地址。
+:end
+
+:eth_enable_bonding_help:
+绑定是一种将多个物理以太网接口组合成单个*绑定*接口**bond0**的功能。
+这可以用来提高系统的连接冗余性和/或吞吐量。
+支持不同的绑定模式（见下文），但某些模式需要正确的交换机支持。
+:end
+
+:eth_bonding_mode_help:
+**模式 0（balance-rr）**<br>
+这种模式从第一个可用的从接口依次传输数据包。
+如果两个真实接口是绑定中的从接口，而两个数据包到达时，定向出绑定接口，第一个将在第一个从接口上传输，第二个帧将在第二个从接口上传输。
+第三个数据包将发送到第一个，依此类推。 这提供了负载平衡和容错。
+
+**模式 1（主动-备份）- 默认**<br>
+这种模式将其中一个接口置于备份状态，只有当主动接口丢失链接时才会激活。
+在一次时间内，只有一个从接口是活动的。 仅当活动从接口失败时，不同的从接口才会变为活动。
+这种模式提供容错。
+
+**模式 2（balance-xor）**<br>
+这种模式基于 XOR 算式来传输数据包。 源 MAC 地址与目标 MAC 地址模从接口数量 XOR。
+这为每个目标 MAC 地址选择相同的从接口，提供负载平衡和容错。
+
+**模式 3（广播）**<br>
+这个模式在所有从接口上传输所有内容。 这种模式最少使用（仅用于特定目的），仅提供容错。
+
+**模式 4（802.3ad）**<br>
+这种模式被称为*动态链接聚合*。 它创建共享相同速度和双工设置的聚合组。
+它需要支持 IEEE 802.3ad 动态连接的开关。
+传输流量的从接口选择是根据传输哈希策略进行的，可以通过 xmit_hash_policy 选项更改默认简单 XOR 策略。
+请注意，并非所有传输策略都可能符合 802.3ad，特别是在 802.3ad 标准第 43.2.4 节的包误排序要求方面。
+不同的对等实施可能对不合规有不同的宽容度。
+
+**模式 5（balance-tlb）**<br>
+这种模式称为*自适应传输负载平衡*。 输出流量按照每个从接口上的当前负载和队列分布。
+输入流量由当前的从接口收到。
+
+**模式 6（balance-alb）**<br>
+这种模式称为*自适应负载平衡*。 这包括针对 IPV4 流量的 balance-tlb + 接收负载平衡（rlb）。
+接收负载平衡通过 ARP 协议实现。
+绑定驱动程序拦截服务器发送的 ARP 回复，将源硬件地址覆盖为绑定中从接口的唯一硬件地址 
+这样的设置使得不同的客户端会使用绑定中不同从接口的硬件地址。
+
+*模式 1（主动-备份）是推荐的设置 其他模式允许您设置特定环境，但可能需要适当的交换机支持。
+选择不支持的模式可能导致通信中断。
+:end
+
+:eth_bonding_members_help:
+选择哪些接口是*捆绑*接口的成员。 默认情况下，eth0是成员，而其他接口是可选的。
+:end
+
+:eth_enable_bridging_help:
+桥接是创建虚拟桥接以便VM和Docker容器直接与物理以太网端口通信的功能。
+捆绑和桥接可以结合使用，让VM或容器通过*捆绑*接口通信。
+:end
+
+:eth_bridging_members_help:
+选择哪些接口是*桥接*接口的成员。 默认情况下，eth0是成员，而其他接口是可选的。
+:end
+
+:eth_network_protocol_help:
+选择使用哪些协议。 默认情况下，仅使用IPv4。<br>
+选择IPv4和IPv6时，可以分别独立配置每个协议。
+:end
+
+:eth_ipv4_address_assignment_help:
+以下设置是可能的：
+
+*自动* - 服务器将尝试从本地DHCP服务器获取IPv4地址<br>
+*静态* - 手动为此接口设置IPv4地址<br>
+*无* - 不为接口分配IPv4地址（仅对VLAN可用）
+:end
+
+:eth_ipv4_address_help:
+使用自动IP分配时将灰显。 否则请在此处指定系统的IPv4地址和掩码。
+:end
+
+:eth_ipv4_default_gateway_help:
+使用自动IP分配时将灰显。 否则请在此处指定您的路由器的IPv4地址。
+:end
+
+:eth_ipv4_dns_server_assignment_help:
+如果设置为*自动*，则服务器将使用本地自动分配返回的IPv4 DNS服务器。<br>
+如果设置为*静态*，您可以输入自己的列表。
+
+这在需要将第一个DNS服务器条目设置为AD域服务器的IP地址的Active Directory配置中很有用。
+:end
+
+:eth_ipv4_dns_server_help:
+这是要使用的主IPv4 DNS服务器。 输入一个IPv4地址。
+
+注意：对于Active Directory，您必须确保将其设置为AD域服务器的IP地址。
+:end
+
+:eth_ipv4_dns_server2_help:
+这是IPv4 DNS在IPv4 DNS服务器1失效时要使用的服务器。
+:end
+
+:eth_ipv4_dns_server3_help:
+这是在IPv4 DNS服务器1和2都失效时要使用的IPv4 DNS服务器。
+:end
+
+:eth_ipv6_address_assignment_help:
+以下设置是可能的：
+
+*自动* - 服务器将尝试从本地DHCP服务器或路由器广告（RA）获取IPv6地址<br>
+*静态* - 手动为此接口设置IPv6地址<br>
+*无* - 不为接口分配IPv6地址（仅对VLAN可用）
+:end
+
+:eth_ipv6_address_help:
+使用自动IP分配时将灰显。 否则请在此处指定系统的IPv6地址。
+:end
+
+:eth_ipv6_default_gateway_help:
+使用自动IP分配时将灰显。 否则请在此处指定您的路由器的IPv6地址。
+:end
+
+:eth_ipv6_privacy_extensions_help:
+根据RFC4941，启用或禁用随机IPv6接口标识符的生成。 这与Windows客户端上生成临时IPv6地址类似。
+:end
+
+:eth_ipv6_dns_server_assignment_help:
+如果设置为*自动*，则服务器将使用本地自动分配返回的IPv6 DNS服务器。<br>
+如果设置为*静态*，您可以输入自己的列表。
+:end
+
+:eth_ipv6_dns_server_help:
+这是要使用的主IPv6 DNS服务器。 输入一个IPv6地址。
+:end
+
+:eth_ipv6_dns_server2_help:
+这是在IPv6 DNS服务器1失效时要使用的IPv6 DNS服务器。
+:end
+
+:eth_ipv6_dns_server3_help:
+这是在IPv6 DNS服务器1和2都失效时要使用的IPv6 DNS服务器。
+:end
+
+:eth_desired_mtu_help:
+这是用于物理以太网接口的MTU大小。
+如果留空，MTU将会自动确定（默认为1500字节）。
+:end
+
+:eth_enable_vlans_help:
+默认情况下不配置VLAN。<br>
+启用VLAN扩展了通过相同物理连接的逻辑连接数量。
+
+注意：使用此功能时，路由器和交换机也必须支持VLAN。
+:end
+
+:eth_vlan_number_help:
+为每个VLAN赋予一个唯一的标识符。 编号范围为1到4095。
+:end
+
+:eth_network_rules_help:
+可以在此更改接口分配规则，可能需要设置用于管理Unraid的首选接口 - 请谨慎使用，通常不需要更改。
+
+**eth0**是用于管理Unraid系统的主接口。 其他接口是可选的，可以根据需要使用。
+每个接口必须由其MAC（硬件）地址唯一标识。
+
+接口分配存储在闪存设备下的*/config/network-rules.cfg*中。 此文件可以用任何编辑器查看，但建议仅通过webGUI进行更改。<br>
+从闪存设备删除*network-rules.cfg*文件将自动在系统重启后恢复接口分配。
+:end
+
+:eth_routing_table_help:
+输入格式为*nnn.nnn.nnn.nnn/xx*的有效IPv4路由，例如 *192.168.1.0/24*<br>
+或者输入格式为*nnnn:nnnn:nnnn::nnnn/xxx*的有效IPv6路由，例如 *fe80::3ad8:2fff:fe25:9709/64*
+
+从下拉列表中选择网关，或输入有效的IPv4/IPv6地址作为网关值。
+
+指标值是可选的，默认为1。 当对相同路由的多个条目存在时，使用它选择优先网关。
+:end
+
+:eth_network_extra_include_help:
+输入一个或多个接口名称或IP地址，它们将包含在本地系统服务的监听接口列表中。
+
+这对于您已创建的用于访问本地系统服务的自定义接口（例如 tailscale VPN隧道）特别有用。
+:end
+
+:eth_network_extra_exclude_help:
+输入一个或多个接口名称或IP地址，它们将被排除在本地系统服务的监听接口列表之外。
+
+这可以用于排除专用本地接口（例如 p-t-p连接）或排除使用本地系统服务的动态接口（WireGuard隧道）。
+:end
+
+:apc_ups_daemon_help:
+设置为“是”以启用apcupsd并启动守护程序，设置为“否”以禁用apcupsd并停止守护程序。
+:end
+
+:apc_ups_cable_help:
+定义UPS与您计算机连接的电缆类型。可能的通用选择为：
+
++ USB、Simple、Smart、Ether或Custom用于指定特制电缆。
+:end
+
+:afp_enable_help:
+设置AFP协议以便于Apple设备进行网络连接。
+
+通过选择相应设置可以启用或禁用协议连接。
+:end
+:eth_ipv4_address_help:
+如果正在使用自动IP分配，该字段将被禁用以防止编辑。 在选择手动设置时，请提供系统的IPv4地址及其子网掩码。
+:end
+
+:end
+:apc_ups_type_help:
+
+定义*UPS类型*，它对应于您的UPS类型（请参阅描述以获取更多详细信息）。
++ **USB** - 大多数新款UPS为USB接口
++ **APCsmart** - 较新的串行字符设备，适合通过串行电缆（非USB）使用的SmartUPS型号 + **Net** - 通过apcupsd的网络信息服务器与主控apcupsd建立网络连接。
+用于不直接连接到计算机而是通过另一台计算机进行监控的UPS。
++ **SNMP** - 与支持SNMP的UPS设备建立SNMP网络链接
++ **Dumb** - 旧式串行字符设备，用于支持简单信号的UPS设备
++ **PCnet** - PowerChute网络关闭协议，作为AP9617智能插槽卡系列与SNMP的替代方案
++ **ModBus** - 串行设备，用于支持MODBUS协议的最新SmartUPS型号
+
+:end
+:apc_ups_device_help:
+
+输入与您情况相对应的*设备*，仅当*UPS类型*未设置为USB时适用。
++ **apcsmart** - /dev/tty** + **net** - hostname:port。 主机名是NIS服务器的IP地址。
+默认端口是3551 + **snmp** - hostname:port:vendor:community。 主机名是网络上UPS的ip地址或主机名。 供应商可以是"APC"或"APC_NOTRAP"。 "APC_NOTRAP"将禁用SNMP捕捉；通常您会选择"APC"。 端口通常是161。
+一般社区为"private"
++ **dumb** - /dev/tty** + **pcnet** - ipaddr:username:passphrase:port。 ipaddr是UPS管理卡的IP地址。 用户名和密码短语是为该卡配置的凭证。 端口是监听来自UPS信息的报文的端口号，通常是3052。
+如果此参数为空或缺失，将使用默认的3052
++ **modbus** - /dev/tty**
+
+:end
+:apc_ups_override_ups_capacity_help: 如果您的设备本身无法通过apcupsd报告额定功率 (`NOMPOWER`)，但报告负载百分比 (`LOADPCT`)，您可以手动定义以瓦特为单位的UPS容量值（这是的“实际功率”以瓦特（W）显示，而不是伏安（VA）显示的“表观功率”）。根据UPS手册或产品列表详细列出的，本插件将通过比较备用UPS容量（W）和当前负载百分比动态计算潜在的额定功率估计（`≈`）。
+这只是一个估计值，因为它未计算UPS的效率等因素。
+
+:end
+:apc_battery_level_help:
+如果电源故障时，UPS报告的剩余电池百分比低于或等于*电池电量*，则apcupsd将启动系统关闭。
+
+:end
+:apc_runtime_left_help:
+如果电源故障时，UPS内部计算的剩余运行时间（以分钟为单位）低于或等于此字段，apcupsd将启动系统关闭。
+
+:end
+:apc_battery_time_help: 如果电源故障时，UPS在电池上运行*超时*秒或更长时间；apcupsd将启动系统关闭。超时值为零将禁用此计时器。
+
+如果您有智能UPS，您可能希望将此计时器设置为零以禁用。
+这样，您的UPS将继续在电池上运行，直到剩余电量百分比降至或低于*电池电量*或剩余电池运行时间降至或低于*分钟*。
+
+当然 - 测试时 - 如果您拔下电源插头，将它设置为60会导致快速系统关机。
+如果您有较旧的哑能UPS，您需要将此设置为低于您知道可以在电池上运行的时间。
+:end
+
+:apc_note_help:
+**注意：** *电池电量*，*剩余运行时间*，和*在电池上时间*是协同工作的，因此第一个实现的措施将触发关闭。
+:end
+
+:apc_killups_help:
+设置为*是*以在关机后关闭UPS的电源。
+:end
+
+:parity_check_scheduled_help:
+默认情况下未计划任何校验检查。选择所需的计划。这可以是每日、每周、每月、每年或自定义计划之一。 :end :parity_day_of_the_week_help:
+当选择**每周**或**自定义**计划时，请在此处选择首选的*星期几*，其他计划中不使用此设置且不可用。
+
+:end
+:parity_week_of_the_month_help:
+当选择**每月**或**每年**计划时，请在此处选择首选的*日期*。
+
+选择**自定义**计划时，请在此处选择首选的*月份的第几周*，其他计划中不使用此设置且不可用。
+:end
+:parity_time_of_the_day_help:
+选择需要开始计划的*一天中的时间*。时间精度以半小时为单位给出。
+
+:end
+:parity_month_of_the_year_help: 当选择**每年**或**自定义**计划时，请在此处选择首选的*一年中的月份*，其他计划中不使用此设置且不可用。
+:end
+
+:parity_write_corrections_help:
+在此选择校验检查时发现的任何校验错误是否需要在校验盘上进行校正。
+:end
+
+:parity_cumulative_check_help:
+将此设置更改为**是**以将长时间校验检查划分为多个周期。此功能在系统需要保持正常并修复仅在非工作时间运行时很有用。
+:end
+
+:parity_accumulation_frequency_help:
+指定累积周期如何执行。 **每日** 表示校验检查持续进行直到完成，每天进行
+**每周** 表示校验检查直到完成，每周进行
+
+:end
+:parity_accumulation_duration_help:
+
+指定每个累积周期运行的时间，以小时为单位。**一天中的时间**指定了期间的开始时间。
+
+:end
+:mover_schedule_help:
+
+选择一个从每小时、每天、每周到每月不等的移动者时间表。
+间隔决定了移动者激活的速度，它在后台运行。 :end
+:mover_day_of_the_week_help:
+
+选择周时间表选择的天数。
+否则禁用。
+
+:end
+:mover_day_of_the_month_help:
+
+选择月份选择的日期。
+否则禁用。 :end
+:mover_time_of_the_day_help:
+
+当选择每小时设置时，这将设置小时间隔。
+间隔总是从整数小时（分钟0）开始。 对于其他计划，请在此处选择mover应开始的时间。
+:end
+
+:mover_logging_help:
+将mover消息写入syslog文件。 :end
+
+:notifications_display_help:
+在*详细*视图中，所有通知都将在到达后立即显示在屏幕上。<br>
+
+通知可以单独或一起确认。
+在*摘要*视图中，仅显示通知的数量，未读通知的数量将在菜单标题中按类别显示。<br>
+单击计数器以确认或查看未读通知。
+
+:end
+:notifications_display_position_help:
+选择通知在*详细*视图中出现在屏幕上的位置。
+
+在*摘要*视图中，通知只会被计数，未读通知的数量显示在每个类别的菜单标题中。<br>
+单击计数器以承认或查看未读通知。
+:end
+
+:notifications_display_position_help:
+选择通知在*详细*视图中在屏幕上出现的位置。 多个通知堆叠在一起，自下而上或
+根据选择的放置方式从上到下。
+:end
+
+:notifications_auto_close_help:
+*详细*视图中通知自动关闭前的秒数。<br>
+值为0将禁用自动关闭。
+:end
+
+:notifications_date_format_help:
+选择用于通知档案的日期格式。 推荐使用 YYYY-MM-DD，以使日期/时间列在排序时有良好的辨识度。
+:end
+
+:notifications_time_format_help:
+选择用于通知档案的时间格式。 推荐使用24小时制，以使日期/时间列在排序时有良好的辨识度。
+:end
+
+:notifications_store_flash_help:
+默认情况下，通知存储在RAM磁盘上，系统重启时会丢失。
+通知可以永久存储在闪存驱动器的'/boot/config/plugins/dynamix'文件夹下。
+:end
+
+:notifications_system_help:
+默认情况下，通知系统是禁用的。 在此启用以开始接收通知。
+以下部分提供有关将发送哪些类型的通知的更多选项。
+:end
+
+:notifications_os_update_help:
+开始定期验证，当检测到新版本Unraid操作系统时通知用户。
+使用下面的复选框选择通知的传递方式；通过浏览器、电子邮件和/或自定义代理。
+:end
+
+:notifications_plugins_update_help:
+开始定期验证，当检测到一个或多个已安装插件的新版本时通知用户。
+使用下面的复选框来选择通知的传递方式；通过浏览器、电子邮件和/或自定义代理。
+:end
+
+:notifications_docker_update_help:
+开始定期验证，当检测到一个或多个已安装docker的新版本时通知用户。
+使用下面的复选框来选择通知的传递方式；通过浏览器、电子邮件和/或自定义代理。
+:end
+
+:notifications_array_status_help:
+开始定期阵列健康检查（预防性维护），并将检查结果通知用户。
+:end
+
+:notifications_agent_selection_help:
+使用上面的复选框选择需要通过何种方式发送通知；包括通过浏览器、电子邮件和/或服务。<br>
+<b>小提示：</b>您可以使用自定义通知代理；只需将它们添加到"/boot/config/plugins/dynamix/notification/agents"目录并勾选“代理”。
+:end
+
+:notifications_classification_help:
+通知被分类如下：
+
+*notice* - 这些是信息性通知，并不指示存在问题，例如： 有新版本可用<br>
+*warning* - 这些是提醒通知，可能指示将来的问题，例如： 硬盘比平时更热<br>
+*alert* - 这些是严重通知，需要立即注意，例如： 硬盘故障<br>
+
+为每种分类选择您希望接收通知的方式。
+:end
+
+:smtp_preset_service_help:
+选择一个预设服务以设置基本服务设置。
+:end
+
+:smtp_email_address_help:
+您的邮件账户的电子邮件地址。 此地址用作通知的发件人。
+:end
+
+:smtp_recipients_help:
+状态和错误通知的接收者。 指定一个或多个电子邮件地址，多个电子邮件地址之间用空格分隔。
+:end
+
+:smtp_priority_help:
+当Unraid OS检测到问题时，将电子邮件头设置为高重要性。
+:end
+
+:smtp_subject_prefix_help:
+设置一个前缀以便于识别Unraid OS消息。
+:end
+
+:smtp_mail_server_help:
+指定电子邮件服务器的名称。 使用预设服务选择以自动填写。
+:end
+
+:smtp_mail_server_port_help:
+指定电子邮件服务器的端口。 使用预设服务选择以自动填写。
+:end
+
+:smtp_use_ssl_tls_help:
+指定是否使用SSL/TLS与SMTP服务器通信。
+:end
+
+:smtp_use_starttls_help:
+指定是否在开始SSL协商之前使用STARTTLS - 参见RFC 2487。
+:end
+
+:smtp_define_tls_cert_help:
+仅在需要用于通信的证书时选择这一项。
+:end
+
+用于 TLS 的 RSA 证书文件名 - 如果需要。
+选择您的电子邮件服务器的正确身份验证方法。
+使用测试验证访问是否正常运作。
+
+输入用户名和密码以登录您的电子邮件账户。
+请注意，密码将以未加密形式存储在电子邮件配置文件中。 :end
+要下载并安装插件，请输入plg文件URL并点击**安装**。将打开一个窗口显示安装进度。
+
+安装完成之前不要关闭此窗口。
+您还可以指定扩展的本地文件名。 :end
+这些插件因为某些安装错误而未能安装。
+
+您应该删除这些插件，然后**重启**您的服务器。
+:end 这些插件未安装，因为已经存在较新的代码。
+只需删除这些插件即可。 :end 模板是为您的Unraid服务器设置Docker容器的一种快捷方式。
+模板有两种：
+**默认模板**<br>
+
+当有效的库已被添加到您的Docker库页面时，它们将出现在此下拉列表的一个分区中供您选择（按作者分类，然后按应用程序模板）。
+选择默认模板后，页面将填充应用程序的新信息，并通常提供有关如何设置容器的说明。  当您首次配置此应用程序时，选择默认模板。
+**用户定义的模板**<br>
+一旦您通过默认模板将应用程序添加到您的系统，
+
+您指定的设置将保存到您的USB闪存设备，以便于在升级失败或其他问题发生时重新构建应用程序。
+要重新构建，只需从用户定义列表中选择加载过的应用程序，所有容器的设置将从您以前的设置中填充。  点击创建将重新下载应用程序的必要文件并应恢复为正常工作状态。
+要删除用户定义的模板，请从上面的列表中选择它，然后单击其右侧的红色X。
+
+:end
+模板是在您的Unraid服务器上设置Docker容器的更快捷方式。  有两种类型的模板：
+
+**默认模板**<br>
+当将有效的存储库添加到您的Docker存储库页面时，它们将出现在下拉列表中供您选择的部分中（按作者分类的主目录，然后按应用程序模板分类）。
+选择默认模板后，页面将填充应用程序描述字段中的新信息，并通常提供设置容器的说明。
+当首次配置此应用程序时，选择默认模板。
+
+**用户定义的模板**<br>
+通过默认模板将应用程序添加到您的系统后，
+您指定的设置会保存到您的USB闪存设备，以便在升级失败或出现其他问题时轻松重建应用程序。
+要重建，只需从用户定义列表中选择先前加载的应用程序，容器的所有设置将会显示并填充您的之前设置。
+点击创建将重新下载应用程序所需的文件，并应恢复到工作状态。
+要删除用户定义的模板，请从上面的列表中选择它并单击其右侧的红色X。
+:end
+
+:docker_client_name_help:
+为容器命名或保持默认。  至少两个字符。  第一个字符必须是a-z A-Z 0-9 剩余字符为a-z A-Z 0-9 . - _
+:end
+
+:docker_client_overview_help:
+应用程序容器的描述。  支持基本HTML标记。
+:end
+
+:docker_client_additional_requirements_help:
+容器的任何附加要求。  支持基本HTML标记。
+:end
+
+:docker_client_repository_help:
+Docker注册表上的应用程序的存储库。  作者名称/应用程序名称的格式。
+您可以选择在应用程序名后加上冒号，以请求特定版本的容器镜像。
+:end
+
+:docker_client_support_thread_help:
+链接到Lime-Technology论坛上的支持线程。
+:end
+
+:docker_client_project_page_help:
+链接到项目页面（例如：www.plex.tv）
+:end
+
+:docker_client_readme_help:
+链接到自述文件或页面
+:end
+
+:docker_client_hub_url_help:
+Docker Hub上容器存储库位置的路径。
+:end
+
+:docker_client_template_url_help:
+该URL用于保持模板更新。
+:end
+
+:docker_client_icon_url_help:
+链接到您的应用程序图标图像（仅在显示设置下显示仪表板应用程序显示为图标时显示）。
+:end
+
+:docker_client_webui_help:
+当您从Docker容器页面单击一个应用程序图标时，WebUI选项将链接到此字段中的路径。
+使用[IP]标识主机的IP，并替换端口的[PORT:####]。
+:end
+
+:docker_extra_parameters_help:
+如果您希望在运行时向Docker容器附加其他命令，可以在此处指定。<br>
+有关所有可能的Docker运行时命令，请参阅这里： <a href="https://docs.docker.com/reference/run/" target="_blank">https://docs.docker.com/reference/run/</a>
+:end
+
+:docker_post_arguments_help:
+如果您希望在容器定义之后附加其他参数，可以在此处指定。
+此字段的内容是容器特定的。
+:end
+
+:docker_cpu_pinning_help:
+选中CPU核心将限制容器仅在选定的核心上运行。 不选择核心将让容器在所有可用核心上运行（默认）
+:end
+
+:docker_fixed_ip_help:
+如果选择了桥接类型，则应用程序的网络访问将仅限于使用端口映射部分中指定的端口进行通信。
+如果选择了主机类型，则应用程序将被授予使用主机上未映射到另一个正在使用的应用程序/服务的任何端口进行通信的权限。
+一般而言，建议将此设置保留为每个应用程序模板指定的默认值。
+
+重要说明：如果调整端口映射，请勿修改容器端口的设置，因为只能调整主机端口。
+:end
+
+:docker_container_network_help:
+这允许您的容器利用另一个容器的网络配置。 从列表中选择适当的容器。<br>这种设置特别有利于当您希望通过VPN路由容器的流量时。
+:end
+
+:docker_tailscale_help:
+启用 Tailscale 将此容器添加为 Tailnet 上的机器。
+:end
+
+:docker_tailscale_hostname_help:
+为此容器提供主机名。该名称不是必须和容器名称一致，但在 Tailnet 上必须是唯一的。请注意，将为此主机名生成 HTTPS 证书，这意味着它将被列入公共账本中，因此请使用不介意公开的名称。更多信息请参见<a href="https://tailscale.com/kb/1153/enabling-https" target="_blank">启用 HTTPS</a>。 这不需要与容器名称匹配，但它必须在您的 Tailnet 上是唯一的。 请注意，将为此主机名生成 HTTPS 证书，这意味着它将被列入公共账本中，因此请使用不介意公开的名称。
+更多信息请参见 <a href="https://tailscale.com/kb/1153/enabling-https" target="_blank">启用 HTTPS</a>。
+:end
+
+:docker_tailscale_be_exitnode_help:
+如果您的 Tailnet 上的其他机器应通过此容器路由其互联网流量，请启用此功能，这对于连接到商用 VPN 服务的容器最有用。一定要在<a href="https://login.tailscale.com/admin/machines" target="_blank"> Tailscale 机器管理面板</a>中授权此出口节点。更多详细信息，请参见 Tailscale 文档，关于<a href="https://tailscale.com/kb/1103/exit-nodes" target="_blank">退出节点</a>。 
+确保在 <a href="https://login.tailscale.com/admin/machines" target="_blank">Tailscale Machines 管理面板</a>中授权此出口节点。
+有关更多详细信息，请参见 Tailscale 文档，关于 <a href="https://tailscale.com/kb/1103/exit-nodes" target="_blank">出口节点</a>。
+:end
+
+:docker_tailscale_exitnode_ip_help:
+可选择通过在 Tailnet 上的出口节点路由此容器的出站互联网流量。选择出口节点或输入其 Tailscale IP 地址。有关更多详细信息，请参见<a href="https://tailscale.com/kb/1103/exit-nodes" target="_blank">出口节点</a>。 可选择通过在 Tailnet 上的出口节点路由此容器的出站互联网流量。选择出口节点或输入其 Tailscale IP 地址。
+有关更多详细信息，请参见<a href="https://tailscale.com/kb/1103/exit-nodes" target="_blank">出口节点</a>。
+:end
+
+:docker_tailscale_lanaccess_help:
+仅在此容器使用出口节点时适用。启用此选项以允许容器访问本地网络。 仅在此容器使用出口节点时适用。启用此选项以允许容器访问本地网络。
+
+<b>警告：</b>&nbsp;即使启用了此功能，如果 LAN 上的系统没有安装 Tailscale，也可能无法访问该容器。
+:end
+
+:docker_tailscale_userspace_networking_help:
+启用后，该容器将运行在一个受限环境中。 Tailscale DNS 将无法工作，容器将无法发起连接到其他 Tailscale 机器。 但是，Tailnet 上的其他机器仍然可以与这个容器通信。
+
+禁用后，该容器将拥有对 Tailnet 的完整访问权限。 Tailscale DNS 将工作，容器可以完全与 Tailnet 上的其他机器通信。
+但是，除非 LAN 上的系统安装了 Tailscale，否则它们可能无法访问容器。
+:end
+
+:docker_tailscale_ssh_help:
+Tailscale SSH 类似于 Unraid webgui 中的 Docker“控制台”选项，但您使用 SSH 客户端连接并通过 Tailscale 进行身份验证。
+有关详细信息，请参阅 <a href="https://tailscale.com/kb/1193/tailscale-ssh" target="_blank">Tailscale SSH</a> 文档。
+:end
+
+:docker_tailscale_serve_mode_help:
+启用 <b>Serve</b> 后，将自动反向代理该容器的主要 Web 服务，并使用有效证书使其在您的 Tailnet 上通过 https 提供！ 
+
+注意，访问 <b>Tailscale WebUI</b> 地址时，除限制它到您的 Tailnet 之外，没有添加任何额外的身份验证层——容器仍负责管理可访问它的用户名/密码。 根据您的配置，直接访问容器仍可能是可能的。
+
+有关详细信息，请参阅 <a href="https://tailscale.com/kb/1312/serve" target="_blank">Tailscale Serve</a> 文档。
+
+如果文档建议为更复杂的用例进行附加设置，请启用 “Show Advanced Settings”。 除验证命令是否正确传递给 Tailscale 外，不提供此类高级设置支持。
+
+<b>Funnel</b> 类似于 <b>Serve</b>，但该 Web 服务可以通过开放的 Internet 访问。 谨慎使用此功能，因为该服务可能会遭到攻击。 与 <b>Serve</b> 相同，容器本身负责处理任何身份验证。
+
+我们建议在启用此功能之前阅读 <a href="https://tailscale.com/kb/1223/funnel" target="_blank">Tailscale Funnel</a> 文档。
+
+<b>注意：</b>&nbsp;启用 <b>Serve</b> 或 <b>Funnel</b> 将发布 Tailscale 主机名到一个公开的账本。
+有关详细信息，请参阅 Tailscale 文档：<a href="https://tailscale.com/kb/1153/enabling-https" target="_blank">启用 HTTPS</a>。
+:end
+
+:docker_tailscale_serve_port_help:
+此字段应指定该容器提供的主要 Web 服务的端口。 注意：应指定容器中的端口，而不是在主机上重新映射的端口。
+
+系统尝试自动确定正确的端口。 如果使用了错误的值，则可能是在此页面的右上角从“基本视图”切换到“高级视图”后，“Web UI”字段存在问题。 
+
+在大多数情况下，您只需要指定此端口即可在此容器中提供网站服务，不过以下提供的附加选项适用于更复杂的容器。
+
+此值传递到启动服务或漏斗的命令的 `<serve_port>` 部分：<br>
+`tailscale [serve|funnel] --bg --<protocol><protocol_port><path> <serve_target>:<serve_port><local_path>`<br>
+更多详情请参阅 <a href="https://tailscale.com/kb/1242/tailscale-serve" target="_blank">Tailscale Serve 命令行</a> 文档。
+:end
+
+:docker_tailscale_show_advanced_help:
+这里有奇技淫巧！
+:end
+
+:docker_tailscale_serve_target_help:
+未指定时，此值默认为 http://localhost。 它传递到启动服务或漏斗的命令的 `<serve_target>` 部分：<br>
+`tailscale [serve|funnel] --bg --<protocol><protocol_port><path> <serve_target>:<serve_port><local_path>`<br>
+更多详情请参阅 <a href="https://tailscale.com/kb/1242/tailscale-serve" target="_blank">Tailscale Serve 命令行</a> 文档。<br>
+请注意，仅支持 `localhost` 或 `127.0.0.1`。
+:end
+
+:docker_tailscale_serve_local_path_help:
+当未指定时，此值默认为空字符串。 它传递给此命令的`<local_path>`部分，用于启动serve或funnel:<br>
+`tailscale [serve|funnel] --bg --<protocol><protocol_port><path> <serve_target>:<serve_port><local_path>`<br>
+更多细节请参见 <a href="https://tailscale.com/kb/1242/tailscale-serve" target="_blank">Tailscale Serve命令行</a> 文档。
+:end
+
+:docker_tailscale_serve_protocol_help:
+当未指定时，此值默认为"https"。 它传递给此命令的`<protocol>`部分，用于启动serve或funnel:<br>
+`tailscale [serve|funnel] --bg --<protocol>=<protocol_port><path> <serve_target>:<serve_port><local_path>`<br>
+更多细节请参见 <a href="https://tailscale.com/kb/1242/tailscale-serve" target="_blank">Tailscale Serve命令行</a> 文档。
+:end
+
+:docker_tailscale_serve_protocol_port_help:
+当未指定时，此值默认为"=443"。 它传递给此命令的`<protocol_port>`部分，用于启动serve或funnel:<br>
+`tailscale [serve|funnel] --bg --<protocol><protocol_port><path> <serve_target>:<serve_port><local_path>`<br>
+更多细节请参见 <a href="https://tailscale.com/kb/1242/tailscale-serve" target="_blank">Tailscale Serve命令行</a> 文档。
+:end
+
+:docker_tailscale_serve_path_help:
+当未指定时，此值默认为空字符串。 它传递给此命令的`<path>`部分，用于启动serve或funnel:<br>
+`tailscale [serve|funnel] --bg --<protocol><protocol_port><path> <serve_target>:<serve_port><local_path>`<br>
+更多细节请参见 <a href="https://tailscale.com/kb/1242/tailscale-serve" target="_blank">Tailscale Serve命令行</a> 文档。
+:end
+
+:docker_tailscale_serve_webui_help:
+如果<b>Serve</b>被启用，这将是一个https网址，具有一个正确的域名，可以在您的Tailnet上访问，无需端口！
+
+如果<b>Funnel</b>被启用，则相同的网址将在互联网上可用。
+
+如果它们被禁用，则网址将从容器的主"Web UI"字段生成，但会修改为使用Tailscale IP。 如果此处指定了错误的端口，则从"基本视图"切换到"高级视图"并查看此容器的"Web UI"字段。
+:end
+
+:docker_tailscale_advertise_routes_help:
+如有需要，请指定在运行**`tailscale up`**时应传递到**`--advertise-routes=`**参数的任何路线。
+更多细节请参见 <a href="https://tailscale.com/kb/1019/subnets#connect-to-tailscale-as-a-subnet-router" target="_blank">子网路由器</a>文档。
+:end
+
+:docker_tailscale_accept_routes_help:
+启用时，此选项将接受来自其他设备的子网路线，在运行**`tailscale up`**时添加**`--accept-routes`**参数。
+更多细节请参见 <a href="https://tailscale.com/kb/1019/subnets?q=allow+routes#use-your-subnet-routes-from-other-devices" target="_blank">从其他设备使用您的子网路线</a> 文档。
+:end
+
+:docker_tailscale_daemon_extra_params_help:
+指定启动**`tailscaled`**时要传递的任何额外参数。
+更多细节请参见 <a href="https://tailscale.com/kb/1278/tailscaled" target="_blank">tailscaled</a> 文档。
+:end
+
+:docker_tailscale_extra_param_help:
+指定运行**`tailscale up`**时要传递的任何额外参数。
+更多细节请参见 <a href="https://tailscale.com/kb/1080/cli#up" target="_blank">Tailscale CLI</a> 文档。
+:end
+
+:docker_tailscale_statedir_help:
+如果启动时状态目录检测失败，您可以在容器中指定一个持久目录以覆盖自动检测，例如`/container-path/.tailscale_state` `/container-path/.tailscale_state`
+:end
+
+:docker_tailscale_troubleshooting_packages_help:
+启用此功能以将`ping`、`nslookup`、`curl`和`speedtest-cli`安装到容器中以帮助排除网络问题。 问题解决后，我们建议禁用此功能以减少容器的大小。
+:end
+
+:docker_privileged_help:
+对于需要直接使用主机设备访问或需要完全暴露主机功能的容器，需要选择此选项。
+想了解更多信息，请查看此链接：<a href="https://docs.docker.com/engine/reference/run/#runtime-privilege-and-linux-capabilities" target="_blank">https://docs.docker.com/engine/reference/run/#runtime-privilege-and-linux-capabilities</a>
+:end
+
+; sysdevs help - added May 18, 2020
+:sysdevs_iommu_groups_help:
+此处显示系统上可用的IOMMU组列表以及每个IOMMU组的`lspci`命令输出。  用于配置PCI直通的数字标识符。您选择的设备将被绑定到启动时的vfio-pci驱动程序，这使得它们可以分配给虚拟机，并且还防止Linux内核自动将它们绑定到任何存在的主机驱动程序上。
+
+**注意，选择设备会绑定不仅是指定设备，还包括同一IOMMU组中的*所有*其他设备。**
+
+&nbsp;<i class="fa fa-circle orb green-orb middle"></i>&nbsp;此符号表示设备当前绑定到vfio-pci驱动程序。
+
+&nbsp;<i class="fa fa-retweet grey-orb middle"></i>&nbsp;&nbsp;&nbsp;此符号表示设备支持FLR（功能级别重置）
+
+<input type="checkbox" value="" disabled>&nbsp;&nbsp;如果复选框呈灰色，这意味着设备正在被Unraid OS使用，不能传递。
+
+&nbsp;<i class='fa fa-retweet grey-orb middle'></i>&nbsp;&nbsp;&nbsp;&nbsp;此符号表示设备支持FLR（功能级别重置）。
+<input type="checkbox" value="" disabled>&nbsp;&nbsp;如果复选框呈灰色，这意味着设备正在被Unraid OS使用，不能传递。
+
+此处显示 CPU 线程配对的列表。
+这将显示 CPU 线程配对列表。
+结束
+
+此处显示 `lsusb` 命令的输出。
+这将显示 `lsusb` 命令的输出。  数值标识符用于配置 PCI 穿透。
+结束
+
+此处显示 `lsscsi` 命令的输出。
+这将显示 `lsscsi` 命令的输出。  数值标识符用于配置 PCI 穿透。
+
+注意 Linux 将 ATA、SATA 和 SAS 设备与真正的 SCSI 设备归为一类。
+结束
+
+; unraid.net 帮助 - 添加于2021年3月11日
+WAN 端口是您路由器上设置的外部 TCP 端口号，用于将来自互联网的流量 NAT/端口转发到此 Unraid 服务器 SSL 端口以进行安全网络流量。
+WAN 端口是您路由器上设置的外部 TCP 端口号，用于将来自互联网的流量 NAT/端口转发到此
+Unraid 服务器 SSL 端口，用于安全的网页流量。
+结束
+
+点击激活以为本地USB Flash 启动设备设置本地git仓库，并连接到与此服务器绑定的专用远程unraid.net。
+点击激活以为本地USB Flash 启动设备设置本地git仓库，并连接到与此服务器绑定的专用远程unraid.net。
+结束
+
+未更新状态表示与unraid.net远程相比，本地文件已发生更改。
+未更新状态表示存在与unraid.net远程更改的本地文件。 点击更新以将更改推送到远程。
+
+点击更改以查看更改内容。
+
+结束
+更新状态表明您的本地配置与存储在unraid.net远程上的配置匹配。
+
+更新状态表明您的本地配置与存储在unraid.net远程上的配置匹配。
+结束
+点击停用以暂停与unraid.net上远程服务器的通信。
+
+点击停用以暂停与unraid.net上远程服务器的通信。
+点击重新初始化以清除本地和unraid.net 远程的所有更改历史记录。
+
+点击重新初始化以清除本地和unraid.net 远程的所有更改历史记录。
+结束
+
+提供逗号分隔的 URL 列表，这些 URL 被允许访问 unraid-api（https://abc.myreverseproxy.com,https://xyz.rvrsprx.com,…）
+提供逗号分隔的 URL 列表，这些 URL 被允许访问 unraid-api（https://abc.myreverseproxy.com,https://xyz.rvrsprx.com,...）
+:结束
+
+:myservers_remote_t2fa_help:
+当为远程访问启用透明两因素认证 (2FA) 时，您可以通过点击 <a href="https://connect.myunraid.net/" target="_blank" rel="noopener noreferrer">前往连接</a> 上的“远程访问”链接来访问您的服务器。系统会透明地请求您的服务器提供2FA令牌并将其嵌入到服务器的登录表单中。 系统将透明地从您的服务器请求2FA令牌，并将其嵌入到服务器的登录表单中。 您的服务器将拒绝任何不包含有效令牌的远程访问登录尝试。 每个令牌只能使用一次，并且仅在五分钟内有效。
+:结束
+
+:myservers_local_t2fa_help:
+当为本地访问启用透明2FA时，您可以通过点击 <a href="https://connect.myunraid.net/" target="_blank" rel="noopener noreferrer">前往连接</a> 上的“本地访问”链接来访问您的服务器。 系统将透明地请求您的服务器提供2FA令牌，并将其嵌入到服务器的登录表单中。 您的服务器将拒绝任何不包含有效令牌的本地访问登录尝试。 每个令牌只能使用一次，并且仅在五分钟内有效。
+
+对于本地访问，这种做法相当极端，并且在大多数情况下不需要。 这需要稳定的互联网连接。 如果您需要在互联网关闭时访问webGUI，请通过 SSH 连接到服务器并运行 'use_ssl no'，这将通过 http://<?=$nginx['NGINX_LANIP']?><?=$nginx['NGINX_PORT'] !== '80' ? ':'.$nginx['NGINX_PORT'] : '' ?> 给予您访问权限。
+:结束
+
+; WireGuard 帮助文本
+
+:wg_local_name_help:
+使用该字段为此连接设置一个名称，使其易于识别。相同名称将出现在任何同伴的配置中。 相同名称将出现在任何对等体的配置中。
+:结束
+
+:wg_generate_keypair_help:
+使用 **生成密钥对** 按钮自动创建一个唯一的私钥和公钥组合。<br>或者粘贴一个由 WireGuard 生成的现有私钥。不要与他人共享此私钥！
+或者粘贴一个由 WireGuard 生成的现有私钥。 勿与他人分享此私钥！
+:结束
+
+:wg_local_tunnel_network_pool_help:
+WireGuard 隧道需要一个内部 IP 地址。使用默认的 IPv4 网络 <?=$netpool['wg0']?>/24 分配网络池 或默认的 IPv6 网络 <?=$netpool6['wg0']?>/64，或分配您自己的网络池，从中可以为此服务器和任何对等方自动分配。
+*通道网络池* 必须是一个不在服务器或任何对等方上存在的唯一网络。
+
+*隧道网络池* 必须是一个不在服务器或任何对等方上存在的唯一网络。
+:结束
+
+:wg_local_tunnel_network_pool_X_help:
+WireGuard 隧道需要一个内部IP地址。 使用默认 IPv4 网络分配网络池， 
+默认 IPv6 网络，或分配您自己的网络池， 以便为此服务器和任何对等方自动分配。
+
+*隧道网络池* 必须是服务器或任何对等方上不存在的唯一网络。
+:结束
+
+:wg_local_tunnel_address_help:
+在创建本地隧道网络池时，将自动填充此字段。 可以覆盖分配，但这通常没有必要。 在手动更改时请小心使用。
+:结束
+
+:wg_local_tunnel_address_help:
+在创建本地隧道网络池时，将自动填充此字段。 可以覆盖分配，但这通常没有必要。 在手动更改时请小心使用。
+:end
+
+:wg_local_endpoint_help:
+此字段会自动填入公共管理域名 *&lt;wan-ip&gt;.&lt;hash&gt;.myunraid.net* 或服务器的公共地址。<br>
+这使得可以从外部对等方到服务器建立 VPN 隧道。<br>
+配置路由器上的正确端口转发（默认端口是 <?=$netport['wg0']?> ，但可以更改）以允许任何传入连接到达服务器。
+
+拥有注册域名的用户可以使用此字段指定他们的服务器在互联网上的名称。 例如， www.myserver.mydomain.<br>
+再次确保您的路由器设置正确。
+
+Cloudflare 用户注意： Cloudflare 代理是为 http 流量设计的，无法代理 VPN 流量。 为了使用与域名的 VPN，您必须禁用 Cloudflare 代理。
+:end
+
+:wg_local_endpoint_X_help:
+此字段会自动填入公共管理域名 *&lt;wan-ip&gt;.&lt;hash&gt;.myunraid.net* 或服务器的公共地址。<br>
+这使得可以从外部对等方到服务器建立 VPN 隧道。<br>
+配置路由器上的正确端口转发以允许任何传入连接到达服务器。
+
+拥有注册域名的用户可以使用此字段指定他们的服务器在互联网上的名称。 例如， www.myserver.mydomain.<br>
+再次确保您的路由器设置正确。
+
+Cloudflare 用户注意： Cloudflare 代理是为 http 流量设计的，无法代理 VPN 流量。 为了使用与域名的 VPN，您必须禁用 Cloudflare 代理。
+:end
+
+:wg_local_server_uses_nat_help:
+启用 NAT 时，服务器会在从隧道向局域网其他设备转发流量时使用其自身的局域网地址。
+在不需要路由器修改的情况下使用此设置，但此方法不适用于使用自定义 IP 地址的 Docker 容器。
+
+禁用 NAT 时，服务器会在转发流量时使用 WireGuard 隧道地址。
+在这种情况下，要求默认网关（路由器）已配置静态路由以将隧道地址返回到服务器。
+:end
+
+:wg_local_gateway_uses_upnp_help:
+如果本地网关启用了 UPnP 并响应请求，默认值为 YES。<br>
+启用 UPnP 时，无需在路由器上配置端口转发以允许传入隧道连接。 这将自动完成。
+:end
+
+:wg_local_tunnel_firewall_help:
+防火墙功能利用 WireGuard 隧道控制对特定主机和/或子网的远程访问。<br>
+默认规则是“deny”并阻止此字段中指定的地址，而允许所有其他地址。<br>
+更改规则为“allow”会反转选择，意味着只有指定的地址被允许，所有其他地址被阻止。<br>
+输入多个 IP 地址时使用逗号作为分隔符。
+:end
+
+:wg_mtu_size_help:
+保持在默认自动模式以选择 MTU 大小。 此 MTU 大小对于所有对等连接都是通用的。
+:end
+
+:wg_peer_configuration_help:
+<i class='fa fa-fw fa-eye'></i> 图标用于查看对等点的配置。<br>可以下载或直接读取配置以立即设置对等方。<br> 图标在没有对等配置或用户更改了尚未应用的现有设置时被禁用。
+<i class='fa fa-fw fa-key'></i> 图标用于显示或隐藏私有密钥、公钥和预共享密钥。<br>注意，当没有设置密钥时，这些字段始终显示。
+
+:end 请注意，当没有设置密钥时，这些字段始终会显示。
+:结束
+
+:wg_peer_name_help:
+使用此字段为此对等连接设置名称，使其易于识别。 相同的名称将在对面的对等方配置中出现。
+:end
+
+:wg_peer_preshared_key_help:
+为了提高安全性可以使用预共享密钥。 使用 **生成密钥** 按钮自动创建一个唯一的预共享密钥。<br>
+该密钥在服务器和对等两侧是相同的，并添加到对等配置中。
+:end
+
+:wg_peer_tunnel_address_help:
+当创建本地隧道网络池时，此字段将自动填充。 允许覆盖分配，但通常没有必要。 手动更改时请小心使用。<br>
+每个对等方必须有一个唯一的隧道 IP 地址。
+:end
+
+:wg_peer_endpoint_help:
+当此字段留空时，服务器将以*被动模式*操作以建立隧道。 必须是对等方启动隧道。
+
+当输入 IP 地址以连接对等方时，服务器以*主动模式*操作，并在有数据发送时立即将隧道建立到对等方。
+
+*注意：此字段对于“服务器到服务器”和“LAN到LAN”连接是强制性的*
+:end
+
+:wg_peer_allowed_ips_help:
+此字段会自动填入对等方的隧道地址。 这允许服务器通过隧道到达对等方。<br>
+当对等方是另一个服务器或具有附加网络的路由器时，可以在此处添加其子网，以通过隧道使这些网络可达。
+:end
+
+:wg_peer_dns_server_help:
+使用此条目覆盖对等的当前 DNS 服务器分配。
+:end
+
+:wg_persistent_keepalive_help:
+默认情况下，当没有流量时，WireGuard 隧道保持沉默，这可能导致连接中断。
+通常这不是问题，因为 WireGuard 隧道会在需要时自动重新建立。<br>
+一个保持活动计时器会保持连接，适用于大多数情况下计时器值为 20 秒是合适的。
+
+请注意，对于移动设备，这将使用更多数据并加快电池耗尽。
+:end
+
+:sysdrivers_intro_help:
+此页面显示此系统上可用的所有驱动程序。 根据驱动程序是在使用中还是未使用过滤列表，或搜索所需特定驱动程序。
+
+任何由插件安装的第三方驱动程序旁边将有一个支持符号，单击此符号以获取插件支持。
+
+单击编辑按钮以在闪存驱动器的 config/modprobe.d 目录中添加/修改/删除任何 modprobe.d 配置文件。
+:end
+
+:console_keyboard_help:
+选择本地控制台的默认键盘布局（不是 Web 终端）。
+:end
+
+:console_screen_help:
+**默认：** '默认' 将空白超时设置为 15 分钟，并将电源保存设置为 60 分钟。
+
+**禁用：** '禁用' 将禁用空白和电源保存超时。
+
+**所有其他值：** 将空白超时设置为所选值，并禁用电源保存超时。
+:end
+
+:console_bash_help:
+如果设置为 '是'，则 bash 历史记录会持续在重启后保留，设置为 '否' 则禁用。
+
+**注意：** bash 历史记录将被写入 USB 启动设备，因此这会导致更高的磨损。
+
+**注意：** 禁用和启用将移除整个 bash 历史记录。
+:end
+
+:WOL_intro_help:
+此页面允许设置以使用WOL魔法包启动/恢复和停止虚拟机、容器（Docker和LXC）
+
+它不设置Unraid服务器的唤醒。
+
+该过程将查找服务（虚拟机或容器）中定义的MAC地址，除了dockers之外。 Docker 在运行之前没有 MAC 地址，因此您需要定义用户 MAC 地址以允许您启动它们。
+
+如果服务暂停，WOL包将恢复。 
+
+对于每个服务，您可以设置：启用、禁用或启用并关闭。
+
+当启用并关闭设置时，如果该服务正在运行，当接收到下一个WOL数据包时，将执行关机。
+:结束
+
+:WOL_enable_help:
+如果设置为是，则会设置 Unraidwold 守护程序运行。
+:结束
+
+:WOL_run_docker_help:
+如果设置为是，当接收到唤醒局域网数据包时，将对docker进行检查，否则将忽略docker。
+:结束
+
+:WOL_run_VM_help:
+如果设置为是，当接收到唤醒局域网数据包时，将对虚拟机进行检查，否则将忽略虚拟机。
+:结束
+
+:WOL_run_LXC_help:
+如果设置为是，当接收到唤醒局域网数据包时，将对 LXC 进行检查，否则将忽略 LXC。 需要安装 LXC 插件以处理 LXC。
+:结束
+
+:WOL_run_shutdown_help:
+如果设置为是，则接收到局域网唤醒数据包时将进行检查，如果启用了服务并且该服务正在运行，则实体将关闭。 系统必须设置为启用和关闭才能操作。
+译文：：结束
+
+译文：：WOL界面帮助：
+指定要绑定到守护进程的接口。 某些接口可能无法接收以太帧数据包。 建议绑定到物理接口。
+译文：：结束
+
+译文：：WOL混杂模式帮助：
+启用以使NIC不对数据包进行过滤。
+译文：：结束
+
+译文：：WOL日志文件帮助：
+默认是记录到syslog，如果想要更改日志位置，请设置文件名。
+译文：：结束
