@@ -35,7 +35,7 @@ jobs:
         base_url: 'https://unraid.api.crowdin.com'
         
         # Skip unchanged files
-        skip_untranslated_files: true
+        skip_untranslated_files: false
         
         # Commit directly if no PR needed
         commit_message: 'New translations from Crowdin'
