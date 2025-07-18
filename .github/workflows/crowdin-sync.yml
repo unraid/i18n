@@ -1,0 +1,47 @@
+name: Sync Crowdin Translations
+
+on:
+  schedule:
+    # Run every Monday at 00:00 UTC
+    - cron: '0 0 * * 1'
+  workflow_dispatch: # Allow manual trigger
+
+jobs:
+  synchronize-with-crowdin:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Download from Crowdin
+      uses: crowdin/github-action@v2
+      with:
+        # Download translations only (no upload since source is in different repo)
+        upload_sources: false
+        upload_translations: false
+        download_translations: true
+        
+        # Create subfolder for each language
+        create_pull_request: true
+        pull_request_title: 'New Crowdin translations'
+        pull_request_body: 'New translations from Crowdin'
+        pull_request_base_branch_name: 'main'
+        
+        # Configuration file location
+        config: .github/crowdin.yml
+        
+        # Crowdin Enterprise URL
+        base_url: 'https://unraid.api.crowdin.com'
+        
+        # Skip unchanged files
+        skip_untranslated_strings: true
+        skip_untranslated_files: true
+        
+        # Commit directly if no PR needed
+        commit_message: 'New translations from Crowdin'
+        
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        CROWDIN_PROJECT_ID: ${{ secrets.CROWDIN_PROJECT_ID }}
+        CROWDIN_PERSONAL_TOKEN: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}

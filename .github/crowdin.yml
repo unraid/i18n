@@ -1,0 +1,14 @@
+# Crowdin configuration file for downloading translations
+# This file defines how translations are downloaded and organized
+
+files:
+  # Define translation file patterns
+  # Adjust these patterns based on your Crowdin project structure
+  - source: /**/*.po
+    translation: /%locale%/%original_file_name%
+    
+  - source: /**/*.txt
+    translation: /%locale%/%original_file_name%
+
+# Additional settings
+preserve_hierarchy: false
