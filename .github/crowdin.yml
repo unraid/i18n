@@ -1,17 +1,14 @@
 # Crowdin configuration file for downloading translations only
 # Source files are managed in a different repository
-
+base_path: "../"
 files:
-  - source: /emhttp/languages/unraid-webgui.po
-    translation: /emhttp/languages/%locale%/unraid-webgui.po
+  - translation: /emhttp/languages/%locale%/unraid-webgui.po
     scheme: file
 
-  - source: /emhttp/languages/unraid-webgui-js.po
-    translation: /emhttp/languages/%locale%/unraid-webgui-js.po
+  - translation: /emhttp/languages/%locale%/unraid-webgui-js.po
     scheme: file
 
-  - source: /emhttp/languages/helptext.txt
-    translation: /emhttp/languages/%locale%/helptext.txt
+  - translation: /emhttp/languages/%locale%/helptext.txt
     scheme: file
 
 # Export settings
